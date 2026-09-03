@@ -153,7 +153,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--gbg);color:va
 <body>
 <div id="toast"></div>
 
-<div class="mock-strip" id="build-info">Canal Resellers · Funil Landing 2026 — Atualizado em 02/09/2026</div>
+<div class="mock-strip" id="build-info">Canal Resellers · Funil Landing 2026 — Atualizado em 03/09/2026</div>
 
 <div class="topbar">
   <span class="tb-brand">Mercado Pago</span>
@@ -207,7 +207,7 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--gbg);color:va
 
   <!-- GRÁFICO 1 -->
   <div class="chart-card">
-    <div class="chart-title">Tráfego LP, Cadastros e Conversão por Dia</div>
+    <div class="chart-title">Tráfego LP por Origem e Conversão por Dia</div>
     <div style="position:relative;height:300px"><canvas id="c1"></canvas></div>
   </div>
 
@@ -244,6 +244,11 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--gbg);color:va
     <div style="position:relative;height:240px"><canvas id="c3"></canvas></div>
   </div>
 
+  <!-- GRÁFICO 4 · Cadastros por origem -->
+  <div class="chart-card" style="margin-top:22px">
+    <div class="chart-title">Cadastros por Origem e Dia</div>
+    <div style="position:relative;height:260px"><canvas id="c-cads"></canvas></div>
+  </div>
 
 </div>
 </div><!-- /tab-geral -->
@@ -296,16 +301,8 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--gbg);color:va
 
   <!-- GRÁFICO — Evolução mensal dos KPIs -->
   <div class="chart-card">
-    <div class="chart-title">Evolução Mensal · Visitas, Cadastros e Conversão</div>
+    <div class="chart-title">Evolução Mensal · Tráfego por Origem e Conversão</div>
     <div style="position:relative;height:300px"><canvas id="c-mensal"></canvas></div>
-  </div>
-
-  <!-- FUNIL MENSAL -->
-  <!-- COHORT HEATMAP -->
-  <div class="chart-card" style="overflow-x:auto;">
-    <div class="chart-title">TPV por Safra de Cadastro (R$)</div>
-    <div style="font-size:11px;color:var(--mt);margin-bottom:14px;">Cada linha = mês de cadastro · Cada coluna = mês de vida · Cor = intensidade de TPV</div>
-    <div id="cohort-table"></div>
   </div>
 
   <!-- PIZZAS -->
@@ -326,6 +323,11 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--gbg);color:va
     <div style="position:relative;height:240px"><canvas id="c3-m"></canvas></div>
   </div>
 
+  <!-- GRÁFICO 4 MENSAL · Cadastros por origem -->
+  <div class="chart-card" style="margin-top:22px">
+    <div class="chart-title">Cadastros por Origem · Evolução Mensal</div>
+    <div style="position:relative;height:260px"><canvas id="c-cads-m"></canvas></div>
+  </div>
 
 </div>
 </div><!-- /tab-mensal -->
@@ -1372,11 +1374,11 @@ const PERFIL_DATA_BY_MES={
     {exp:'Intermediário',mod:'Gestor de Equipe',cads:1,ativos:0,taxa:0.0},
   ],
   'abr26':[
-    {exp:'Iniciante',mod:'Consultor Autônomo',cads:2726,ativos:25,taxa:0.9},
+    {exp:'Iniciante',mod:'Consultor Autônomo',cads:2726,ativos:27,taxa:1.0},
     {exp:'Iniciante',mod:'Estratégia Digital',cads:500,ativos:3,taxa:0.6},
     {exp:'Iniciante',mod:'Indicação de Balcão',cads:334,ativos:10,taxa:3.0},
     {exp:'Iniciante',mod:'Gestor de Equipe',cads:119,ativos:5,taxa:4.2},
-    {exp:'Intermediário',mod:'Consultor Autônomo',cads:610,ativos:8,taxa:1.3},
+    {exp:'Intermediário',mod:'Consultor Autônomo',cads:610,ativos:9,taxa:1.5},
     {exp:'Intermediário',mod:'Estratégia Digital',cads:103,ativos:2,taxa:1.9},
     {exp:'Intermediário',mod:'Indicação de Balcão',cads:97,ativos:2,taxa:2.1},
     {exp:'Intermediário',mod:'Gestor de Equipe',cads:36,ativos:0,taxa:0.0},
@@ -1390,7 +1392,7 @@ const PERFIL_DATA_BY_MES={
     {exp:'Iniciante',mod:'Estratégia Digital',cads:335,ativos:5,taxa:1.5},
     {exp:'Iniciante',mod:'Indicação de Balcão',cads:269,ativos:12,taxa:4.5},
     {exp:'Iniciante',mod:'Gestor de Equipe',cads:52,ativos:1,taxa:1.9},
-    {exp:'Intermediário',mod:'Consultor Autônomo',cads:474,ativos:17,taxa:3.6},
+    {exp:'Intermediário',mod:'Consultor Autônomo',cads:474,ativos:15,taxa:3.2},
     {exp:'Intermediário',mod:'Estratégia Digital',cads:81,ativos:4,taxa:4.9},
     {exp:'Intermediário',mod:'Indicação de Balcão',cads:75,ativos:3,taxa:4.0},
     {exp:'Intermediário',mod:'Gestor de Equipe',cads:44,ativos:1,taxa:2.3},
@@ -1400,17 +1402,17 @@ const PERFIL_DATA_BY_MES={
     {exp:'Especialista',mod:'Gestor de Equipe',cads:22,ativos:3,taxa:13.6},
   ],
   'jun26':[
-    {exp:'Iniciante',mod:'Consultor Autônomo',cads:1636,ativos:60,taxa:3.7},
+    {exp:'Iniciante',mod:'Consultor Autônomo',cads:1636,ativos:62,taxa:3.8},
     {exp:'Iniciante',mod:'Estratégia Digital',cads:290,ativos:5,taxa:1.7},
-    {exp:'Iniciante',mod:'Indicação de Balcão',cads:241,ativos:12,taxa:5.0},
+    {exp:'Iniciante',mod:'Indicação de Balcão',cads:241,ativos:11,taxa:4.6},
     {exp:'Iniciante',mod:'Gestor de Equipe',cads:57,ativos:4,taxa:7.0},
     {exp:'Intermediário',mod:'Consultor Autônomo',cads:458,ativos:22,taxa:4.8},
     {exp:'Intermediário',mod:'Estratégia Digital',cads:62,ativos:2,taxa:3.2},
     {exp:'Intermediário',mod:'Indicação de Balcão',cads:71,ativos:3,taxa:4.2},
     {exp:'Intermediário',mod:'Gestor de Equipe',cads:36,ativos:3,taxa:8.3},
-    {exp:'Especialista',mod:'Consultor Autônomo',cads:163,ativos:16,taxa:9.8},
+    {exp:'Especialista',mod:'Consultor Autônomo',cads:163,ativos:15,taxa:9.2},
     {exp:'Especialista',mod:'Estratégia Digital',cads:21,ativos:2,taxa:9.5},
-    {exp:'Especialista',mod:'Indicação de Balcão',cads:54,ativos:3,taxa:5.6},
+    {exp:'Especialista',mod:'Indicação de Balcão',cads:54,ativos:2,taxa:3.7},
     {exp:'Especialista',mod:'Gestor de Equipe',cads:17,ativos:1,taxa:5.9},
   ],
   'jul26':[
@@ -1432,7 +1434,7 @@ const PERFIL_DATA_BY_MES={
     {exp:'Iniciante',mod:'Estratégia Digital',cads:239,ativos:3,taxa:1.3},
     {exp:'Iniciante',mod:'Indicação de Balcão',cads:219,ativos:10,taxa:4.6},
     {exp:'Iniciante',mod:'Gestor de Equipe',cads:87,ativos:4,taxa:4.6},
-    {exp:'Intermediário',mod:'Consultor Autônomo',cads:348,ativos:21,taxa:6.0},
+    {exp:'Intermediário',mod:'Consultor Autônomo',cads:348,ativos:22,taxa:6.3},
     {exp:'Intermediário',mod:'Estratégia Digital',cads:70,ativos:5,taxa:7.1},
     {exp:'Intermediário',mod:'Indicação de Balcão',cads:50,ativos:2,taxa:4.0},
     {exp:'Intermediário',mod:'Gestor de Equipe',cads:65,ativos:7,taxa:10.8},
@@ -1477,11 +1479,11 @@ const PERFIL_TPV_DATA_BY_MES={
     {exp:'Intermediário',mod:'Gestor de Equipe',cads:1,ativados:1,tpv_total:0,n_tpv:0},
   ],
   'abr26':[
-    {exp:'Iniciante',mod:'Consultor Autônomo',cads:2726,ativados:37,tpv_total:84284,n_tpv:17},
+    {exp:'Iniciante',mod:'Consultor Autônomo',cads:2726,ativados:37,tpv_total:94812,n_tpv:18},
     {exp:'Iniciante',mod:'Estratégia Digital',cads:500,ativados:7,tpv_total:260,n_tpv:1},
-    {exp:'Iniciante',mod:'Indicação de Balcão',cads:334,ativados:16,tpv_total:67789,n_tpv:8},
+    {exp:'Iniciante',mod:'Indicação de Balcão',cads:334,ativados:16,tpv_total:77838,n_tpv:8},
     {exp:'Iniciante',mod:'Gestor de Equipe',cads:119,ativados:5,tpv_total:13043,n_tpv:5},
-    {exp:'Intermediário',mod:'Consultor Autônomo',cads:610,ativados:11,tpv_total:100358,n_tpv:6},
+    {exp:'Intermediário',mod:'Consultor Autônomo',cads:610,ativados:11,tpv_total:100888,n_tpv:7},
     {exp:'Intermediário',mod:'Estratégia Digital',cads:103,ativados:3,tpv_total:3147,n_tpv:2},
     {exp:'Intermediário',mod:'Indicação de Balcão',cads:97,ativados:5,tpv_total:7879,n_tpv:2},
     {exp:'Intermediário',mod:'Gestor de Equipe',cads:36,ativados:0,tpv_total:0,n_tpv:0},
@@ -1491,11 +1493,11 @@ const PERFIL_TPV_DATA_BY_MES={
     {exp:'Especialista',mod:'Gestor de Equipe',cads:33,ativados:4,tpv_total:5536,n_tpv:2},
   ],
   'mai26':[
-    {exp:'Iniciante',mod:'Consultor Autônomo',cads:1886,ativados:52,tpv_total:252560,n_tpv:27},
+    {exp:'Iniciante',mod:'Consultor Autônomo',cads:1886,ativados:52,tpv_total:253489,n_tpv:28},
     {exp:'Iniciante',mod:'Estratégia Digital',cads:335,ativados:5,tpv_total:109987,n_tpv:5},
     {exp:'Iniciante',mod:'Indicação de Balcão',cads:269,ativados:15,tpv_total:50399,n_tpv:10},
     {exp:'Iniciante',mod:'Gestor de Equipe',cads:52,ativados:1,tpv_total:537,n_tpv:1},
-    {exp:'Intermediário',mod:'Consultor Autônomo',cads:474,ativados:20,tpv_total:80566,n_tpv:12},
+    {exp:'Intermediário',mod:'Consultor Autônomo',cads:474,ativados:20,tpv_total:75364,n_tpv:10},
     {exp:'Intermediário',mod:'Estratégia Digital',cads:81,ativados:4,tpv_total:9277,n_tpv:2},
     {exp:'Intermediário',mod:'Indicação de Balcão',cads:75,ativados:3,tpv_total:978,n_tpv:2},
     {exp:'Intermediário',mod:'Gestor de Equipe',cads:44,ativados:1,tpv_total:1816,n_tpv:1},
@@ -1505,7 +1507,7 @@ const PERFIL_TPV_DATA_BY_MES={
     {exp:'Especialista',mod:'Gestor de Equipe',cads:22,ativados:3,tpv_total:33763,n_tpv:3},
   ],
   'jun26':[
-    {exp:'Iniciante',mod:'Consultor Autônomo',cads:1636,ativados:73,tpv_total:345236,n_tpv:42},
+    {exp:'Iniciante',mod:'Consultor Autônomo',cads:1636,ativados:73,tpv_total:371631,n_tpv:44},
     {exp:'Iniciante',mod:'Estratégia Digital',cads:290,ativados:6,tpv_total:4375,n_tpv:2},
     {exp:'Iniciante',mod:'Indicação de Balcão',cads:241,ativados:12,tpv_total:66584,n_tpv:7},
     {exp:'Iniciante',mod:'Gestor de Equipe',cads:57,ativados:4,tpv_total:314,n_tpv:1},
@@ -1513,9 +1515,9 @@ const PERFIL_TPV_DATA_BY_MES={
     {exp:'Intermediário',mod:'Estratégia Digital',cads:62,ativados:2,tpv_total:12594,n_tpv:2},
     {exp:'Intermediário',mod:'Indicação de Balcão',cads:71,ativados:4,tpv_total:10035,n_tpv:2},
     {exp:'Intermediário',mod:'Gestor de Equipe',cads:36,ativados:3,tpv_total:39475,n_tpv:2},
-    {exp:'Especialista',mod:'Consultor Autônomo',cads:163,ativados:16,tpv_total:47335,n_tpv:13},
+    {exp:'Especialista',mod:'Consultor Autônomo',cads:163,ativados:16,tpv_total:46555,n_tpv:12},
     {exp:'Especialista',mod:'Estratégia Digital',cads:21,ativados:2,tpv_total:0,n_tpv:0},
-    {exp:'Especialista',mod:'Indicação de Balcão',cads:54,ativados:4,tpv_total:41307,n_tpv:2},
+    {exp:'Especialista',mod:'Indicação de Balcão',cads:54,ativados:4,tpv_total:41287,n_tpv:1},
     {exp:'Especialista',mod:'Gestor de Equipe',cads:17,ativados:1,tpv_total:26949,n_tpv:1},
   ],
   'jul26':[
@@ -1533,17 +1535,17 @@ const PERFIL_TPV_DATA_BY_MES={
     {exp:'Especialista',mod:'Gestor de Equipe',cads:23,ativados:2,tpv_total:7094,n_tpv:1},
   ],
   'ago26':[
-    {exp:'Iniciante',mod:'Consultor Autônomo',cads:1307,ativados:43,tpv_total:72805,n_tpv:18},
-    {exp:'Iniciante',mod:'Estratégia Digital',cads:239,ativados:3,tpv_total:31,n_tpv:1},
-    {exp:'Iniciante',mod:'Indicação de Balcão',cads:219,ativados:10,tpv_total:10537,n_tpv:5},
+    {exp:'Iniciante',mod:'Consultor Autônomo',cads:1307,ativados:43,tpv_total:84198,n_tpv:20},
+    {exp:'Iniciante',mod:'Estratégia Digital',cads:239,ativados:3,tpv_total:42,n_tpv:1},
+    {exp:'Iniciante',mod:'Indicação de Balcão',cads:219,ativados:10,tpv_total:11538,n_tpv:6},
     {exp:'Iniciante',mod:'Gestor de Equipe',cads:87,ativados:4,tpv_total:0,n_tpv:0},
-    {exp:'Intermediário',mod:'Consultor Autônomo',cads:348,ativados:21,tpv_total:96241,n_tpv:11},
-    {exp:'Intermediário',mod:'Estratégia Digital',cads:70,ativados:5,tpv_total:3388,n_tpv:3},
+    {exp:'Intermediário',mod:'Consultor Autônomo',cads:348,ativados:22,tpv_total:106614,n_tpv:14},
+    {exp:'Intermediário',mod:'Estratégia Digital',cads:70,ativados:5,tpv_total:3441,n_tpv:3},
     {exp:'Intermediário',mod:'Indicação de Balcão',cads:50,ativados:2,tpv_total:0,n_tpv:0},
-    {exp:'Intermediário',mod:'Gestor de Equipe',cads:65,ativados:7,tpv_total:189294,n_tpv:6},
-    {exp:'Especialista',mod:'Consultor Autônomo',cads:92,ativados:12,tpv_total:40421,n_tpv:7},
+    {exp:'Intermediário',mod:'Gestor de Equipe',cads:65,ativados:7,tpv_total:209228,n_tpv:7},
+    {exp:'Especialista',mod:'Consultor Autônomo',cads:92,ativados:12,tpv_total:41603,n_tpv:8},
     {exp:'Especialista',mod:'Estratégia Digital',cads:42,ativados:0,tpv_total:0,n_tpv:0},
-    {exp:'Especialista',mod:'Indicação de Balcão',cads:56,ativados:3,tpv_total:4172,n_tpv:1},
+    {exp:'Especialista',mod:'Indicação de Balcão',cads:56,ativados:3,tpv_total:5107,n_tpv:3},
     {exp:'Especialista',mod:'Gestor de Equipe',cads:15,ativados:3,tpv_total:24,n_tpv:1},
   ],
 };
@@ -2327,7 +2329,6 @@ function renderKPIs(kpi, cmpLabel, containerId) {
     {key:'conv_cad',    label:'Conv. Cadastro',  pct:true},
     {key:'ativos_m0',   label:'Ativos M0'},
     {key:'taxa_ativos', label:'Taxa Ativos M0',  pct:true},
-    {key:'tpv_m0',      label:'TPV M0',          brl:true, note:'dado mensal · independe do filtro de data'},
   ];
   const el=document.getElementById(containerId);
   el.innerHTML=defs.map((d,i)=>{
@@ -2346,7 +2347,7 @@ function renderKPIs(kpi, cmpLabel, containerId) {
 }
 
 /* ==DATA_START== */
-// Gerado automaticamente por build.py em 02/09/2026 às 00:00
+// Gerado automaticamente por build.py em 03/09/2026 às 00:00
 const MONTHS_2025=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
 const MONTHS_2026=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago"];
 
@@ -2354,58 +2355,58 @@ const MONTHS_2026=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago"];
 const activeYears={main:new Set(['2026']), cmp:new Set(['2025'])};
 const selMonths={main:new Set(MONTHS_2026.map(m=>m+'/26')), cmp:new Set()};
 
-const PERIODO_MAP={'mtd':{label:'MTD · Set/26 D1',cmp:'vs Ago/26 D1'},'ago26':{label:'Ago/26',cmp:'vs Jul/26'},'jul26':{label:'Jul/26',cmp:'vs Jun/26'},'jun26':{label:'Jun/26',cmp:'vs Mai/26'},'mai26':{label:'Mai/26',cmp:'vs Abr/26'},'abr26':{label:'Abr/26',cmp:'vs Mar/26'},'mar26':{label:'Mar/26',cmp:'vs Fev/26'},'fev26':{label:'Fev/26',cmp:'vs Jan/26'},'jan26':{label:'Jan/26',cmp:'vs Dez/25'}};
+const PERIODO_MAP={'mtd':{label:'MTD · Set/26 D2',cmp:'vs Ago/26 D2'},'ago26':{label:'Ago/26',cmp:'vs Jul/26'},'jul26':{label:'Jul/26',cmp:'vs Jun/26'},'jun26':{label:'Jun/26',cmp:'vs Mai/26'},'mai26':{label:'Mai/26',cmp:'vs Abr/26'},'abr26':{label:'Abr/26',cmp:'vs Mar/26'},'mar26':{label:'Mar/26',cmp:'vs Fev/26'},'fev26':{label:'Fev/26',cmp:'vs Jan/26'},'jan26':{label:'Jan/26',cmp:'vs Dez/25'}};
 
 const KPI_ABA1={
-  visitas:     {curr:2311,     prev:1614},
-  cadastros:   {curr:114, prev:2},
-  conv_cad:    {curr:4.93,   prev:0.12},
-  ativos_m0:   {curr:0,     prev:0},
-  taxa_ativos: {curr:0.0,       prev:0.0},
+  visitas:     {curr:4289,     prev:2951},
+  cadastros:   {curr:242, prev:4},
+  conv_cad:    {curr:5.64,   prev:0.14},
+  ativos_m0:   {curr:4,     prev:0},
+  taxa_ativos: {curr:1.65,       prev:0.0},
   tpv_m0:      {curr:0,        prev:0},
 };
-const CMP_LABEL='vs Ago/26 D1';
+const CMP_LABEL='vs Ago/26 D2';
 
 const KPI_ABA2={
   visitas:     {curr:52605,  prev:53898},
   cadastros:   {curr:2607,  prev:2610},
   conv_cad:    {curr:4.96, prev:4.84},
-  ativos_m0:   {curr:113, prev:107},
-  taxa_ativos: {curr:4.33, prev:4.1},
-  tpv_m0:      {curr:416912, prev:663045},
+  ativos_m0:   {curr:114, prev:107},
+  taxa_ativos: {curr:4.37, prev:4.1},
+  tpv_m0:      {curr:461795, prev:663045},
 };
 const CMP_LABEL_M='vs Jul/26';
 
-const DAYS=["01/09"];
-const VISITS=[2311];
-const CADS=[114];
+const DAYS=["01/09","02/09"];
+const VISITS=[2311,1978];
+const CADS=[114,128];
 const CONV=VISITS.map((v,i)=>v>0?+(CADS[i]/v*100).toFixed(2):null);
 
-const FUNIL_ATUAL=[{"step": "Visita LP", "users": 2311, "pct": 100.0, "pass": null}, {"step": "Cadastro Concluído", "users": 114, "pct": 4.9, "pass": 4.9}];
-const FUNIL_PREV=[{"step": "Visita LP", "users": 1614, "pct": 100.0, "pass": null}, {"step": "Cadastro Concluído", "users": 2, "pct": 0.1, "pass": 0.1}];
-const FUNIL_BY_CANAL={"banner_xsell": [{"step": "Visita LP", "users": 188, "pct": 100.0, "pass": null}, {"step": "Cadastro Concluído", "users": 10, "pct": 5.3, "pass": 5.3}], "direct": [{"step": "Visita LP", "users": 212, "pct": 100.0, "pass": null}, {"step": "Cadastro Concluído", "users": 10, "pct": 4.7, "pass": 4.7}], "micrositio": [{"step": "Visita LP", "users": 1910, "pct": 100.0, "pass": null}, {"step": "Cadastro Concluído", "users": 79, "pct": 4.1, "pass": 4.1}], "outros": [{"step": "Visita LP", "users": 1, "pct": 100.0, "pass": null}, {"step": "Cadastro Concluído", "users": 15, "pct": 1500.0, "pass": 1500.0}]};
-const FUNIL_BY_OS={"Android": [{"step": "Visita LP", "users": 1659, "pct": 100.0, "pass": null}], "iOS": [{"step": "Visita LP", "users": 643, "pct": 100.0, "pass": null}], "Mac OS X": [{"step": "Visita LP", "users": 0, "pct": 0.0, "pass": null}], "Windows": [{"step": "Visita LP", "users": 8, "pct": 100.0, "pass": null}], "Linux": [{"step": "Visita LP", "users": 1, "pct": 100.0, "pass": null}], "Other": [{"step": "Visita LP", "users": 0, "pct": 0.0, "pass": null}]};
-const FUNIL_BY_DEV={"/mobile/android": [{"step": "Visita LP", "users": 1652, "pct": 100.0, "pass": null}], "/mobile/ios": [{"step": "Visita LP", "users": 643, "pct": 100.0, "pass": null}], "/web/desktop": [{"step": "Visita LP", "users": 9, "pct": 100.0, "pass": null}], "/web/mobile": [{"step": "Visita LP", "users": 7, "pct": 100.0, "pass": null}]};
+const FUNIL_ATUAL=[{"step": "Visita LP", "users": 4241, "pct": 100.0, "pass": null}, {"step": "Cadastro Concluído", "users": 242, "pct": 5.7, "pass": 5.7}];
+const FUNIL_PREV=[{"step": "Visita LP", "users": 2905, "pct": 100.0, "pass": null}, {"step": "Cadastro Concluído", "users": 4, "pct": 0.1, "pass": 0.1}];
+const FUNIL_BY_CANAL={"banner_xsell": [{"step": "Visita LP", "users": 416, "pct": 100.0, "pass": null}, {"step": "Cadastro Concluído", "users": 29, "pct": 7.0, "pass": 7.0}], "direct": [{"step": "Visita LP", "users": 337, "pct": 100.0, "pass": null}, {"step": "Cadastro Concluído", "users": 19, "pct": 5.6, "pass": 5.6}], "micrositio": [{"step": "Visita LP", "users": 3485, "pct": 100.0, "pass": null}, {"step": "Cadastro Concluído", "users": 177, "pct": 5.1, "pass": 5.1}], "outros": [{"step": "Visita LP", "users": 3, "pct": 100.0, "pass": null}, {"step": "Cadastro Concluído", "users": 17, "pct": 566.7, "pass": 566.7}], "placement / row_mgm": [{"step": "Visita LP", "users": 0, "pct": 0.0, "pass": null}]};
+const FUNIL_BY_OS={"Android": [{"step": "Visita LP", "users": 3061, "pct": 100.0, "pass": null}], "iOS": [{"step": "Visita LP", "users": 1164, "pct": 100.0, "pass": null}], "Mac OS X": [{"step": "Visita LP", "users": 2, "pct": 100.0, "pass": null}], "Windows": [{"step": "Visita LP", "users": 13, "pct": 100.0, "pass": null}], "Linux": [{"step": "Visita LP", "users": 1, "pct": 100.0, "pass": null}], "Other": [{"step": "Visita LP", "users": 0, "pct": 0.0, "pass": null}]};
+const FUNIL_BY_DEV={"/mobile/android": [{"step": "Visita LP", "users": 3054, "pct": 100.0, "pass": null}], "/mobile/ios": [{"step": "Visita LP", "users": 1163, "pct": 100.0, "pass": null}], "/web/desktop": [{"step": "Visita LP", "users": 16, "pct": 100.0, "pass": null}], "/web/mobile": [{"step": "Visita LP", "users": 8, "pct": 100.0, "pass": null}]};
 
-const PIE_OS={labels:["Android","iOS","Windows / Mac"],data:[72,28,0]};
+const PIE_OS={labels:["Android","iOS","Windows / Mac"],data:[72,27,0]};
 const PIE_DEV={labels:["Mobile","App","Desktop"],data:[100,0,0]};
 
-const CANAIS=[{c:"micrositio",v:1910,cv:4.14},{c:"direct",v:212,cv:4.72},{c:"banner_xsell",v:188,cv:5.32},{c:"outros",v:1,cv:1500.0}];
+const CANAIS=[{c:"micrositio",v:3494,cv:5.07},{c:"banner_xsell",v:419,cv:6.92},{c:"direct",v:373,cv:5.09},{c:"outros",v:3,cv:566.67}];
 
 const MESES_M=["Jan/25","Fev/25","Mar/25","Abr/25","Mai/25","Jun/25","Jul/25","Ago/25","Set/25","Out/25","Nov/25","Dez/25","Jan/26","Fev/26","Mar/26","Abr/26","Mai/26","Jun/26","Jul/26","Ago/26"];
 const MV=[0,0,0,0,0,0,366089,315967,213424,243819,200593,208784,198722,241350,242939,195346,75054,54153,53898,52605];
 const MC=[51474,43687,48896,47812,51707,42843,38419,25087,17062,17175,14859,14965,15669,20876,17208,10962,3797,3121,2610,2607];
 const MCONV_M=MV.map((v,i)=>v>0?+(MC[i]/v*100).toFixed(2):null);
-const MA=[214,180,290,338,286,209,174,129,90,94,106,77,108,158,180,108,106,137,107,113];
-const MTPV=[1067721,883055,1428804,1779462,1638994,1493420,1338034,1367877,612675,1380880,1067290,681960,865613,1147099,1004134,701513,646558,728013,663045,416912];
+const MA=[214,180,290,338,286,209,174,129,90,94,106,77,112,156,180,112,104,137,107,114];
+const MTPV=[1067721,883055,1428804,1779462,1638994,1493420,1338034,1367877,612675,1380880,1067290,681960,865613,1147099,1004134,701513,646558,728013,663045,461795];
 const PIE_OS_BY_MES={'Jan/25':[0,0,0],'Fev/25':[0,0,0],'Mar/25':[0,0,0],'Abr/25':[0,0,0],'Mai/25':[0,0,0],'Jun/25':[0,0,0],'Jul/25':[288594,76536,959],'Ago/25':[251825,63284,858],'Set/25':[169267,43525,632],'Out/25':[188458,54745,616],'Nov/25':[151606,48397,590],'Dez/25':[160309,48007,468],'Jan/26':[151232,46963,527],'Fev/26':[183181,57713,456],'Mar/26':[183166,59288,485],'Abr/26':[144019,50938,389],'Mai/26':[49849,24952,253],'Jun/26':[40243,13667,243],'Jul/26':[38871,14770,257],'Ago/26':[37184,15177,244]};
 const PIE_DEV_BY_MES={'Jan/25':[0,0,0],'Fev/25':[0,0,0],'Mar/25':[0,0,0],'Abr/25':[0,0,0],'Mai/25':[0,0,0],'Jun/25':[0,0,0],'Jul/25':[365459,0,630],'Ago/25':[315240,0,727],'Set/25':[212836,0,588],'Out/25':[243308,0,511],'Nov/25':[200153,0,440],'Dez/25':[208360,0,424],'Jan/26':[198201,0,521],'Fev/26':[240900,0,450],'Mar/26':[242457,0,482],'Abr/26':[194959,0,387],'Mai/26':[74802,0,252],'Jun/26':[53910,0,243],'Jul/26':[53642,0,256],'Ago/26':[52361,0,244]};
 const CANAIS_BY_MES={'Jan/25':[],'Fev/25':[],'Mar/25':[],'Abr/25':[],'Mai/25':[],'Jun/25':[],'Jul/25':[{c:"app / push",v:360912,cv:10.64},{c:"micrositio",v:1393,cv:2758.0},{c:"direct",v:1373,cv:2798.18},{c:"outros",v:1132,cv:3393.9},{c:"valueprop / canva",v:964,cv:3985.37},{c:"whatsapp",v:307,cv:12514.33},{c:"placement / row_mgm",v:8,cv:480237.5}],'Ago/25':[{c:"app / push",v:308798,cv:8.12},{c:"direct",v:2872,cv:873.5},{c:"valueprop / canva",v:2078,cv:1207.27},{c:"micrositio",v:1345,cv:1865.2},{c:"outros",v:573,cv:4378.18},{c:"whatsapp",v:292,cv:8591.44},{c:"placement / row_mgm",v:9,cv:278744.44}],'Set/25':[{c:"app / push",v:204162,cv:8.36},{c:"direct",v:4838,cv:352.67},{c:"micrositio",v:2024,cv:842.98},{c:"valueprop / canva",v:1726,cv:988.53},{c:"whatsapp",v:376,cv:4537.77},{c:"outros",v:292,cv:5843.15},{c:"placement / row_mgm",v:6,cv:284366.67}],'Out/25':[{c:"app / push",v:229023,cv:7.5},{c:"direct",v:12090,cv:142.06},{c:"micrositio",v:1227,cv:1399.76},{c:"valueprop / canva",v:1015,cv:1692.12},{c:"outros",v:270,cv:6361.11},{c:"whatsapp",v:188,cv:9135.64},{c:"placement / row_mgm",v:6,cv:286250.0}],'Nov/25':[{c:"app / push",v:194726,cv:7.63},{c:"direct",v:3859,cv:385.05},{c:"micrositio",v:900,cv:1651.0},{c:"valueprop / canva",v:751,cv:1978.56},{c:"outros",v:256,cv:5804.3},{c:"whatsapp",v:98,cv:15162.24},{c:"placement / row_mgm",v:3,cv:495300.0}],'Dez/25':[{c:"app / push",v:202451,cv:7.39},{c:"direct",v:4125,cv:362.79},{c:"micrositio",v:1081,cv:1384.37},{c:"valueprop / canva",v:755,cv:1982.12},{c:"outros",v:256,cv:5845.7},{c:"whatsapp",v:114,cv:13127.19},{c:"placement / row_mgm",v:2,cv:748250.0}],'Jan/26':[{c:"app / push",v:191691,cv:8.17},{c:"direct",v:3962,cv:395.48},{c:"micrositio",v:2356,cv:665.07},{c:"valueprop / canva",v:400,cv:3917.25},{c:"outros",v:284,cv:5517.25},{c:"whatsapp",v:28,cv:55960.71},{c:"placement / row_mgm",v:1,cv:1566900.0}],'Fev/26':[{c:"app / push",v:167156,cv:12.49},{c:"outros",v:41647,cv:50.13},{c:"micrositio",v:27886,cv:74.86},{c:"direct",v:3436,cv:607.57},{c:"valueprop / canva",v:1216,cv:1716.78},{c:"whatsapp",v:6,cv:347933.33},{c:"placement / row_mgm",v:3,cv:695866.67}],'Mar/26':[{c:"app / push",v:165894,cv:10.37},{c:"micrositio",v:73350,cv:23.46},{c:"direct",v:2785,cv:617.88},{c:"outros",v:618,cv:2784.47},{c:"valueprop / canva",v:288,cv:5975.0},{c:"placement / row_mgm",v:2,cv:860400.0},{c:"whatsapp",v:2,cv:860400.0}],'Abr/26':[{c:"app / push",v:122967,cv:8.91},{c:"micrositio",v:66727,cv:16.43},{c:"direct",v:5416,cv:202.4},{c:"outros",v:206,cv:5321.36},{c:"valueprop / canva",v:23,cv:47660.87},{c:"placement / row_mgm",v:4,cv:274050.0},{c:"whatsapp",v:3,cv:365400.0}],'Mai/26':[{c:"micrositio",v:58532,cv:6.49},{c:"app / push",v:11307,cv:33.58},{c:"direct",v:5125,cv:74.09},{c:"outros",v:85,cv:4467.06},{c:"placement / row_mgm",v:3,cv:126566.67},{c:"whatsapp",v:2,cv:189850.0}],'Jun/26':[{c:"micrositio",v:50040,cv:6.24},{c:"direct",v:4060,cv:76.87},{c:"outros",v:53,cv:5888.68}],'Jul/26':[{c:"micrositio",v:49558,cv:5.27},{c:"direct",v:4253,cv:61.37},{c:"outros",v:84,cv:3107.14},{c:"placement / row_mgm",v:3,cv:87000.0}],'Ago/26':[{c:"micrositio",v:45385,cv:5.74},{c:"direct",v:4239,cv:61.5},{c:"banner_xsell",v:2888,cv:90.27},{c:"outros",v:92,cv:2833.7},{c:"placement / row_mgm",v:1,cv:260700.0}]};
-const CADS_BY_CANAL_M={'Jan/25':{"app / push":4563,"direct":302,"outros":46527,"valueprop / canva":75,"whatsapp":7},'Fev/25':{"app / push":4139,"direct":268,"micrositio":1,"outros":39196,"valueprop / canva":81,"whatsapp":2},'Mar/25':{"app / push":5276,"direct":348,"outros":43167,"valueprop / canva":94,"whatsapp":11},'Abr/25':{"app / push":5760,"direct":410,"micrositio":4,"outros":41529,"placement / row_mgm":1,"valueprop / canva":97,"whatsapp":11},'Mai/25':{"app / push":5473,"direct":411,"micrositio":4,"outros":45680,"valueprop / canva":130,"whatsapp":9},'Jun/25':{"app / push":4002,"direct":358,"micrositio":2,"outros":38344,"valueprop / canva":117,"whatsapp":20},'Jul/25':{"app / push":31879,"direct":642,"micrositio":725,"outros":4902,"valueprop / canva":198,"whatsapp":73},'Ago/25':{"app / push":23212,"direct":875,"micrositio":573,"outros":98,"valueprop / canva":263,"whatsapp":66},'Set/25':{"app / push":15423,"direct":460,"micrositio":877,"outros":80,"valueprop / canva":178,"whatsapp":44},'Out/25':{"app / push":15837,"direct":564,"micrositio":509,"outros":79,"valueprop / canva":158,"whatsapp":28},'Nov/25':{"app / push":13729,"direct":549,"micrositio":363,"outros":72,"valueprop / canva":126,"whatsapp":20},'Dez/25':{"app / push":13394,"direct":557,"micrositio":484,"outros":384,"valueprop / canva":126,"whatsapp":20},'Jan/26':{"app / push":13432,"banner_xsell":10,"direct":699,"micrositio":1174,"outros":228,"valueprop / canva":120,"whatsapp":6},'Fev/26':{"app / push":11443,"banner_xsell":16,"direct":616,"micrositio":2934,"outros":5612,"valueprop / canva":254,"whatsapp":1},'Mar/26':{"app / push":9581,"banner_xsell":8,"direct":459,"micrositio":6976,"outros":126,"valueprop / canva":57,"whatsapp":1},'Abr/26':{"app / push":4480,"banner_xsell":8,"direct":2140,"micrositio":4266,"outros":66,"valueprop / canva":2},'Mai/26':{"app / push":249,"banner_xsell":4,"direct":485,"micrositio":3001,"outros":58},'Jun/26':{"banner_xsell":3,"direct":322,"micrositio":2744,"outros":52},'Jul/26':{"banner_xsell":5,"direct":286,"micrositio":2266,"outros":53},'Ago/26':{"banner_xsell":217,"direct":298,"micrositio":2042,"outros":50}};
-const ATIVOS_BY_CANAL_M={'Jan/25':{"app / push":0,"direct":3,"outros":209,"valueprop / canva":1,"whatsapp":1},'Fev/25':{"app / push":0,"direct":13,"micrositio":0,"outros":167,"valueprop / canva":0,"whatsapp":0},'Mar/25':{"app / push":0,"direct":24,"outros":265,"valueprop / canva":0,"whatsapp":1},'Abr/25':{"app / push":0,"direct":30,"micrositio":0,"outros":306,"placement / row_mgm":1,"valueprop / canva":1,"whatsapp":0},'Mai/25':{"app / push":0,"direct":27,"micrositio":1,"outros":258,"valueprop / canva":0,"whatsapp":0},'Jun/25':{"app / push":0,"direct":12,"micrositio":0,"outros":194,"valueprop / canva":3,"whatsapp":0},'Jul/25':{"app / push":64,"direct":45,"micrositio":34,"outros":26,"valueprop / canva":3,"whatsapp":2},'Ago/25':{"app / push":57,"direct":40,"micrositio":27,"outros":1,"valueprop / canva":3,"whatsapp":1},'Set/25':{"app / push":22,"direct":31,"micrositio":28,"outros":3,"valueprop / canva":2,"whatsapp":4},'Out/25':{"app / push":24,"direct":30,"micrositio":29,"outros":2,"valueprop / canva":7,"whatsapp":2},'Nov/25':{"app / push":41,"direct":41,"micrositio":14,"outros":2,"valueprop / canva":6,"whatsapp":2},'Dez/25':{"app / push":28,"direct":29,"micrositio":12,"outros":2,"valueprop / canva":4,"whatsapp":2},'Jan/26':{"app / push":20,"banner_xsell":1,"direct":48,"micrositio":37,"outros":0,"valueprop / canva":1,"whatsapp":1},'Fev/26':{"app / push":23,"banner_xsell":0,"direct":44,"micrositio":61,"outros":26,"valueprop / canva":4,"whatsapp":0},'Mar/26':{"app / push":23,"banner_xsell":0,"direct":42,"micrositio":113,"outros":2,"valueprop / canva":0,"whatsapp":0},'Abr/26':{"app / push":5,"banner_xsell":0,"direct":38,"micrositio":65,"outros":0,"valueprop / canva":0},'Mai/26':{"app / push":2,"banner_xsell":0,"direct":21,"micrositio":80,"outros":3},'Jun/26':{"banner_xsell":0,"direct":28,"micrositio":108,"outros":1},'Jul/26':{"banner_xsell":0,"direct":22,"micrositio":85,"outros":0},'Ago/26':{"banner_xsell":6,"direct":30,"micrositio":76,"outros":1}};
-const TPV_BY_CANAL_M={'Jan/25':{"direct":78817,"outros":987082,"valueprop / canva":1218,"whatsapp":603},'Fev/25':{"direct":189161,"outros":693894},'Mar/25':{"direct":243813,"outros":1166192,"whatsapp":18799},'Abr/25':{"direct":280118,"outros":1494092,"placement / row_mgm":2996,"valueprop / canva":2255},'Mai/25':{"direct":364751,"micrositio":67,"outros":1274176},'Jun/25':{"direct":187530,"outros":1292728,"valueprop / canva":13161},'Jul/25':{"app / push":155281,"direct":774373,"micrositio":168832,"outros":187279,"valueprop / canva":49819,"whatsapp":2450},'Ago/25':{"app / push":243387,"direct":729019,"micrositio":340211,"outros":39696,"valueprop / canva":15564},'Set/25':{"app / push":117393,"direct":298486,"micrositio":150624,"outros":17427,"valueprop / canva":380,"whatsapp":28365},'Out/25':{"app / push":60269,"direct":667912,"micrositio":534173,"outros":31805,"valueprop / canva":55537,"whatsapp":31184},'Nov/25':{"app / push":192029,"direct":584393,"micrositio":181070,"outros":16454,"valueprop / canva":91215,"whatsapp":2129},'Dez/25':{"app / push":143251,"direct":409238,"micrositio":83824,"outros":11499,"valueprop / canva":458,"whatsapp":33689},'Jan/26':{"app / push":86615,"banner_xsell":5131,"direct":466136,"micrositio":306860,"valueprop / canva":439,"whatsapp":432},'Fev/26':{"app / push":136821,"direct":194497,"micrositio":727425,"outros":78223,"valueprop / canva":10134},'Mar/26':{"app / push":66343,"direct":215485,"micrositio":721437,"outros":870},'Abr/26':{"app / push":95556,"direct":245959,"micrositio":359999},'Mai/26':{"app / push":2757,"direct":179175,"micrositio":464626},'Jun/26':{"direct":174793,"micrositio":553220},'Jul/26':{"direct":156447,"micrositio":506597},'Ago/26':{"banner_xsell":156,"direct":323437,"micrositio":90114,"outros":3206}};
+const CADS_BY_CANAL_M={'Jan/25':{"app / push":4563,"direct":302,"outros":46527,"valueprop / canva":75,"whatsapp":7},'Fev/25':{"app / push":4139,"direct":268,"micrositio":1,"outros":39196,"valueprop / canva":81,"whatsapp":2},'Mar/25':{"app / push":5276,"direct":348,"outros":43167,"valueprop / canva":94,"whatsapp":11},'Abr/25':{"app / push":5760,"direct":410,"micrositio":4,"outros":41529,"placement / row_mgm":1,"valueprop / canva":97,"whatsapp":11},'Mai/25':{"app / push":5473,"direct":411,"micrositio":4,"outros":45680,"valueprop / canva":130,"whatsapp":9},'Jun/25':{"app / push":4002,"direct":358,"micrositio":2,"outros":38344,"valueprop / canva":117,"whatsapp":20},'Jul/25':{"app / push":31879,"direct":642,"micrositio":725,"outros":4902,"valueprop / canva":198,"whatsapp":73},'Ago/25':{"app / push":23212,"direct":875,"micrositio":573,"outros":98,"valueprop / canva":263,"whatsapp":66},'Set/25':{"app / push":15423,"direct":460,"micrositio":877,"outros":80,"valueprop / canva":178,"whatsapp":44},'Out/25':{"app / push":15837,"direct":564,"micrositio":509,"outros":79,"valueprop / canva":158,"whatsapp":28},'Nov/25':{"app / push":13729,"direct":549,"micrositio":363,"outros":72,"valueprop / canva":126,"whatsapp":20},'Dez/25':{"app / push":13394,"direct":557,"micrositio":484,"outros":384,"valueprop / canva":126,"whatsapp":20},'Jan/26':{"app / push":13428,"banner_xsell":10,"direct":699,"micrositio":1174,"outros":228,"valueprop / canva":125,"whatsapp":5},'Fev/26':{"app / push":11442,"banner_xsell":16,"direct":615,"micrositio":2936,"outros":5613,"valueprop / canva":253,"whatsapp":1},'Mar/26':{"app / push":9581,"banner_xsell":8,"direct":461,"micrositio":6977,"outros":127,"valueprop / canva":53,"whatsapp":1},'Abr/26':{"app / push":4476,"banner_xsell":8,"direct":2146,"micrositio":4264,"outros":66,"valueprop / canva":2},'Mai/26':{"app / push":250,"banner_xsell":4,"direct":482,"micrositio":3003,"outros":58},'Jun/26':{"banner_xsell":3,"direct":321,"micrositio":2745,"outros":52},'Jul/26':{"banner_xsell":5,"direct":286,"micrositio":2267,"outros":52},'Ago/26':{"banner_xsell":219,"direct":298,"micrositio":2041,"outros":49}};
+const ATIVOS_BY_CANAL_M={'Jan/25':{"app / push":0,"direct":3,"outros":209,"valueprop / canva":1,"whatsapp":1},'Fev/25':{"app / push":0,"direct":13,"micrositio":0,"outros":167,"valueprop / canva":0,"whatsapp":0},'Mar/25':{"app / push":0,"direct":24,"outros":265,"valueprop / canva":0,"whatsapp":1},'Abr/25':{"app / push":0,"direct":30,"micrositio":0,"outros":306,"placement / row_mgm":1,"valueprop / canva":1,"whatsapp":0},'Mai/25':{"app / push":0,"direct":27,"micrositio":1,"outros":258,"valueprop / canva":0,"whatsapp":0},'Jun/25':{"app / push":0,"direct":12,"micrositio":0,"outros":194,"valueprop / canva":3,"whatsapp":0},'Jul/25':{"app / push":64,"direct":45,"micrositio":34,"outros":26,"valueprop / canva":3,"whatsapp":2},'Ago/25':{"app / push":57,"direct":40,"micrositio":27,"outros":1,"valueprop / canva":3,"whatsapp":1},'Set/25':{"app / push":22,"direct":31,"micrositio":28,"outros":3,"valueprop / canva":2,"whatsapp":4},'Out/25':{"app / push":24,"direct":30,"micrositio":29,"outros":2,"valueprop / canva":7,"whatsapp":2},'Nov/25':{"app / push":41,"direct":41,"micrositio":14,"outros":2,"valueprop / canva":6,"whatsapp":2},'Dez/25':{"app / push":28,"direct":29,"micrositio":12,"outros":2,"valueprop / canva":4,"whatsapp":2},'Jan/26':{"app / push":21,"banner_xsell":1,"direct":51,"micrositio":38,"outros":0,"valueprop / canva":1,"whatsapp":0},'Fev/26':{"app / push":22,"banner_xsell":0,"direct":40,"micrositio":65,"outros":27,"valueprop / canva":2,"whatsapp":0},'Mar/26':{"app / push":22,"banner_xsell":0,"direct":45,"micrositio":111,"outros":2,"valueprop / canva":0,"whatsapp":0},'Abr/26':{"app / push":5,"banner_xsell":0,"direct":40,"micrositio":67,"outros":0,"valueprop / canva":0},'Mai/26':{"app / push":2,"banner_xsell":0,"direct":22,"micrositio":77,"outros":3},'Jun/26':{"banner_xsell":0,"direct":28,"micrositio":108,"outros":1},'Jul/26':{"banner_xsell":0,"direct":22,"micrositio":85,"outros":0},'Ago/26':{"banner_xsell":6,"direct":31,"micrositio":77,"outros":0}};
+const TPV_BY_CANAL_M={'Jan/25':{"direct":78817,"outros":987082,"valueprop / canva":1218,"whatsapp":603},'Fev/25':{"direct":189161,"outros":693894},'Mar/25':{"direct":243813,"outros":1166192,"whatsapp":18799},'Abr/25':{"direct":280118,"outros":1494092,"placement / row_mgm":2996,"valueprop / canva":2255},'Mai/25':{"direct":364751,"micrositio":67,"outros":1274176},'Jun/25':{"direct":187530,"outros":1292728,"valueprop / canva":13161},'Jul/25':{"app / push":155281,"direct":774373,"micrositio":168832,"outros":187279,"valueprop / canva":49819,"whatsapp":2450},'Ago/25':{"app / push":243387,"direct":729019,"micrositio":340211,"outros":39696,"valueprop / canva":15564},'Set/25':{"app / push":117393,"direct":298486,"micrositio":150624,"outros":17427,"valueprop / canva":380,"whatsapp":28365},'Out/25':{"app / push":60269,"direct":667912,"micrositio":534173,"outros":31805,"valueprop / canva":55537,"whatsapp":31184},'Nov/25':{"app / push":192029,"direct":584393,"micrositio":181070,"outros":16454,"valueprop / canva":91215,"whatsapp":2129},'Dez/25':{"app / push":143251,"direct":409238,"micrositio":83824,"outros":11499,"valueprop / canva":458,"whatsapp":33689},'Jan/26':{"app / push":86615,"banner_xsell":5131,"direct":466136,"micrositio":306860,"valueprop / canva":439,"whatsapp":432},'Fev/26':{"app / push":136821,"direct":194497,"micrositio":729057,"outros":77801,"valueprop / canva":8923},'Mar/26':{"app / push":66343,"direct":215485,"micrositio":721437,"outros":870},'Abr/26':{"app / push":95556,"direct":245959,"micrositio":359999},'Mai/26':{"app / push":2757,"direct":204249,"micrositio":439552},'Jun/26':{"direct":174648,"micrositio":553365},'Jul/26':{"direct":156447,"micrositio":506597},'Ago/26':{"banner_xsell":819,"direct":367400,"micrositio":93576}};
 const TRAF_DIARIO_BY_MES={'Jan/25':{days:["01/01","02/01","03/01","04/01","05/01","06/01","07/01","08/01","09/01","10/01","11/01","12/01","13/01","14/01","15/01","16/01","17/01","18/01","19/01","20/01","21/01","22/01","23/01","24/01","25/01","26/01","27/01","28/01","29/01","30/01","31/01"],visits:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],cads:[2797,3058,2039,1739,2486,1696,1621,1475,1689,1010,1378,2215,2160,1469,1288,1147,1042,1379,3100,1546,1133,1478,1052,987,894,2101,1230,1024,2373,1294,1574]},'Fev/25':{days:["01/02","02/02","03/02","04/02","05/02","06/02","07/02","08/02","09/02","10/02","11/02","12/02","13/02","14/02","15/02","16/02","17/02","18/02","19/02","20/02","21/02","22/02","23/02","24/02","25/02","26/02","27/02","28/02"],visits:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],cads:[3146,3696,1882,1845,1499,1247,1252,980,2671,2552,1443,1571,1466,1131,1021,1893,1373,1345,1626,1233,1029,1147,1368,1139,1100,1327,920,785]},'Mar/25':{days:["01/03","02/03","03/03","04/03","05/03","06/03","07/03","08/03","09/03","10/03","11/03","12/03","13/03","14/03","15/03","16/03","17/03","18/03","19/03","20/03","21/03","22/03","23/03","24/03","25/03","26/03","27/03","28/03","29/03","30/03","31/03"],visits:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],cads:[1118,2941,2193,2443,2420,1680,1332,1165,1927,1520,1445,2270,1792,1285,1062,2117,2357,1417,1380,1156,1183,1138,1291,1102,1130,1089,926,755,974,839,3449]},'Abr/25':{days:["01/04","02/04","03/04","04/04","05/04","06/04","07/04","08/04","09/04","10/04","11/04","12/04","13/04","14/04","15/04","16/04","17/04","18/04","19/04","20/04","21/04","22/04","23/04","24/04","25/04","26/04","27/04","28/04","29/04","30/04"],visits:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],cads:[1623,2493,1892,1926,1633,1792,1396,1245,1519,1403,1473,1545,1552,3280,1784,1653,1368,1199,1123,1478,1965,1506,1186,1013,963,918,2044,2351,1251,1238]},'Mai/25':{days:["01/05","02/05","03/05","04/05","05/05","06/05","07/05","08/05","09/05","10/05","11/05","12/05","13/05","14/05","15/05","16/05","17/05","18/05","19/05","20/05","21/05","22/05","23/05","24/05","25/05","26/05","27/05","28/05","29/05","30/05","31/05"],visits:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],cads:[2103,1717,1725,1635,2504,5986,2544,1441,1139,1083,1634,2173,1500,1262,1675,1097,1095,1457,2152,1314,1234,1244,1009,924,1178,2087,1262,1545,1344,1117,1527]},'Jun/25':{days:["01/06","02/06","03/06","04/06","05/06","06/06","07/06","08/06","09/06","10/06","11/06","12/06","13/06","14/06","15/06","16/06","17/06","18/06","19/06","20/06","21/06","22/06","23/06","24/06","25/06","26/06","27/06","28/06","29/06","30/06"],visits:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],cads:[2027,2585,1867,1569,1663,1569,1463,1453,2377,1472,1477,1418,1237,1137,1630,2827,1083,920,1068,820,766,1038,2106,848,734,1004,651,857,1012,2165]},'Jul/25':{days:["01/07","02/07","03/07","04/07","05/07","06/07","07/07","08/07","09/07","10/07","11/07","12/07","13/07","14/07","15/07","16/07","17/07","18/07","19/07","20/07","21/07","22/07","23/07","24/07","25/07","26/07","27/07","28/07","29/07","30/07","31/07"],visits:[0,0,0,16743,15419,20236,29139,16888,14520,16509,12195,11914,16398,24502,13134,12944,14997,11865,13164,10957,23317,11267,11291,12089,9300,7943,9522,7391,17732,9895,21895],cads:[1926,1611,1651,1284,965,1425,2657,1302,1177,1271,952,836,1333,2333,1077,1047,1285,879,827,777,2253,969,883,962,649,609,717,608,1962,862,1330]},'Ago/25':{days:["01/08","02/08","03/08","04/08","05/08","06/08","07/08","08/08","09/08","10/08","11/08","12/08","13/08","14/08","15/08","16/08","17/08","18/08","19/08","20/08","21/08","22/08","23/08","24/08","25/08","26/08","27/08","28/08","29/08","30/08","31/08"],visits:[19945,14077,36891,37283,24829,12265,14008,10210,8595,7916,8442,8144,9309,9389,7649,7397,8258,8000,7758,8143,8090,7175,6498,7039,6740,6806,6305,5945,7113,5783,22586],cads:[1151,922,2736,2744,1888,838,895,648,540,565,600,604,679,734,492,528,577,538,577,630,614,559,467,488,485,519,458,448,497,453,1213]},'Set/25':{days:["01/09","02/09","03/09","04/09","05/09","06/09","07/09","08/09","09/09","10/09","11/09","12/09","13/09","14/09","15/09","16/09","17/09","18/09","19/09","20/09","21/09","22/09","23/09","24/09","25/09","26/09","27/09","28/09","29/09","30/09"],visits:[21100,12703,13678,13515,11400,9343,9394,9229,7895,7725,7186,7216,6580,6826,7094,6956,7543,6914,6227,5699,6772,7335,6488,6436,5897,5268,5404,5788,6579,6220],cads:[1133,927,887,789,599,563,647,611,568,569,538,560,481,518,502,509,535,510,469,437,490,546,503,492,426,420,427,422,516,468]},'Out/25':{days:["01/10","02/10","03/10","04/10","05/10","06/10","07/10","08/10","09/10","10/10","11/10","12/10","13/10","14/10","15/10","16/10","17/10","18/10","19/10","20/10","21/10","22/10","23/10","24/10","25/10","26/10","27/10","28/10","29/10","30/10","31/10"],visits:[28574,19611,12928,9450,13674,13620,10886,11064,9862,6975,6963,6907,7493,8392,8270,6613,5634,5411,4815,6724,7448,7271,5437,5127,4846,4682,4817,4807,5854,5444,25424],cads:[1556,1114,758,584,705,699,608,665,646,431,392,399,392,468,534,461,385,340,360,255,654,539,406,343,334,319,355,354,469,383,1267]},'Nov/25':{days:["01/11","02/11","03/11","04/11","05/11","06/11","07/11","08/11","09/11","10/11","11/11","12/11","13/11","14/11","15/11","16/11","17/11","18/11","19/11","20/11","21/11","22/11","23/11","24/11","25/11","26/11","27/11","28/11","29/11","30/11"],visits:[25994,15741,14404,12359,14093,10281,7694,7866,7325,7593,7025,7561,6774,6712,6005,6194,5748,6231,5266,5755,5449,5474,4690,5788,5553,5064,4318,4611,4444,5027],cads:[1291,963,838,648,752,649,454,435,493,495,518,489,462,460,386,437,406,458,372,364,360,377,343,428,414,329,282,328,271,357]},'Dez/25':{days:["01/12","02/12","03/12","04/12","05/12","06/12","07/12","08/12","09/12","10/12","11/12","12/12","13/12","14/12","15/12","16/12","17/12","18/12","19/12","20/12","21/12","22/12","23/12","24/12","25/12","26/12","27/12","28/12","29/12","30/12","31/12"],visits:[22894,17913,15643,11144,9635,7693,7965,9075,8092,7333,6577,6124,6549,5475,6325,6475,6244,5928,5226,4669,7252,5553,4408,3754,4392,4687,4017,4287,4849,4418,19057],cads:[1133,961,835,678,632,529,484,537,538,480,495,451,398,398,425,477,435,384,366,317,436,338,289,233,215,330,294,339,355,308,875]},'Jan/26':{days:["01/01","02/01","03/01","04/01","05/01","06/01","07/01","08/01","09/01","10/01","11/01","12/01","13/01","14/01","15/01","16/01","17/01","18/01","19/01","20/01","21/01","22/01","23/01","24/01","25/01","26/01","27/01","28/01","29/01","30/01","31/01"],visits:[19061,14116,11213,11531,11552,9560,9236,8838,7445,6395,6313,6650,6627,6392,5942,5859,5706,5758,6042,4821,5104,5484,5512,4007,4594,4640,4677,4079,5207,4859,15731],cads:[803,789,724,703,658,570,624,572,519,423,465,490,526,513,440,446,433,466,499,357,382,438,439,348,383,362,374,363,394,346,820]},'Fev/26':{days:["01/02","02/02","03/02","04/02","05/02","06/02","07/02","08/02","09/02","10/02","11/02","12/02","13/02","14/02","15/02","16/02","17/02","18/02","19/02","20/02","21/02","22/02","23/02","24/02","25/02","26/02","27/02","28/02"],visits:[21075,13944,11247,12557,12546,9411,8094,7568,7773,6271,6487,6038,6519,5217,4782,4923,5312,5471,12336,11776,9709,9618,15827,10939,10259,21733,10095,8420],cads:[1099,830,749,669,674,524,499,471,493,492,455,451,463,350,365,373,421,460,1356,1224,962,955,1786,1062,804,1567,769,553]},'Mar/26':{days:["01/03","02/03","03/03","04/03","05/03","06/03","07/03","08/03","09/03","10/03","11/03","12/03","13/03","14/03","15/03","16/03","17/03","18/03","19/03","20/03","21/03","22/03","23/03","24/03","25/03","26/03","27/03","28/03","29/03","30/03","31/03"],visits:[6863,6819,25378,20268,12905,15719,14311,10525,8861,5419,11277,8517,9892,6716,5926,7203,7293,7019,6279,6078,5316,4884,6041,5788,5683,5200,10245,5336,4059,4640,20001],cads:[559,538,1370,980,713,792,677,517,542,456,671,569,603,450,379,489,525,482,468,396,371,351,443,409,397,399,595,367,327,365,1008]},'Abr/26':{days:["01/04","02/04","03/04","04/04","05/04","06/04","07/04","08/04","09/04","10/04","11/04","12/04","13/04","14/04","15/04","16/04","17/04","18/04","19/04","20/04","21/04","22/04","23/04","24/04","25/04","26/04","27/04","28/04","29/04","30/04"],visits:[17752,9461,10925,12344,7629,9684,12135,10302,10160,5815,7880,6868,4709,4149,12816,6755,4630,4192,5515,5911,5207,5828,5589,5342,4580,4223,4915,6223,3861,3857],cads:[838,532,569,532,405,518,704,436,453,262,371,284,291,257,460,345,272,246,264,287,289,330,275,297,263,210,259,247,261,205]},'Mai/26':{days:["01/05","02/05","03/05","04/05","05/05","06/05","07/05","08/05","09/05","10/05","11/05","12/05","13/05","14/05","15/05","16/05","17/05","18/05","19/05","20/05","21/05","22/05","23/05","24/05","25/05","26/05","27/05","28/05","29/05","30/05","31/05"],visits:[7814,5318,3502,2895,2655,2644,2637,2480,1863,1493,2495,2880,2499,2259,2102,1838,1607,2363,2347,2468,2243,2096,1614,1517,2220,2248,1973,2115,2092,1754,1611],cads:[278,197,186,182,164,177,117,121,72,68,134,128,122,102,106,71,84,111,103,103,115,94,97,83,109,123,124,100,99,115,112]},'Jun/26':{days:["01/06","02/06","03/06","04/06","05/06","06/06","07/06","08/06","09/06","10/06","11/06","12/06","13/06","14/06","15/06","16/06","17/06","18/06","19/06","20/06","21/06","22/06","23/06","24/06","25/06","26/06","27/06","28/06","29/06","30/06"],visits:[2282,2165,2049,1839,2054,1626,1539,2204,2097,2325,2039,1816,1468,1496,2222,2135,1997,1866,1676,1446,1419,2005,1975,1730,1867,1768,1517,1310,1477,2791],cads:[119,110,123,127,104,99,97,98,124,135,107,98,70,94,122,132,118,109,95,80,86,86,108,108,96,107,84,76,67,142]},'Jul/26':{days:["01/07","02/07","03/07","04/07","05/07","06/07","07/07","08/07","09/07","10/07","11/07","12/07","13/07","14/07","15/07","16/07","17/07","18/07","19/07","20/07","21/07","22/07","23/07","24/07","25/07","26/07","27/07","28/07","29/07","30/07","31/07"],visits:[2469,2108,1853,1522,1248,2015,2075,2090,1897,1961,1565,1359,2492,2207,2175,2074,1789,1441,1266,2050,1906,1779,1677,1646,1347,1098,1739,1746,1753,1699,1693],cads:[127,106,101,82,80,109,108,111,107,119,80,95,123,120,107,100,97,80,72,117,105,101,91,85,70,67,32,7,3,4,4]},'Ago/26':{days:["01/08","02/08","03/08","04/08","05/08","06/08","07/08","08/08","09/08","10/08","11/08","12/08","13/08","14/08","15/08","16/08","17/08","18/08","19/08","20/08","21/08","22/08","23/08","24/08","25/08","26/08","27/08","28/08","29/08","30/08","31/08"],visits:[1532,1260,1840,1899,1854,1959,1879,1476,1251,2061,1946,1990,1884,1625,1355,1261,1761,1797,1782,1935,1917,1631,1479,2141,2027,1962,1815,1760,1572,1303,2002],cads:[2,2,2,6,6,5,73,79,80,125,105,114,98,110,93,81,96,112,103,96,98,115,113,131,132,133,125,107,87,80,98]}};
-const KPI_POR_PERIODO={'mtd':null,'ago26':{kpi1:{visitas:{curr:52605,prev:53898},cadastros:{curr:2607,prev:2610},conv_cad:{curr:4.96,prev:4.84},ativos_m0:{curr:113,prev:107},taxa_ativos:{curr:4.33,prev:4.1},tpv_m0:{curr:416912,prev:663045}},cmp1:'vs Jul/26'},'jul26':{kpi1:{visitas:{curr:53898,prev:54153},cadastros:{curr:2610,prev:3121},conv_cad:{curr:4.84,prev:5.76},ativos_m0:{curr:107,prev:137},taxa_ativos:{curr:4.1,prev:4.39},tpv_m0:{curr:663045,prev:728013}},cmp1:'vs Jun/26'},'jun26':{kpi1:{visitas:{curr:54153,prev:75054},cadastros:{curr:3121,prev:3797},conv_cad:{curr:5.76,prev:5.06},ativos_m0:{curr:137,prev:106},taxa_ativos:{curr:4.39,prev:2.79},tpv_m0:{curr:728013,prev:646558}},cmp1:'vs Mai/26'},'mai26':{kpi1:{visitas:{curr:75054,prev:195346},cadastros:{curr:3797,prev:10962},conv_cad:{curr:5.06,prev:5.61},ativos_m0:{curr:106,prev:108},taxa_ativos:{curr:2.79,prev:0.99},tpv_m0:{curr:646558,prev:701513}},cmp1:'vs Abr/26'},'abr26':{kpi1:{visitas:{curr:195346,prev:242939},cadastros:{curr:10962,prev:17208},conv_cad:{curr:5.61,prev:7.08},ativos_m0:{curr:108,prev:180},taxa_ativos:{curr:0.99,prev:1.05},tpv_m0:{curr:701513,prev:1004134}},cmp1:'vs Mar/26'},'mar26':{kpi1:{visitas:{curr:242939,prev:241350},cadastros:{curr:17208,prev:20876},conv_cad:{curr:7.08,prev:8.65},ativos_m0:{curr:180,prev:158},taxa_ativos:{curr:1.05,prev:0.76},tpv_m0:{curr:1004134,prev:1147099}},cmp1:'vs Fev/26'},'fev26':{kpi1:{visitas:{curr:241350,prev:198722},cadastros:{curr:20876,prev:15669},conv_cad:{curr:8.65,prev:7.88},ativos_m0:{curr:158,prev:108},taxa_ativos:{curr:0.76,prev:0.69},tpv_m0:{curr:1147099,prev:865613}},cmp1:'vs Jan/26'},'jan26':{kpi1:{visitas:{curr:198722,prev:208784},cadastros:{curr:15669,prev:14965},conv_cad:{curr:7.88,prev:7.17},ativos_m0:{curr:108,prev:77},taxa_ativos:{curr:0.69,prev:0.51},tpv_m0:{curr:865613,prev:681960}},cmp1:'vs Dez/25'}};
+const KPI_POR_PERIODO={'mtd':null,'ago26':{kpi1:{visitas:{curr:52605,prev:53898},cadastros:{curr:2607,prev:2610},conv_cad:{curr:4.96,prev:4.84},ativos_m0:{curr:114,prev:107},taxa_ativos:{curr:4.37,prev:4.1},tpv_m0:{curr:461795,prev:663045}},cmp1:'vs Jul/26'},'jul26':{kpi1:{visitas:{curr:53898,prev:54153},cadastros:{curr:2610,prev:3121},conv_cad:{curr:4.84,prev:5.76},ativos_m0:{curr:107,prev:137},taxa_ativos:{curr:4.1,prev:4.39},tpv_m0:{curr:663045,prev:728013}},cmp1:'vs Jun/26'},'jun26':{kpi1:{visitas:{curr:54153,prev:75054},cadastros:{curr:3121,prev:3797},conv_cad:{curr:5.76,prev:5.06},ativos_m0:{curr:137,prev:104},taxa_ativos:{curr:4.39,prev:2.74},tpv_m0:{curr:728013,prev:646558}},cmp1:'vs Mai/26'},'mai26':{kpi1:{visitas:{curr:75054,prev:195346},cadastros:{curr:3797,prev:10962},conv_cad:{curr:5.06,prev:5.61},ativos_m0:{curr:104,prev:112},taxa_ativos:{curr:2.74,prev:1.02},tpv_m0:{curr:646558,prev:701513}},cmp1:'vs Abr/26'},'abr26':{kpi1:{visitas:{curr:195346,prev:242939},cadastros:{curr:10962,prev:17208},conv_cad:{curr:5.61,prev:7.08},ativos_m0:{curr:112,prev:180},taxa_ativos:{curr:1.02,prev:1.05},tpv_m0:{curr:701513,prev:1004134}},cmp1:'vs Mar/26'},'mar26':{kpi1:{visitas:{curr:242939,prev:241350},cadastros:{curr:17208,prev:20876},conv_cad:{curr:7.08,prev:8.65},ativos_m0:{curr:180,prev:156},taxa_ativos:{curr:1.05,prev:0.75},tpv_m0:{curr:1004134,prev:1147099}},cmp1:'vs Fev/26'},'fev26':{kpi1:{visitas:{curr:241350,prev:198722},cadastros:{curr:20876,prev:15669},conv_cad:{curr:8.65,prev:7.88},ativos_m0:{curr:156,prev:112},taxa_ativos:{curr:0.75,prev:0.71},tpv_m0:{curr:1147099,prev:865613}},cmp1:'vs Jan/26'},'jan26':{kpi1:{visitas:{curr:198722,prev:208784},cadastros:{curr:15669,prev:14965},conv_cad:{curr:7.88,prev:7.17},ativos_m0:{curr:112,prev:77},taxa_ativos:{curr:0.71,prev:0.51},tpv_m0:{curr:865613,prev:681960}},cmp1:'vs Dez/25'}};
 
 const PIE_OS_M={labels:["Android","iOS","Windows / Mac"],data:[71,29,0]};
 const PIE_DEV_M={labels:["Mobile","App","Desktop"],data:[100,0,0]};
@@ -2413,258 +2414,259 @@ const PIE_DEV_M={labels:["Mobile","App","Desktop"],data:[100,0,0]};
 const CANAIS_M=[{c:"micrositio",v:45385,cv:5.74},{c:"direct",v:4239,cv:61.5},{c:"banner_xsell",v:2888,cv:90.27},{c:"outros",v:92,cv:2833.7},{c:"placement / row_mgm",v:1,cv:260700.0}];
 
 const COHORT_SAFRAS=["Jan/25","Fev/25","Mar/25","Abr/25","Mai/25","Jun/25","Jul/25","Ago/25","Set/25","Out/25","Nov/25","Dez/25","Jan/26","Fev/26","Mar/26","Abr/26","Mai/26","Jun/26","Jul/26","Ago/26"];
-const COHORT_DATA=[[498485,1743427,3010400,3380989,4308337,5160890,5804910,5703214,5550102,6282712,6488558,7064454,6820132],[189984,1602833,2406734,3000967,3240458,3615541,4411166,4484737,4695217,5034150,6164780,5231911,4582791],[372596,2409371,4348466,5337701,6880690,7739498,7596258,7439250,7948442,8814717,7335500,6834918,7755440],[765707,3135820,5585335,5990299,5910379,5767386,6549462,6300056,7200919,5332050,5116360,5420267,5114326],[425165,2450210,3380310,3771958,3666459,4198509,4352443,5046575,4174105,4152799,4631028,4450475,4921171],[640223,2256095,3126725,3754872,4575778,5126654,5302056,4377623,3825162,3973323,3757090,4082833,3680080],[483582,2145065,3835561,4831093,5373098,6039700,5696282,5662683,7632479,6308026,5730108,5077780,5292815],[644189,2273755,2834545,3477361,4129022,3434986,3550561,3896795,3686891,3964604,3582349,3635828,1900855],[343145,1047647,1391458,2053466,2042537,2064568,2227727,2304109,2455519,2412363,2488532,1389675,null],[515206,2310652,3865944,3967147,3791049,4311421,4545774,4728038,4757169,4813224,2554783,null,null],[235051,1949159,2160932,2147474,2291689,2331911,2824044,3162410,3052914,1607888,null,null,null],[313397,1249215,1468049,1603681,2115258,2458117,2500164,2765957,1552690,null,null,null,null],[334659,1697993,2532187,2991710,2722537,2780193,3097228,3098772,117298,null,null,null,null],[414338,1543257,2380370,2409017,2811274,2936987,3174811,93602,null,null,null,null,null],[428927,1760273,2825184,3243461,3754439,3920508,103320,null,null,null,null,null,null],[396669,1155027,1725952,2473605,2487110,69301,null,null,null,null,null,null,null],[277496,856039,993999,1012846,39693,null,null,null,null,null,null,null,null],[334117,943141,2342309,130635,null,null,null,null,null,null,null,null,null],[284270,1216115,51194,null,null,null,null,null,null,null,null,null,null],[381927,35927,null,null,null,null,null,null,null,null,null,null,null]];
+const COHORT_DATA=[[498485,1743427,3010400,3380989,4308337,5160890,5804910,5703214,5550102,6282712,6488558,7064454,6820132],[189984,1602833,2406734,3000967,3240458,3615541,4411166,4484737,4695217,5034150,6164780,5231911,4582791],[372596,2409371,4348466,5337701,6880690,7739498,7596258,7439250,7948442,8814717,7335500,6834918,7755440],[765707,3135820,5585335,5990299,5910379,5767386,6549462,6300056,7200919,5332050,5116360,5420267,5114326],[425165,2450210,3380310,3771958,3666459,4198509,4352443,5046575,4174105,4152799,4631028,4450475,4921171],[640223,2256095,3126725,3754872,4575778,5126654,5302056,4377623,3825162,3973323,3757090,4082833,3680080],[483582,2145065,3835561,4831093,5373098,6039700,5696282,5662683,7632479,6308026,5730108,5077780,5292815],[644189,2273755,2834545,3477361,4129022,3434986,3550561,3896795,3686891,3964604,3582349,3635828,1900855],[343145,1047647,1391458,2053466,2042537,2064568,2227727,2304109,2455519,2412363,2488532,1389675,null],[515206,2310652,3865944,3967147,3791049,4311421,4545774,4728038,4757169,4813224,2554783,null,null],[235051,1949159,2160932,2147474,2291689,2331911,2824044,3162410,3052914,1607888,null,null,null],[313397,1249215,1468049,1603681,2115258,2458117,2500164,2765957,1552690,null,null,null,null],[334659,1697993,2532187,2991710,2722537,2780193,3097228,3098772,186512,null,null,null,null],[414338,1543257,2380370,2409017,2811274,2936987,3174811,178354,null,null,null,null,null],[428927,1760273,2825184,3243461,3754439,3920508,216257,null,null,null,null,null,null],[396669,1155027,1725952,2473605,2487110,139201,null,null,null,null,null,null,null],[277496,856039,993999,1012846,78177,null,null,null,null,null,null,null,null],[334117,943141,2342309,224705,null,null,null,null,null,null,null,null,null],[284270,1216115,102846,null,null,null,null,null,null,null,null,null,null],[381927,80810,null,null,null,null,null,null,null,null,null,null,null]];
 /* ==DATA_END== */
 /* ==DAILY_START== */
 const FUNIL_STEPS=['Visita LP','Profiling Exp.','Tipo de Negócio','Loc. Seleção','Loc. Confirmação','Cadastro Concluído'];
 const OS_LABELS=['Android','iOS','Windows / Mac'];
 const DEV_LABELS=['Mobile','App','Desktop'];
-const CANAL_LABELS=['micrositio','direct','app / push','placement / row_mgm','valueprop / canva','whatsapp','outros'];
+const CANAL_LABELS=['micrositio','banner_xsell','direct','app / push','placement / row_mgm','valueprop / canva','whatsapp','outros'];
 const DAILY={
-'2026-01-01':{v:19108,c:803,a:1,os:[14684,4412,12],dev:[19097,0,11],cn:[19,112,18924,0,37,3,13],cc:[7,15,735,0,7,2,37],f:[0,0,0,0,0,0]},
-'2026-01-02':{v:14145,c:789,a:7,os:[10828,3295,22],dev:[14123,0,22],cn:[60,165,13882,0,24,5,9],cc:[37,29,711,0,4,0,8],f:[0,0,0,0,0,0]},
-'2026-01-03':{v:11238,c:724,a:2,os:[8619,2611,8],dev:[11231,0,7],cn:[38,147,11025,0,23,1,4],cc:[20,19,668,0,3,0,14],f:[0,0,0,0,0,0]},
-'2026-01-04':{v:11565,c:703,a:1,os:[8716,2842,7],dev:[11559,0,6],cn:[52,127,11350,0,22,8,6],cc:[29,20,642,0,4,1,7],f:[0,0,0,0,0,0]},
-'2026-01-05':{v:11591,c:658,a:4,os:[8789,2773,29],dev:[11564,0,27],cn:[92,166,11284,0,28,6,15],cc:[35,25,578,0,6,1,13],f:[0,0,0,0,0,0]},
-'2026-01-06':{v:9572,c:570,a:1,os:[7095,2456,21],dev:[9552,0,20],cn:[98,191,9262,0,10,0,11],cc:[45,19,490,0,8,0,8],f:[0,0,0,0,0,0]},
-'2026-01-07':{v:9250,c:624,a:4,os:[7035,2188,27],dev:[9223,0,27],cn:[74,195,8963,0,6,0,12],cc:[40,38,533,0,3,0,10],f:[0,0,0,0,0,0]},
-'2026-01-08':{v:8850,c:572,a:3,os:[6676,2149,25],dev:[8825,0,25],cn:[89,172,8576,0,3,1,9],cc:[45,20,486,0,7,1,13],f:[0,0,0,0,0,0]},
-'2026-01-09':{v:7461,c:519,a:4,os:[5624,1813,24],dev:[7437,0,24],cn:[71,180,7183,0,14,1,12],cc:[35,30,438,0,8,0,8],f:[0,0,0,0,0,0]},
-'2026-01-10':{v:6406,c:423,a:3,os:[4868,1531,7],dev:[6399,0,7],cn:[53,154,6189,0,7,0,3],cc:[26,22,368,0,2,0,5],f:[0,0,0,0,0,0]},
-'2026-01-11':{v:6326,c:465,a:2,os:[4808,1512,6],dev:[6320,0,6],cn:[65,134,6117,0,4,0,6],cc:[34,20,399,0,4,0,8],f:[0,0,0,0,0,0]},
-'2026-01-12':{v:6663,c:490,a:8,os:[5051,1583,29],dev:[6635,0,28],cn:[93,155,6385,0,12,1,17],cc:[48,21,411,0,2,0,8],f:[0,0,0,0,0,0]},
-'2026-01-13':{v:6639,c:526,a:4,os:[4972,1636,31],dev:[6608,0,31],cn:[106,122,6388,0,11,0,12],cc:[42,23,451,0,2,0,8],f:[0,0,0,0,0,0]},
-'2026-01-14':{v:6406,c:513,a:4,os:[4777,1606,23],dev:[6383,0,23],cn:[103,116,6162,1,15,0,9],cc:[48,26,428,0,5,0,6],f:[0,0,0,0,0,0]},
-'2026-01-15':{v:5956,c:440,a:4,os:[4428,1497,31],dev:[5925,0,31],cn:[80,110,5745,1,5,0,15],cc:[46,21,358,0,2,0,13],f:[0,0,0,0,0,0]},
-'2026-01-16':{v:5871,c:446,a:2,os:[4449,1406,16],dev:[5855,0,16],cn:[82,125,5652,1,6,1,4],cc:[39,22,376,0,3,0,6],f:[0,0,0,0,0,0]},
-'2026-01-17':{v:5715,c:433,a:2,os:[4419,1290,6],dev:[5709,0,6],cn:[47,95,5560,1,7,0,5],cc:[20,14,393,0,4,0,2],f:[0,0,0,0,0,0]},
-'2026-01-18':{v:5769,c:466,a:4,os:[4395,1364,10],dev:[5759,0,10],cn:[55,83,5609,0,17,0,5],cc:[37,25,392,0,5,0,7],f:[0,0,0,0,0,0]},
-'2026-01-19':{v:6050,c:499,a:5,os:[4594,1420,36],dev:[6014,0,36],cn:[96,118,5816,1,4,0,15],cc:[42,27,421,0,2,0,7],f:[0,0,0,0,0,0]},
-'2026-01-20':{v:4833,c:357,a:3,os:[3635,1174,24],dev:[4809,0,24],cn:[83,119,4607,1,9,1,13],cc:[32,23,300,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-01-21':{v:5112,c:382,a:2,os:[3826,1259,27],dev:[5085,0,27],cn:[112,142,4837,0,5,0,16],cc:[52,16,307,0,4,0,3],f:[0,0,0,0,0,0]},
-'2026-01-22':{v:5494,c:438,a:1,os:[4170,1297,27],dev:[5467,0,27],cn:[98,154,5223,1,7,0,11],cc:[51,25,355,0,1,0,6],f:[0,0,0,0,0,0]},
-'2026-01-23':{v:5520,c:439,a:1,os:[4148,1346,26],dev:[5494,0,26],cn:[88,128,5284,0,5,0,15],cc:[41,23,365,0,3,0,7],f:[0,0,0,0,0,0]},
-'2026-01-24':{v:4017,c:348,a:3,os:[3087,919,11],dev:[4006,0,11],cn:[88,123,3791,1,10,0,4],cc:[46,27,270,0,0,0,5],f:[0,0,0,0,0,0]},
-'2026-01-25':{v:4608,c:383,a:3,os:[3447,1155,6],dev:[4602,0,6],cn:[71,86,4443,0,5,0,3],cc:[43,11,319,0,8,0,2],f:[0,0,0,0,0,0]},
-'2026-01-26':{v:4656,c:362,a:2,os:[3531,1095,30],dev:[4626,0,30],cn:[125,121,4387,1,10,0,12],cc:[62,15,276,0,2,0,7],f:[0,0,0,0,0,0]},
-'2026-01-27':{v:4689,c:374,a:8,os:[3570,1098,21],dev:[4668,0,21],cn:[73,131,4457,0,20,0,8],cc:[48,30,290,0,4,0,2],f:[0,0,0,0,0,0]},
-'2026-01-28':{v:4094,c:363,a:8,os:[3143,931,20],dev:[4074,0,20],cn:[78,121,3864,0,18,0,13],cc:[29,21,309,0,3,0,1],f:[0,0,0,0,0,0]},
-'2026-01-29':{v:5216,c:394,a:3,os:[3964,1224,28],dev:[5188,0,28],cn:[54,125,5018,0,7,0,12],cc:[23,29,337,0,5,0,0],f:[0,0,0,0,0,0]},
-'2026-01-30':{v:4876,c:346,a:3,os:[3717,1142,17],dev:[4859,0,17],cn:[85,114,4644,0,24,0,9],cc:[35,19,284,0,3,0,5],f:[0,0,0,0,0,0]},
-'2026-01-31':{v:15754,c:820,a:6,os:[11883,3858,13],dev:[15741,0,13],cn:[74,109,15538,0,25,0,8],cc:[40,15,757,0,8,0,0],f:[0,0,0,0,0,0]},
-'2026-02-01':{v:21115,c:1099,a:8,os:[15915,5190,10],dev:[21105,0,10],cn:[77,103,20876,1,44,0,14],cc:[33,21,1027,0,8,0,10],f:[0,0,0,0,0,0]},
-'2026-02-02':{v:13982,c:830,a:5,os:[10708,3251,23],dev:[13959,0,23],cn:[106,137,13654,1,63,0,21],cc:[42,25,751,0,8,0,4],f:[0,0,0,0,0,0]},
-'2026-02-03':{v:11269,c:749,a:9,os:[8568,2675,26],dev:[11245,0,24],cn:[96,167,10963,0,29,0,14],cc:[46,28,654,0,8,0,13],f:[0,0,0,0,0,0]},
-'2026-02-04':{v:12591,c:669,a:6,os:[9458,3108,25],dev:[12566,0,25],cn:[85,323,12124,1,41,0,17],cc:[38,29,588,0,5,0,9],f:[0,0,0,0,0,0]},
-'2026-02-05':{v:12575,c:674,a:4,os:[9293,3253,29],dev:[12546,0,29],cn:[106,144,12280,0,32,0,13],cc:[41,23,603,0,3,0,4],f:[0,0,0,0,0,0]},
-'2026-02-06':{v:9435,c:524,a:8,os:[7113,2299,23],dev:[9412,0,23],cn:[77,162,9162,0,25,0,9],cc:[36,19,461,0,5,0,3],f:[0,0,0,0,0,0]},
-'2026-02-07':{v:8120,c:499,a:1,os:[6147,1953,20],dev:[8100,0,20],cn:[67,107,7908,0,27,0,11],cc:[24,15,442,0,9,0,9],f:[0,0,0,0,0,0]},
-'2026-02-08':{v:7591,c:471,a:1,os:[5743,1844,4],dev:[7587,0,4],cn:[64,96,7403,1,24,0,3],cc:[32,14,414,0,7,0,4],f:[0,0,0,0,0,0]},
-'2026-02-09':{v:7799,c:493,a:3,os:[5942,1832,25],dev:[7775,0,24],cn:[110,137,7502,1,32,0,17],cc:[48,17,410,0,10,0,8],f:[0,0,0,0,0,0]},
-'2026-02-10':{v:6301,c:492,a:5,os:[4674,1612,15],dev:[6286,0,15],cn:[115,133,6013,0,31,0,9],cc:[57,27,403,0,3,0,2],f:[0,0,0,0,0,0]},
-'2026-02-11':{v:6518,c:455,a:3,os:[4831,1650,37],dev:[6481,0,37],cn:[96,236,6128,0,39,0,19],cc:[40,21,378,0,6,0,10],f:[0,0,0,0,0,0]},
-'2026-02-12':{v:6058,c:451,a:1,os:[4499,1530,29],dev:[6029,0,29],cn:[95,146,5777,0,27,0,13],cc:[44,30,368,0,6,0,3],f:[0,0,0,0,0,0]},
-'2026-02-13':{v:6552,c:463,a:2,os:[4993,1542,17],dev:[6535,0,17],cn:[75,127,6306,0,36,0,8],cc:[36,16,397,0,7,0,7],f:[0,0,0,0,0,0]},
-'2026-02-14':{v:5240,c:350,a:2,os:[3954,1283,3],dev:[5237,0,3],cn:[68,112,5028,0,25,0,7],cc:[38,17,283,0,5,0,7],f:[0,0,0,0,0,0]},
-'2026-02-15':{v:4789,c:365,a:0,os:[3576,1204,9],dev:[4780,0,9],cn:[55,78,4638,0,12,0,6],cc:[17,12,326,0,4,0,6],f:[0,0,0,0,0,0]},
-'2026-02-16':{v:4947,c:373,a:3,os:[3713,1222,12],dev:[4935,0,12],cn:[86,107,4712,0,30,0,12],cc:[27,15,325,0,3,0,3],f:[0,0,0,0,0,0]},
-'2026-02-17':{v:5331,c:421,a:8,os:[4039,1280,12],dev:[5319,0,12],cn:[75,113,5120,0,16,0,7],cc:[47,28,337,0,6,0,3],f:[0,0,0,0,0,0]},
-'2026-02-18':{v:5491,c:460,a:2,os:[4149,1320,22],dev:[5470,0,21],cn:[95,114,5238,0,25,0,19],cc:[46,17,385,0,8,0,4],f:[0,0,0,0,0,0]},
-'2026-02-19':{v:12479,c:1356,a:14,os:[9471,2991,17],dev:[12462,0,17],cn:[2810,160,4885,0,98,0,4526],cc:[221,30,319,0,18,0,768],f:[0,0,0,0,0,0]},
-'2026-02-20':{v:11933,c:1224,a:8,os:[9012,2901,20],dev:[11913,0,20],cn:[3114,138,5176,0,71,0,3434],cc:[276,15,340,0,10,0,583],f:[0,0,0,0,0,0]},
-'2026-02-21':{v:9851,c:962,a:5,os:[7524,2322,5],dev:[9846,0,5],cn:[2396,116,4371,0,78,0,2890],cc:[196,14,321,0,10,0,421],f:[0,0,0,0,0,0]},
-'2026-02-22':{v:9745,c:955,a:5,os:[7381,2355,9],dev:[9736,0,9],cn:[2186,116,4707,0,64,0,2672],cc:[198,18,352,0,10,0,377],f:[0,0,0,0,0,0]},
-'2026-02-23':{v:16011,c:1786,a:9,os:[12241,3748,22],dev:[15989,0,22],cn:[2883,148,4998,0,81,0,7901],cc:[246,22,294,0,19,0,1205],f:[0,0,0,0,0,0]},
-'2026-02-24':{v:11084,c:1062,a:9,os:[8426,2633,25],dev:[11059,0,25],cn:[2890,215,4461,0,58,0,3460],cc:[237,18,323,0,22,0,462],f:[0,0,0,0,0,0]},
-'2026-02-25':{v:10384,c:804,a:10,os:[7510,2854,20],dev:[10364,0,20],cn:[2950,162,4470,0,62,3,2737],cc:[235,18,183,0,10,1,357],f:[0,0,0,0,0,0]},
-'2026-02-26':{v:21960,c:1567,a:13,os:[16845,5083,32],dev:[21930,0,30],cn:[2641,168,4062,0,80,0,15009],cc:[229,24,271,0,17,0,1026],f:[0,0,0,0,0,0]},
-'2026-02-27':{v:10168,c:769,a:8,os:[7904,2245,19],dev:[10149,0,19],cn:[2844,156,3404,0,40,3,3721],cc:[215,20,234,0,9,0,291],f:[0,0,0,0,0,0]},
-'2026-02-28':{v:8510,c:553,a:6,os:[6609,1890,11],dev:[8499,0,11],cn:[2342,110,5119,0,26,0,913],cc:[198,20,286,0,8,0,41],f:[0,0,0,0,0,0]},
-'2026-03-01':{v:6929,c:559,a:8,os:[5277,1641,11],dev:[6918,0,11],cn:[2268,135,4175,0,35,0,316],cc:[207,15,314,0,4,0,19],f:[0,0,0,0,0,0]},
-'2026-03-02':{v:6865,c:538,a:7,os:[5184,1653,28],dev:[6837,0,28],cn:[3012,159,3633,0,43,0,18],cc:[260,16,247,0,9,0,6],f:[0,0,0,0,0,0]},
-'2026-03-03':{v:25462,c:1370,a:9,os:[18844,6590,28],dev:[25435,0,27],cn:[2834,136,22407,0,63,0,22],cc:[257,13,1079,0,16,0,5],f:[0,0,0,0,0,0]},
-'2026-03-04':{v:20349,c:980,a:4,os:[15369,4953,27],dev:[20323,0,26],cn:[2865,158,17246,0,59,0,21],cc:[239,14,712,0,14,0,1],f:[0,0,0,0,0,0]},
-'2026-03-05':{v:12964,c:713,a:9,os:[9756,3178,30],dev:[12934,0,30],cn:[2845,158,9918,0,21,0,22],cc:[254,15,433,0,4,0,7],f:[0,0,0,0,0,0]},
-'2026-03-06':{v:15760,c:792,a:7,os:[11783,3951,26],dev:[15734,0,26],cn:[2922,142,12681,0,2,0,13],cc:[267,16,506,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-03-07':{v:14339,c:677,a:9,os:[10774,3553,12],dev:[14327,0,12],cn:[2321,111,11893,0,4,0,10],cc:[205,12,456,0,0,0,4],f:[0,0,0,0,0,0]},
-'2026-03-08':{v:10552,c:517,a:4,os:[7885,2659,8],dev:[10544,0,8],cn:[1878,90,8575,0,3,0,6],cc:[182,10,323,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-03-09':{v:8893,c:542,a:4,os:[6813,2053,27],dev:[8866,0,27],cn:[3109,146,5623,0,2,0,13],cc:[257,16,263,0,0,0,6],f:[0,0,0,0,0,0]},
-'2026-03-10':{v:5438,c:456,a:5,os:[4098,1320,20],dev:[5418,0,20],cn:[3380,174,1876,0,4,1,3],cc:[326,9,115,0,1,0,5],f:[0,0,0,0,0,0]},
-'2026-03-11':{v:11328,c:671,a:6,os:[8358,2932,38],dev:[11290,0,38],cn:[2999,166,8140,0,7,0,16],cc:[265,14,382,0,2,0,8],f:[0,0,0,0,0,0]},
-'2026-03-12':{v:8535,c:569,a:7,os:[6410,2101,24],dev:[8512,0,23],cn:[2774,181,5572,0,2,0,6],cc:[252,16,297,0,0,0,4],f:[0,0,0,0,0,0]},
-'2026-03-13':{v:9942,c:603,a:4,os:[7416,2502,24],dev:[9918,0,24],cn:[2660,148,7114,2,0,1,17],cc:[217,9,370,0,0,1,6],f:[0,0,0,0,0,0]},
-'2026-03-14':{v:6746,c:450,a:2,os:[5136,1599,11],dev:[6735,0,11],cn:[2037,130,4571,0,1,0,7],cc:[178,13,252,0,2,0,5],f:[0,0,0,0,0,0]},
-'2026-03-15':{v:5945,c:379,a:2,os:[4436,1502,7],dev:[5938,0,7],cn:[1843,102,3984,0,7,0,9],cc:[167,6,205,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-03-16':{v:7232,c:489,a:6,os:[5454,1760,18],dev:[7214,0,18],cn:[2808,160,4256,0,1,0,7],cc:[250,17,219,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-03-17':{v:7334,c:525,a:5,os:[5537,1779,18],dev:[7316,0,18],cn:[2670,164,4489,0,2,0,9],cc:[253,15,247,0,0,0,10],f:[0,0,0,0,0,0]},
-'2026-03-18':{v:7062,c:482,a:2,os:[5316,1727,19],dev:[7043,0,19],cn:[2584,160,4306,0,4,0,8],cc:[219,16,240,0,2,0,5],f:[0,0,0,0,0,0]},
-'2026-03-19':{v:6306,c:468,a:5,os:[4839,1455,12],dev:[6294,0,12],cn:[2346,131,3819,0,3,0,7],cc:[219,16,228,0,1,0,4],f:[0,0,0,0,0,0]},
-'2026-03-20':{v:6104,c:396,a:4,os:[4586,1499,19],dev:[6085,0,19],cn:[2452,143,3497,0,2,0,10],cc:[212,8,174,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-03-21':{v:5340,c:371,a:3,os:[4047,1287,6],dev:[5334,0,6],cn:[1922,115,3295,1,1,0,6],cc:[184,14,173,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-03-22':{v:4901,c:351,a:3,os:[3708,1183,10],dev:[4891,0,10],cn:[1662,98,3137,0,2,0,2],cc:[167,16,167,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-03-23':{v:6068,c:443,a:11,os:[4564,1478,26],dev:[6042,0,26],cn:[2426,147,3483,0,2,0,10],cc:[243,13,186,0,1,0,0],f:[0,0,0,0,0,0]},
-'2026-03-24':{v:5823,c:409,a:5,os:[4324,1473,26],dev:[5797,0,26],cn:[2373,163,3275,0,2,0,10],cc:[214,13,180,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-03-25':{v:5717,c:397,a:8,os:[4298,1392,27],dev:[5690,0,27],cn:[2542,159,3004,0,2,0,10],cc:[223,11,160,0,1,0,2],f:[0,0,0,0,0,0]},
-'2026-03-26':{v:5236,c:399,a:10,os:[3958,1258,20],dev:[5216,0,20],cn:[2308,173,2744,0,4,0,7],cc:[230,17,147,0,0,0,5],f:[0,0,0,0,0,0]},
-'2026-03-27':{v:10288,c:595,a:3,os:[7592,2672,24],dev:[10265,0,23],cn:[2332,146,7793,0,4,0,13],cc:[210,13,370,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-03-28':{v:5356,c:367,a:6,os:[4147,1197,12],dev:[5344,0,12],cn:[1951,116,3279,0,3,0,7],cc:[183,15,165,0,1,0,3],f:[0,0,0,0,0,0]},
-'2026-03-29':{v:4078,c:327,a:3,os:[3076,995,7],dev:[4071,0,7],cn:[1714,103,2253,0,1,0,7],cc:[182,7,136,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-03-30':{v:4654,c:365,a:7,os:[3512,1123,19],dev:[4635,0,19],cn:[2526,178,1938,0,4,0,8],cc:[236,17,111,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-03-31':{v:20041,c:1008,a:12,os:[14612,5411,18],dev:[20023,0,18],cn:[2816,155,17053,0,3,0,14],cc:[248,19,737,0,1,0,3],f:[0,0,0,0,0,0]},
-'2026-04-01':{v:17789,c:838,a:13,os:[13267,4503,19],dev:[17770,0,19],cn:[2879,165,14728,0,3,3,11],cc:[246,72,516,0,0,0,4],f:[0,0,0,0,0,0]},
-'2026-04-02':{v:9490,c:532,a:6,os:[7146,2330,14],dev:[9476,0,14],cn:[2373,130,6974,0,7,0,6],cc:[217,49,262,0,1,0,3],f:[0,0,0,0,0,0]},
-'2026-04-03':{v:10958,c:569,a:5,os:[8186,2768,4],dev:[10954,0,4],cn:[1881,113,8961,0,0,0,3],cc:[180,62,325,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-04-04':{v:12367,c:532,a:2,os:[8988,3370,9],dev:[12358,0,9],cn:[1863,112,10378,0,7,0,7],cc:[154,60,317,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-04-05':{v:7644,c:405,a:1,os:[5577,2057,10],dev:[7634,0,10],cn:[1598,99,5941,1,0,0,5],cc:[148,30,224,0,1,0,2],f:[0,0,0,0,0,0]},
-'2026-04-06':{v:9703,c:518,a:5,os:[7288,2382,33],dev:[9671,0,32],cn:[2702,148,6837,1,1,0,14],cc:[196,50,269,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-04-07':{v:12175,c:704,a:6,os:[8878,3280,17],dev:[12158,0,17],cn:[3270,182,8715,1,1,0,6],cc:[296,52,355,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-04-08':{v:10466,c:436,a:5,os:[7582,2854,30],dev:[10436,0,30],cn:[3136,279,7038,0,4,0,9],cc:[179,95,159,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-04-09':{v:10504,c:453,a:4,os:[7446,3032,26],dev:[10478,0,26],cn:[2858,477,7152,0,0,0,17],cc:[127,189,134,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-04-10':{v:6028,c:262,a:4,os:[4487,1519,22],dev:[6006,0,22],cn:[2778,420,2821,0,0,0,9],cc:[89,122,49,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-04-11':{v:8175,c:371,a:4,os:[6053,2116,6],dev:[8169,0,6],cn:[2098,451,5622,0,0,0,4],cc:[76,182,111,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-04-12':{v:7113,c:284,a:2,os:[5243,1859,11],dev:[7102,0,11],cn:[1850,420,4839,0,0,0,4],cc:[65,130,89,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-04-13':{v:4922,c:291,a:5,os:[3655,1254,13],dev:[4909,0,13],cn:[2653,421,1843,0,0,0,5],cc:[105,137,48,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-04-14':{v:4293,c:257,a:1,os:[3160,1117,16],dev:[4277,0,16],cn:[2643,326,1315,0,0,0,9],cc:[111,103,43,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-04-15':{v:12975,c:460,a:3,os:[9091,3861,23],dev:[12952,0,23],cn:[2633,290,10040,0,0,0,12],cc:[130,81,246,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-04-16':{v:6867,c:345,a:3,os:[5032,1816,19],dev:[6848,0,19],cn:[2559,249,4050,0,0,0,9],cc:[154,67,120,0,0,0,4],f:[0,0,0,0,0,0]},
-'2026-04-17':{v:4724,c:272,a:0,os:[3558,1149,17],dev:[4707,0,17],cn:[2315,216,2188,1,0,0,4],cc:[145,50,75,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-04-18':{v:4263,c:246,a:3,os:[3212,1044,7],dev:[4256,0,7],cn:[1885,190,2182,0,0,0,6],cc:[119,31,95,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-04-19':{v:5599,c:264,a:2,os:[4099,1495,5],dev:[5594,0,5],cn:[1627,152,3818,0,0,0,2],cc:[110,39,113,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-04-20':{v:6002,c:287,a:0,os:[4472,1517,13],dev:[5989,0,13],cn:[2325,233,3440,0,0,0,4],cc:[144,50,92,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-04-21':{v:5307,c:289,a:4,os:[3953,1343,11],dev:[5296,0,11],cn:[2096,216,2988,0,0,0,7],cc:[139,48,99,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-04-22':{v:5921,c:330,a:2,os:[4342,1553,26],dev:[5895,0,26],cn:[2424,220,3265,0,0,0,12],cc:[157,52,118,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-04-23':{v:5699,c:275,a:5,os:[4183,1496,20],dev:[5679,0,20],cn:[2331,237,3125,0,0,0,6],cc:[136,47,90,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-04-24':{v:5433,c:297,a:3,os:[4072,1342,19],dev:[5414,0,19],cn:[2191,233,3004,0,0,0,5],cc:[129,61,107,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-04-25':{v:4650,c:263,a:2,os:[3528,1113,9],dev:[4641,0,9],cn:[1860,183,2602,0,0,0,5],cc:[110,46,104,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-04-26':{v:4302,c:210,a:2,os:[3269,1027,6],dev:[4296,0,6],cn:[1618,183,2496,0,0,0,5],cc:[94,40,75,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-04-27':{v:5012,c:259,a:3,os:[3697,1295,20],dev:[4992,0,20],cn:[2335,228,2438,0,0,0,11],cc:[138,40,78,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-04-28':{v:6309,c:247,a:3,os:[4578,1713,18],dev:[6291,0,18],cn:[2404,238,3661,0,0,0,6],cc:[110,50,84,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-04-29':{v:3935,c:261,a:7,os:[2830,1090,15],dev:[3920,0,15],cn:[2388,227,1314,0,0,0,6],cc:[164,45,46,0,0,0,6],f:[0,0,0,0,0,0]},
-'2026-04-30':{v:3934,c:205,a:3,os:[2328,1588,18],dev:[3917,0,17],cn:[2250,214,1465,0,0,0,5],cc:[121,37,47,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-05-01':{v:7902,c:278,a:4,os:[2743,5154,5],dev:[7897,0,5],cn:[1943,213,5742,0,0,0,4],cc:[123,34,120,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-05-02':{v:5391,c:197,a:2,os:[2113,3269,9],dev:[5382,0,9],cn:[1780,181,3427,0,0,0,3],cc:[99,29,68,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-05-03':{v:3563,c:186,a:1,os:[1554,2006,3],dev:[3560,0,3],cn:[1591,168,1800,0,0,0,4],cc:[102,26,56,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-05-04':{v:2959,c:182,a:3,os:[2003,942,14],dev:[2945,0,14],cn:[2327,234,388,0,0,0,10],cc:[146,24,7,0,0,0,5],f:[0,0,0,0,0,0]},
-'2026-05-05':{v:2715,c:164,a:1,os:[2034,668,13],dev:[2703,0,12],cn:[2445,235,29,0,0,0,6],cc:[141,22,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-05-06':{v:2700,c:177,a:8,os:[2016,671,13],dev:[2687,0,13],cn:[2470,227,0,0,0,0,3],cc:[140,34,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-05-07':{v:2685,c:117,a:3,os:[1999,676,10],dev:[2675,0,10],cn:[2424,258,1,0,0,0,2],cc:[107,9,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-05-08':{v:2538,c:121,a:3,os:[1950,574,14],dev:[2524,0,14],cn:[2288,246,0,1,0,0,3],cc:[107,11,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-05-09':{v:1902,c:72,a:3,os:[1447,453,2],dev:[1900,0,2],cn:[1744,157,0,0,0,0,1],cc:[59,10,1,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-05-10':{v:1534,c:68,a:1,os:[1156,377,1],dev:[1533,0,1],cn:[1390,143,0,0,0,0,1],cc:[58,9,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-05-11':{v:2565,c:134,a:0,os:[1883,666,16],dev:[2549,0,16],cn:[2331,226,0,0,0,0,8],cc:[117,14,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-05-12':{v:2950,c:128,a:2,os:[2196,740,14],dev:[2936,0,14],cn:[2258,686,0,0,0,0,6],cc:[107,16,0,0,0,0,5],f:[0,0,0,0,0,0]},
-'2026-05-13':{v:2546,c:122,a:5,os:[1881,652,13],dev:[2533,0,13],cn:[2169,372,0,0,0,0,5],cc:[106,14,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-05-14':{v:2318,c:102,a:7,os:[1722,580,16],dev:[2302,0,16],cn:[2060,256,0,0,0,0,2],cc:[82,18,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-05-15':{v:2161,c:106,a:4,os:[1582,566,13],dev:[2148,0,13],cn:[1927,233,0,0,0,0,1],cc:[87,18,1,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-05-16':{v:1887,c:71,a:0,os:[1463,418,6],dev:[1881,0,6],cn:[1684,200,0,0,0,0,3],cc:[57,12,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-05-17':{v:1672,c:84,a:3,os:[1240,425,7],dev:[1665,0,7],cn:[1486,181,0,0,0,2,3],cc:[66,18,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-05-18':{v:2423,c:111,a:2,os:[1795,613,15],dev:[2408,0,15],cn:[2199,223,0,0,0,0,1],cc:[101,10,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-05-19':{v:2414,c:103,a:2,os:[1769,628,17],dev:[2397,0,17],cn:[2179,232,0,0,0,0,3],cc:[91,10,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-05-20':{v:2528,c:103,a:3,os:[1856,659,13],dev:[2515,0,13],cn:[2309,217,0,0,0,0,2],cc:[89,11,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-05-21':{v:2290,c:115,a:8,os:[1728,552,10],dev:[2280,0,10],cn:[2093,192,0,0,0,0,5],cc:[100,14,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-05-22':{v:2136,c:94,a:2,os:[1611,515,10],dev:[2126,0,10],cn:[1973,161,0,1,0,0,1],cc:[87,6,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-05-23':{v:1657,c:97,a:6,os:[1289,365,3],dev:[1654,0,3],cn:[1503,151,0,0,0,0,3],cc:[83,11,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-05-24':{v:1554,c:83,a:2,os:[1207,345,2],dev:[1552,0,2],cn:[1421,132,0,1,0,0,0],cc:[80,2,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-05-25':{v:2284,c:109,a:4,os:[1695,580,9],dev:[2275,0,9],cn:[2069,213,0,0,0,0,2],cc:[94,15,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-05-26':{v:2302,c:123,a:7,os:[1721,561,20],dev:[2282,0,20],cn:[2106,195,0,0,0,0,1],cc:[105,16,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-05-27':{v:2023,c:124,a:5,os:[1521,487,15],dev:[2008,0,15],cn:[1817,205,0,0,0,0,1],cc:[104,15,0,0,0,0,5],f:[0,0,0,0,0,0]},
-'2026-05-28':{v:2178,c:100,a:5,os:[1635,531,12],dev:[2166,0,12],cn:[1968,210,0,0,0,0,0],cc:[89,9,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-05-29':{v:2150,c:99,a:4,os:[1639,499,12],dev:[2138,0,12],cn:[1945,202,0,0,0,0,3],cc:[90,7,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-05-30':{v:1798,c:115,a:2,os:[1402,393,3],dev:[1795,0,3],cn:[1645,153,0,0,0,0,0],cc:[105,8,1,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-05-31':{v:1652,c:112,a:4,os:[1284,361,7],dev:[1645,0,7],cn:[1500,152,0,0,0,0,0],cc:[97,14,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-01':{v:2346,c:119,a:8,os:[1732,593,21],dev:[2325,0,21],cn:[2125,221,0,0,0,0,0],cc:[105,13,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-02':{v:2217,c:110,a:7,os:[1669,535,13],dev:[2204,0,13],cn:[2002,213,0,0,0,0,2],cc:[99,8,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-06-03':{v:2104,c:123,a:7,os:[1591,493,20],dev:[2084,0,20],cn:[1892,208,0,0,0,0,4],cc:[93,7,0,0,0,0,23],f:[0,0,0,0,0,0]},
-'2026-06-04':{v:1880,c:127,a:8,os:[1421,452,7],dev:[1873,0,7],cn:[1710,167,0,0,0,0,3],cc:[112,11,0,0,0,0,4],f:[0,0,0,0,0,0]},
-'2026-06-05':{v:2108,c:104,a:3,os:[1599,500,9],dev:[2099,0,9],cn:[1904,204,0,0,0,0,0],cc:[93,11,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-06-06':{v:1671,c:99,a:2,os:[1299,364,8],dev:[1663,0,8],cn:[1514,157,0,0,0,0,0],cc:[88,10,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-07':{v:1587,c:97,a:3,os:[1220,363,4],dev:[1583,0,4],cn:[1453,131,0,0,0,0,3],cc:[89,7,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-08':{v:2262,c:98,a:2,os:[1645,606,11],dev:[2251,0,11],cn:[2037,223,0,0,0,0,2],cc:[81,14,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-06-09':{v:2155,c:124,a:5,os:[1612,529,14],dev:[2141,0,14],cn:[1945,205,0,0,0,0,5],cc:[108,15,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-10':{v:2386,c:135,a:6,os:[1753,620,13],dev:[2373,0,13],cn:[2164,221,0,0,0,0,1],cc:[120,13,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-06-11':{v:2080,c:107,a:4,os:[1525,544,11],dev:[2069,0,11],cn:[1913,166,0,0,0,0,1],cc:[93,13,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-12':{v:1860,c:98,a:5,os:[1420,429,11],dev:[1849,0,11],cn:[1674,183,0,0,0,0,3],cc:[87,10,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-13':{v:1511,c:70,a:4,os:[1150,353,8],dev:[1503,0,8],cn:[1352,157,0,0,0,0,2],cc:[63,6,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-14':{v:1541,c:94,a:6,os:[1158,378,5],dev:[1536,0,5],cn:[1388,152,0,0,0,0,1],cc:[82,10,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-06-15':{v:2297,c:122,a:4,os:[1692,591,14],dev:[2283,0,14],cn:[2068,226,0,0,0,0,3],cc:[109,13,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-06-16':{v:2199,c:132,a:6,os:[1606,577,16],dev:[2183,0,16],cn:[1992,207,0,0,0,0,0],cc:[116,14,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-06-17':{v:2057,c:118,a:5,os:[1491,558,8],dev:[2049,0,8],cn:[1865,190,0,0,0,0,2],cc:[105,11,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-06-18':{v:1922,c:109,a:3,os:[1429,481,12],dev:[1910,0,12],cn:[1726,194,0,0,0,0,2],cc:[92,10,0,0,0,0,7],f:[0,0,0,0,0,0]},
-'2026-06-19':{v:1711,c:95,a:4,os:[1313,392,6],dev:[1705,0,6],cn:[1548,162,0,0,0,0,1],cc:[83,10,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-06-20':{v:1492,c:80,a:1,os:[1165,320,7],dev:[1485,0,7],cn:[1341,150,0,0,0,0,1],cc:[72,8,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-06-21':{v:1469,c:86,a:3,os:[1134,333,2],dev:[1467,0,2],cn:[1307,161,0,0,0,0,1],cc:[76,9,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-22':{v:2065,c:86,a:4,os:[1487,566,12],dev:[2053,0,12],cn:[1874,190,0,0,0,0,1],cc:[78,7,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-23':{v:2036,c:108,a:2,os:[1467,552,17],dev:[2019,0,17],cn:[1826,206,0,0,0,0,4],cc:[89,15,0,0,0,0,4],f:[0,0,0,0,0,0]},
-'2026-06-24':{v:1786,c:108,a:4,os:[1323,449,14],dev:[1772,0,14],cn:[1594,191,0,0,0,0,1],cc:[90,17,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-25':{v:1923,c:96,a:4,os:[1397,514,12],dev:[1911,0,12],cn:[1725,196,0,0,0,0,2],cc:[85,8,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-06-26':{v:1818,c:107,a:4,os:[1369,434,15],dev:[1803,0,15],cn:[1629,185,0,0,0,0,4],cc:[96,9,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-06-27':{v:1561,c:84,a:4,os:[1168,389,4],dev:[1557,0,4],cn:[1388,170,0,0,0,0,3],cc:[74,10,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-06-28':{v:1351,c:76,a:6,os:[1016,332,3],dev:[1348,0,3],cn:[1199,150,0,0,0,0,2],cc:[66,9,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-29':{v:1520,c:67,a:2,os:[1154,358,8],dev:[1512,0,8],cn:[1378,141,0,0,0,0,1],cc:[55,11,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-06-30':{v:2855,c:142,a:11,os:[1947,889,19],dev:[2836,0,19],cn:[2644,207,0,0,0,0,4],cc:[125,10,0,0,0,0,7],f:[0,0,0,0,0,0]},
-'2026-07-01':{v:2549,c:127,a:4,os:[1886,639,24],dev:[2525,0,24],cn:[2302,240,0,1,0,0,6],cc:[108,13,0,0,0,0,6],f:[0,0,0,0,0,0]},
-'2026-07-02':{v:2150,c:106,a:8,os:[1596,546,8],dev:[2142,0,8],cn:[1955,193,0,0,0,0,2],cc:[91,11,0,0,0,0,4],f:[0,0,0,0,0,0]},
-'2026-07-03':{v:1906,c:101,a:7,os:[1403,485,18],dev:[1888,0,18],cn:[1709,194,0,1,0,0,2],cc:[89,11,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-07-04':{v:1555,c:82,a:6,os:[1183,366,6],dev:[1549,0,6],cn:[1410,144,0,0,0,0,1],cc:[65,14,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-07-05':{v:1283,c:80,a:1,os:[1003,277,3],dev:[1280,0,3],cn:[1152,131,0,0,0,0,0],cc:[74,6,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-07-06':{v:2068,c:109,a:6,os:[1524,530,14],dev:[2054,0,14],cn:[1883,183,0,0,0,0,2],cc:[98,10,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-07-07':{v:2126,c:108,a:10,os:[1558,555,13],dev:[2113,0,13],cn:[1937,187,0,0,0,0,2],cc:[98,8,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-07-08':{v:2155,c:111,a:1,os:[1606,537,12],dev:[2143,0,12],cn:[1934,216,0,1,0,0,4],cc:[104,5,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-07-09':{v:1950,c:107,a:4,os:[1460,485,5],dev:[1945,0,5],cn:[1761,187,0,0,0,0,2],cc:[90,14,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-07-10':{v:2023,c:119,a:6,os:[1493,521,9],dev:[2015,0,8],cn:[1835,186,0,0,0,0,2],cc:[100,17,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-07-11':{v:1604,c:80,a:1,os:[1216,380,8],dev:[1596,0,8],cn:[1440,164,0,0,0,0,0],cc:[72,8,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-07-12':{v:1405,c:95,a:6,os:[1068,328,9],dev:[1396,0,9],cn:[1253,150,0,0,0,0,2],cc:[86,8,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-07-13':{v:2552,c:123,a:5,os:[1775,763,14],dev:[2538,0,14],cn:[2344,203,0,0,0,0,5],cc:[105,17,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-07-14':{v:2272,c:120,a:6,os:[1643,618,11],dev:[2261,0,11],cn:[2061,207,0,0,0,0,4],cc:[111,8,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-07-15':{v:2232,c:107,a:7,os:[1600,620,12],dev:[2220,0,12],cn:[2020,209,0,0,0,0,3],cc:[91,14,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-07-16':{v:2125,c:100,a:3,os:[1509,602,14],dev:[2111,0,14],cn:[1935,185,0,0,0,0,5],cc:[88,9,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-07-17':{v:1839,c:97,a:3,os:[1329,497,13],dev:[1826,0,13],cn:[1666,169,0,0,0,0,4],cc:[79,13,0,0,0,0,5],f:[0,0,0,0,0,0]},
-'2026-07-18':{v:1477,c:80,a:1,os:[1050,422,5],dev:[1472,0,5],cn:[1330,146,0,0,0,0,1],cc:[70,7,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-07-19':{v:1300,c:72,a:2,os:[955,341,4],dev:[1296,0,4],cn:[1164,132,0,0,0,0,4],cc:[63,8,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-07-20':{v:2105,c:117,a:4,os:[1519,574,12],dev:[2093,0,12],cn:[1898,204,0,0,0,0,3],cc:[104,12,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-07-21':{v:1968,c:105,a:4,os:[1360,596,12],dev:[1956,0,12],cn:[1754,209,0,0,0,0,5],cc:[86,17,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-07-22':{v:1814,c:101,a:5,os:[1286,517,11],dev:[1803,0,11],cn:[1649,161,0,0,0,0,4],cc:[84,13,0,0,0,0,4],f:[0,0,0,0,0,0]},
-'2026-07-23':{v:1711,c:91,a:1,os:[1227,479,5],dev:[1706,0,5],cn:[1539,171,0,0,0,0,1],cc:[80,9,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-07-24':{v:1683,c:85,a:1,os:[1198,470,15],dev:[1668,0,15],cn:[1514,162,0,0,0,0,7],cc:[74,7,0,0,0,0,4],f:[0,0,0,0,0,0]},
-'2026-07-25':{v:1383,c:70,a:3,os:[960,420,3],dev:[1380,0,3],cn:[1240,143,0,0,0,0,0],cc:[62,8,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-07-26':{v:1125,c:67,a:2,os:[821,297,7],dev:[1118,0,7],cn:[996,128,0,0,0,0,1],cc:[61,5,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-07-27':{v:1839,c:32,a:0,os:[1263,566,10],dev:[1829,0,10],cn:[1604,233,0,0,0,0,2],cc:[27,3,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-07-28':{v:1830,c:7,a:0,os:[1269,551,10],dev:[1820,0,10],cn:[1632,193,0,0,0,0,5],cc:[2,4,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-07-29':{v:1845,c:3,a:0,os:[1268,563,14],dev:[1831,0,14],cn:[1615,228,0,0,0,0,2],cc:[0,2,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-07-30':{v:1785,c:4,a:0,os:[1233,543,9],dev:[1776,0,9],cn:[1559,221,0,0,0,0,5],cc:[1,2,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-07-31':{v:1774,c:4,a:0,os:[1229,539,6],dev:[1768,0,6],cn:[1571,202,0,0,0,0,1],cc:[0,1,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-08-01':{v:1614,c:2,a:0,os:[1137,472,5],dev:[1609,0,5],cn:[1420,191,0,0,0,0,3],cc:[0,2,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-08-02':{v:1337,c:2,a:0,os:[956,380,1],dev:[1336,0,1],cn:[1161,175,0,0,0,0,1],cc:[0,2,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-08-03':{v:1943,c:2,a:0,os:[1311,616,16],dev:[1927,0,16],cn:[1699,240,0,0,0,0,4],cc:[1,1,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-08-04':{v:2017,c:6,a:0,os:[1363,642,12],dev:[2005,0,12],cn:[1764,247,0,0,0,0,6],cc:[2,3,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-08-05':{v:1955,c:6,a:0,os:[1363,576,16],dev:[1939,0,16],cn:[1695,246,0,0,0,0,14],cc:[0,3,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-08-06':{v:2050,c:5,a:2,os:[1414,626,10],dev:[2040,0,10],cn:[1831,213,0,0,0,0,6],cc:[1,3,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-08-07':{v:1946,c:73,a:7,os:[1343,589,14],dev:[1932,0,14],cn:[1744,198,0,0,0,0,4],cc:[62,10,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-08-08':{v:1518,c:79,a:3,os:[1043,467,8],dev:[1510,0,8],cn:[1384,132,0,0,0,0,2],cc:[69,5,0,0,0,0,5],f:[0,0,0,0,0,0]},
-'2026-08-09':{v:1291,c:80,a:7,os:[924,363,4],dev:[1287,0,4],cn:[1159,131,0,0,0,0,1],cc:[68,10,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-08-10':{v:2122,c:125,a:13,os:[1471,635,16],dev:[2106,0,16],cn:[1927,190,0,0,0,0,5],cc:[106,18,0,0,0,0,1],f:[0,0,0,0,0,0]},
-'2026-08-11':{v:2018,c:105,a:5,os:[1411,592,15],dev:[2003,0,15],cn:[1806,208,0,0,0,0,4],cc:[89,14,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-08-12':{v:2039,c:114,a:6,os:[1429,596,14],dev:[2025,0,14],cn:[1861,175,0,0,0,0,3],cc:[97,13,0,0,0,0,4],f:[0,0,0,0,0,0]},
-'2026-08-13':{v:1940,c:98,a:4,os:[1384,546,10],dev:[1930,0,10],cn:[1757,180,0,0,0,0,3],cc:[85,10,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-08-14':{v:1668,c:110,a:1,os:[1206,453,9],dev:[1659,0,9],cn:[1490,175,0,0,0,0,3],cc:[96,11,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-08-15':{v:1399,c:93,a:3,os:[988,407,4],dev:[1395,0,4],cn:[1239,158,0,0,0,0,2],cc:[75,16,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-08-16':{v:1298,c:81,a:4,os:[954,338,6],dev:[1292,0,6],cn:[1159,135,0,0,0,0,4],cc:[63,15,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-08-17':{v:1814,c:96,a:4,os:[1271,532,11],dev:[1803,0,11],cn:[1637,177,0,0,0,0,0],cc:[87,9,0,0,0,0,0],f:[0,0,0,0,0,0]},
-'2026-08-18':{v:1859,c:112,a:4,os:[1305,538,16],dev:[1843,0,16],cn:[1669,189,0,0,0,0,1],cc:[91,18,0,0,0,0,3],f:[0,0,0,0,0,0]},
-'2026-08-19':{v:1840,c:103,a:2,os:[1280,550,10],dev:[1830,0,10],cn:[1633,201,0,0,0,0,6],cc:[90,11,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-08-20':{v:1981,c:96,a:1,os:[1379,595,7],dev:[1974,0,7],cn:[1808,169,0,0,0,0,4],cc:[87,7,0,0,0,0,2],f:[0,0,0,0,0,0]},
-'2026-08-21':{v:1977,c:98,a:6,os:[1433,533,11],dev:[1966,0,11],cn:[1470,179,0,0,0,0,328],cc:[75,10,0,0,0,0,13],f:[0,0,0,0,0,0]},
-'2026-08-22':{v:1683,c:115,a:2,os:[1236,442,5],dev:[1678,0,5],cn:[1229,155,0,0,0,0,299],cc:[75,9,0,0,0,0,31],f:[0,0,0,0,0,0]},
-'2026-08-23':{v:1527,c:113,a:6,os:[1144,375,8],dev:[1519,0,8],cn:[1094,130,0,0,0,0,303],cc:[73,12,0,0,0,0,28],f:[0,0,0,0,0,0]},
-'2026-08-24':{v:2213,c:131,a:12,os:[1627,573,13],dev:[2200,0,13],cn:[1576,194,0,0,0,0,443],cc:[79,16,0,0,0,0,36],f:[0,0,0,0,0,0]},
-'2026-08-25':{v:2094,c:132,a:3,os:[1468,614,12],dev:[2082,0,12],cn:[1556,185,0,0,0,0,353],cc:[96,10,0,0,0,0,26],f:[0,0,0,0,0,0]},
-'2026-08-26':{v:2028,c:133,a:2,os:[1472,539,17],dev:[2011,0,17],cn:[1572,187,0,0,0,0,269],cc:[97,11,0,0,0,0,25],f:[0,0,0,0,0,0]},
-'2026-08-27':{v:1871,c:125,a:4,os:[1313,548,10],dev:[1861,0,10],cn:[1457,167,0,0,0,0,247],cc:[96,13,0,0,0,0,16],f:[0,0,0,0,0,0]},
-'2026-08-28':{v:1810,c:107,a:5,os:[1318,487,5],dev:[1805,0,5],cn:[1402,150,0,0,0,0,258],cc:[76,11,0,0,0,0,20],f:[0,0,0,0,0,0]},
-'2026-08-29':{v:1614,c:87,a:1,os:[1198,410,6],dev:[1608,0,6],cn:[1233,143,0,0,0,0,238],cc:[60,9,0,0,0,0,18],f:[0,0,0,0,0,0]},
-'2026-08-30':{v:1347,c:80,a:1,os:[979,366,2],dev:[1345,0,2],cn:[1070,125,0,0,0,0,152],cc:[69,5,0,0,0,0,6],f:[0,0,0,0,0,0]},
-'2026-08-31':{v:2073,c:98,a:5,os:[1446,619,8],dev:[2065,0,8],cn:[1726,190,0,1,0,0,156],cc:[77,9,0,0,0,0,12],f:[0,0,0,0,0,0]},
-'2026-09-01':{v:2311,c:114,a:0,os:[1659,643,9],dev:[2302,0,9],cn:[1910,212,0,0,0,0,189],cc:[89,12,0,0,0,0,13],f:[0,0,0,0,0,0]}
+'2026-01-01':{v:19108,c:803,a:1,os:[14684,4412,12],dev:[19097,0,11],cn:[19,0,112,18924,0,37,3,13],cc:[7,0,15,735,0,7,2,37],f:[0,0,0,0,0,0]},
+'2026-01-02':{v:14145,c:789,a:7,os:[10828,3295,22],dev:[14123,0,22],cn:[60,0,165,13882,0,24,5,9],cc:[36,0,29,710,0,6,0,8],f:[0,0,0,0,0,0]},
+'2026-01-03':{v:11238,c:724,a:3,os:[8619,2611,8],dev:[11231,0,7],cn:[38,0,147,11025,0,23,1,4],cc:[18,0,18,670,0,4,0,14],f:[0,0,0,0,0,0]},
+'2026-01-04':{v:11565,c:703,a:1,os:[8716,2842,7],dev:[11559,0,6],cn:[52,0,127,11350,0,22,8,6],cc:[29,0,20,643,0,3,1,7],f:[0,0,0,0,0,0]},
+'2026-01-05':{v:11591,c:658,a:5,os:[8789,2773,29],dev:[11564,0,27],cn:[92,0,166,11284,0,28,6,15],cc:[37,0,24,575,0,7,2,13],f:[0,0,0,0,0,0]},
+'2026-01-06':{v:9572,c:570,a:1,os:[7095,2456,21],dev:[9552,0,20],cn:[98,0,191,9262,0,10,0,11],cc:[45,0,19,490,0,8,0,8],f:[0,0,0,0,0,0]},
+'2026-01-07':{v:9250,c:624,a:4,os:[7035,2188,27],dev:[9223,0,27],cn:[74,0,195,8963,0,6,0,12],cc:[40,0,38,533,0,3,0,10],f:[0,0,0,0,0,0]},
+'2026-01-08':{v:8850,c:572,a:2,os:[6676,2149,25],dev:[8825,0,25],cn:[89,0,172,8576,0,3,1,9],cc:[45,0,20,486,0,7,1,13],f:[0,0,0,0,0,0]},
+'2026-01-09':{v:7461,c:519,a:5,os:[5624,1813,24],dev:[7437,0,24],cn:[71,0,180,7183,0,14,1,12],cc:[35,0,30,439,0,7,0,8],f:[0,0,0,0,0,0]},
+'2026-01-10':{v:6406,c:423,a:3,os:[4868,1531,7],dev:[6399,0,7],cn:[53,0,154,6189,0,7,0,3],cc:[26,0,22,367,0,3,0,5],f:[0,0,0,0,0,0]},
+'2026-01-11':{v:6326,c:465,a:3,os:[4808,1512,6],dev:[6320,0,6],cn:[65,0,134,6117,0,4,0,6],cc:[34,0,20,399,0,4,0,8],f:[0,0,0,0,0,0]},
+'2026-01-12':{v:6663,c:490,a:8,os:[5051,1583,29],dev:[6635,0,28],cn:[93,0,155,6385,0,12,1,17],cc:[48,0,21,411,0,2,0,8],f:[0,0,0,0,0,0]},
+'2026-01-13':{v:6639,c:526,a:4,os:[4972,1636,31],dev:[6608,0,31],cn:[106,0,122,6388,0,11,0,12],cc:[42,0,23,451,0,2,0,8],f:[0,0,0,0,0,0]},
+'2026-01-14':{v:6406,c:513,a:4,os:[4777,1606,23],dev:[6383,0,23],cn:[103,0,116,6162,1,15,0,9],cc:[48,0,26,429,0,4,0,6],f:[0,0,0,0,0,0]},
+'2026-01-15':{v:5956,c:440,a:5,os:[4428,1497,31],dev:[5925,0,31],cn:[80,0,110,5745,1,5,0,15],cc:[46,0,21,359,0,1,0,13],f:[0,0,0,0,0,0]},
+'2026-01-16':{v:5871,c:446,a:1,os:[4449,1406,16],dev:[5855,0,16],cn:[82,0,125,5652,1,6,1,4],cc:[39,0,22,376,0,3,0,6],f:[0,0,0,0,0,0]},
+'2026-01-17':{v:5715,c:433,a:2,os:[4419,1290,6],dev:[5709,0,6],cn:[47,0,95,5560,1,7,0,5],cc:[20,0,14,392,0,5,0,2],f:[0,0,0,0,0,0]},
+'2026-01-18':{v:5769,c:466,a:4,os:[4395,1364,10],dev:[5759,0,10],cn:[55,0,83,5609,0,17,0,5],cc:[37,0,25,392,0,5,0,7],f:[0,0,0,0,0,0]},
+'2026-01-19':{v:6050,c:499,a:5,os:[4594,1420,36],dev:[6014,0,36],cn:[96,0,118,5816,1,4,0,15],cc:[42,0,27,420,0,3,0,7],f:[0,0,0,0,0,0]},
+'2026-01-20':{v:4833,c:357,a:3,os:[3635,1174,24],dev:[4809,0,24],cn:[83,0,119,4607,1,9,1,13],cc:[32,0,23,300,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-01-21':{v:5112,c:382,a:2,os:[3826,1259,27],dev:[5085,0,27],cn:[112,0,142,4837,0,5,0,16],cc:[52,0,16,307,0,4,0,3],f:[0,0,0,0,0,0]},
+'2026-01-22':{v:5494,c:438,a:1,os:[4170,1297,27],dev:[5467,0,27],cn:[98,0,154,5223,1,7,0,11],cc:[51,0,26,354,0,2,0,5],f:[0,0,0,0,0,0]},
+'2026-01-23':{v:5520,c:439,a:1,os:[4148,1346,26],dev:[5494,0,26],cn:[88,0,128,5284,0,5,0,15],cc:[41,0,23,365,0,3,0,7],f:[0,0,0,0,0,0]},
+'2026-01-24':{v:4017,c:348,a:3,os:[3087,919,11],dev:[4006,0,11],cn:[88,0,123,3791,1,10,0,4],cc:[46,0,27,270,0,0,0,5],f:[0,0,0,0,0,0]},
+'2026-01-25':{v:4608,c:383,a:3,os:[3447,1155,6],dev:[4602,0,6],cn:[71,0,86,4443,0,5,0,3],cc:[45,0,11,318,0,7,0,2],f:[0,0,0,0,0,0]},
+'2026-01-26':{v:4656,c:362,a:2,os:[3531,1095,30],dev:[4626,0,30],cn:[125,0,121,4387,1,10,0,12],cc:[62,0,15,275,0,3,0,7],f:[0,0,0,0,0,0]},
+'2026-01-27':{v:4689,c:374,a:8,os:[3570,1098,21],dev:[4668,0,21],cn:[73,0,131,4457,0,20,0,8],cc:[48,0,30,291,0,3,0,2],f:[0,0,0,0,0,0]},
+'2026-01-28':{v:4094,c:363,a:8,os:[3143,931,20],dev:[4074,0,20],cn:[78,0,121,3864,0,18,0,13],cc:[29,0,21,309,0,3,0,1],f:[0,0,0,0,0,0]},
+'2026-01-29':{v:5216,c:394,a:4,os:[3964,1224,28],dev:[5188,0,28],cn:[54,0,125,5018,0,7,0,12],cc:[24,0,28,337,0,5,0,0],f:[0,0,0,0,0,0]},
+'2026-01-30':{v:4876,c:346,a:3,os:[3717,1142,17],dev:[4859,0,17],cn:[85,0,114,4644,0,24,0,9],cc:[35,0,19,285,0,3,0,4],f:[0,0,0,0,0,0]},
+'2026-01-31':{v:15754,c:820,a:6,os:[11883,3858,13],dev:[15741,0,13],cn:[74,0,109,15538,0,25,0,8],cc:[40,0,15,756,0,8,0,1],f:[0,0,0,0,0,0]},
+'2026-02-01':{v:21115,c:1099,a:8,os:[15915,5190,10],dev:[21105,0,10],cn:[77,0,103,20876,1,44,0,14],cc:[33,0,21,1022,0,13,0,10],f:[0,0,0,0,0,0]},
+'2026-02-02':{v:13982,c:830,a:5,os:[10708,3251,23],dev:[13959,0,23],cn:[106,0,137,13654,1,63,0,21],cc:[42,0,25,751,0,8,0,4],f:[0,0,0,0,0,0]},
+'2026-02-03':{v:11269,c:749,a:9,os:[8568,2675,26],dev:[11245,0,24],cn:[96,0,167,10963,0,29,0,14],cc:[46,0,28,651,0,10,0,14],f:[0,0,0,0,0,0]},
+'2026-02-04':{v:12591,c:669,a:6,os:[9458,3108,25],dev:[12566,0,25],cn:[85,0,323,12124,1,41,0,17],cc:[38,0,29,586,0,7,0,9],f:[0,0,0,0,0,0]},
+'2026-02-05':{v:12575,c:674,a:4,os:[9293,3253,29],dev:[12546,0,29],cn:[106,0,144,12280,0,32,0,13],cc:[40,0,23,602,0,5,0,4],f:[0,0,0,0,0,0]},
+'2026-02-06':{v:9435,c:524,a:8,os:[7113,2299,23],dev:[9412,0,23],cn:[77,0,162,9162,0,25,0,9],cc:[36,0,19,461,0,5,0,3],f:[0,0,0,0,0,0]},
+'2026-02-07':{v:8120,c:499,a:1,os:[6147,1953,20],dev:[8100,0,20],cn:[67,0,107,7908,0,27,0,11],cc:[24,0,15,442,0,9,0,9],f:[0,0,0,0,0,0]},
+'2026-02-08':{v:7591,c:471,a:1,os:[5743,1844,4],dev:[7587,0,4],cn:[64,0,96,7403,1,24,0,3],cc:[32,0,13,414,0,8,0,4],f:[0,0,0,0,0,0]},
+'2026-02-09':{v:7799,c:493,a:3,os:[5942,1832,25],dev:[7775,0,24],cn:[110,0,137,7502,1,32,0,17],cc:[48,0,18,410,0,9,0,8],f:[0,0,0,0,0,0]},
+'2026-02-10':{v:6301,c:492,a:4,os:[4674,1612,15],dev:[6286,0,15],cn:[115,0,133,6013,0,31,0,9],cc:[57,0,27,403,0,3,0,2],f:[0,0,0,0,0,0]},
+'2026-02-11':{v:6518,c:455,a:2,os:[4831,1650,37],dev:[6481,0,37],cn:[96,0,236,6128,0,39,0,19],cc:[40,0,21,378,0,6,0,10],f:[0,0,0,0,0,0]},
+'2026-02-12':{v:6058,c:451,a:1,os:[4499,1530,29],dev:[6029,0,29],cn:[95,0,146,5777,0,27,0,13],cc:[44,0,31,366,0,7,0,3],f:[0,0,0,0,0,0]},
+'2026-02-13':{v:6552,c:463,a:2,os:[4993,1542,17],dev:[6535,0,17],cn:[75,0,127,6306,0,36,0,8],cc:[36,0,16,398,0,6,0,7],f:[0,0,0,0,0,0]},
+'2026-02-14':{v:5240,c:350,a:2,os:[3954,1283,3],dev:[5237,0,3],cn:[68,0,112,5028,0,25,0,7],cc:[37,0,18,283,0,5,0,7],f:[0,0,0,0,0,0]},
+'2026-02-15':{v:4789,c:365,a:0,os:[3576,1204,9],dev:[4780,0,9],cn:[55,0,78,4638,0,12,0,6],cc:[17,0,12,326,0,4,0,6],f:[0,0,0,0,0,0]},
+'2026-02-16':{v:4947,c:373,a:3,os:[3713,1222,12],dev:[4935,0,12],cn:[86,0,107,4712,0,30,0,12],cc:[27,0,15,325,0,3,0,3],f:[0,0,0,0,0,0]},
+'2026-02-17':{v:5331,c:421,a:7,os:[4039,1280,12],dev:[5319,0,12],cn:[75,0,113,5120,0,16,0,7],cc:[46,0,28,337,0,6,0,4],f:[0,0,0,0,0,0]},
+'2026-02-18':{v:5491,c:460,a:2,os:[4149,1320,22],dev:[5470,0,21],cn:[95,0,114,5238,0,25,0,19],cc:[46,0,17,385,0,8,0,4],f:[0,0,0,0,0,0]},
+'2026-02-19':{v:12479,c:1356,a:13,os:[9471,2991,17],dev:[12462,0,17],cn:[2810,0,160,4885,0,98,0,4526],cc:[220,0,29,318,0,19,0,770],f:[0,0,0,0,0,0]},
+'2026-02-20':{v:11933,c:1224,a:10,os:[9012,2901,20],dev:[11913,0,20],cn:[3114,0,138,5176,0,71,0,3434],cc:[274,0,15,340,0,16,0,579],f:[0,0,0,0,0,0]},
+'2026-02-21':{v:9851,c:962,a:5,os:[7524,2322,5],dev:[9846,0,5],cn:[2396,0,116,4371,0,78,0,2890],cc:[196,0,14,321,0,12,0,419],f:[0,0,0,0,0,0]},
+'2026-02-22':{v:9745,c:955,a:4,os:[7381,2355,9],dev:[9736,0,9],cn:[2186,0,116,4707,0,64,0,2672],cc:[197,0,18,350,0,14,0,376],f:[0,0,0,0,0,0]},
+'2026-02-23':{v:16011,c:1786,a:9,os:[12241,3748,22],dev:[15989,0,22],cn:[2883,0,148,4998,0,81,0,7901],cc:[246,0,23,293,0,17,0,1207],f:[0,0,0,0,0,0]},
+'2026-02-24':{v:11084,c:1062,a:8,os:[8426,2633,25],dev:[11059,0,25],cn:[2890,0,215,4461,0,58,0,3460],cc:[238,0,17,323,0,18,0,466],f:[0,0,0,0,0,0]},
+'2026-02-25':{v:10384,c:804,a:10,os:[7510,2854,20],dev:[10364,0,20],cn:[2950,0,162,4470,0,62,3,2737],cc:[232,0,18,183,0,12,1,358],f:[0,0,0,0,0,0]},
+'2026-02-26':{v:21960,c:1567,a:13,os:[16845,5083,32],dev:[21930,0,30],cn:[2641,0,168,4062,0,80,0,15009],cc:[228,0,24,270,0,20,0,1025],f:[0,0,0,0,0,0]},
+'2026-02-27':{v:10168,c:769,a:10,os:[7904,2245,19],dev:[10149,0,19],cn:[2844,0,156,3404,0,40,3,3721],cc:[212,0,20,235,0,11,0,291],f:[0,0,0,0,0,0]},
+'2026-02-28':{v:8510,c:553,a:6,os:[6609,1890,11],dev:[8499,0,11],cn:[2342,0,110,5119,0,26,0,913],cc:[196,0,21,287,0,8,0,41],f:[0,0,0,0,0,0]},
+'2026-03-01':{v:6929,c:559,a:8,os:[5277,1641,11],dev:[6918,0,11],cn:[2268,0,135,4175,0,35,0,316],cc:[206,0,15,314,0,5,0,19],f:[0,0,0,0,0,0]},
+'2026-03-02':{v:6865,c:538,a:7,os:[5184,1653,28],dev:[6837,0,28],cn:[3012,0,159,3633,0,43,0,18],cc:[262,0,16,246,0,8,0,6],f:[0,0,0,0,0,0]},
+'2026-03-03':{v:25462,c:1370,a:9,os:[18844,6590,28],dev:[25435,0,27],cn:[2834,0,136,22407,0,63,0,22],cc:[256,0,13,1078,0,18,0,5],f:[0,0,0,0,0,0]},
+'2026-03-04':{v:20349,c:980,a:4,os:[15369,4953,27],dev:[20323,0,26],cn:[2865,0,158,17246,0,59,0,21],cc:[238,0,14,714,0,13,0,1],f:[0,0,0,0,0,0]},
+'2026-03-05':{v:12964,c:713,a:9,os:[9756,3178,30],dev:[12934,0,30],cn:[2845,0,158,9918,0,21,0,22],cc:[256,0,15,434,0,1,0,7],f:[0,0,0,0,0,0]},
+'2026-03-06':{v:15760,c:792,a:7,os:[11783,3951,26],dev:[15734,0,26],cn:[2922,0,142,12681,0,2,0,13],cc:[267,0,16,506,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-03-07':{v:14339,c:677,a:9,os:[10774,3553,12],dev:[14327,0,12],cn:[2321,0,111,11893,0,4,0,10],cc:[205,0,12,456,0,0,0,4],f:[0,0,0,0,0,0]},
+'2026-03-08':{v:10552,c:517,a:4,os:[7885,2659,8],dev:[10544,0,8],cn:[1878,0,90,8575,0,3,0,6],cc:[183,0,10,322,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-03-09':{v:8893,c:542,a:4,os:[6813,2053,27],dev:[8866,0,27],cn:[3109,0,146,5623,0,2,0,13],cc:[258,0,15,263,0,0,0,6],f:[0,0,0,0,0,0]},
+'2026-03-10':{v:5438,c:456,a:6,os:[4098,1320,20],dev:[5418,0,20],cn:[3380,0,174,1876,0,4,1,3],cc:[326,0,9,115,0,1,0,5],f:[0,0,0,0,0,0]},
+'2026-03-11':{v:11328,c:671,a:6,os:[8358,2932,38],dev:[11290,0,38],cn:[2999,0,166,8140,0,7,0,16],cc:[264,0,14,382,0,3,0,8],f:[0,0,0,0,0,0]},
+'2026-03-12':{v:8535,c:569,a:7,os:[6410,2101,24],dev:[8512,0,23],cn:[2774,0,181,5572,0,2,0,6],cc:[253,0,15,297,0,0,0,4],f:[0,0,0,0,0,0]},
+'2026-03-13':{v:9942,c:603,a:4,os:[7416,2502,24],dev:[9918,0,24],cn:[2660,0,148,7114,2,0,1,17],cc:[217,0,9,370,0,0,1,6],f:[0,0,0,0,0,0]},
+'2026-03-14':{v:6746,c:450,a:2,os:[5136,1599,11],dev:[6735,0,11],cn:[2037,0,130,4571,0,1,0,7],cc:[180,0,14,251,0,1,0,4],f:[0,0,0,0,0,0]},
+'2026-03-15':{v:5945,c:379,a:2,os:[4436,1502,7],dev:[5938,0,7],cn:[1843,0,102,3984,0,7,0,9],cc:[167,0,6,205,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-03-16':{v:7232,c:489,a:5,os:[5454,1760,18],dev:[7214,0,18],cn:[2808,0,160,4256,0,1,0,7],cc:[250,0,17,219,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-03-17':{v:7334,c:525,a:5,os:[5537,1779,18],dev:[7316,0,18],cn:[2670,0,164,4489,0,2,0,9],cc:[252,0,16,248,0,0,0,9],f:[0,0,0,0,0,0]},
+'2026-03-18':{v:7062,c:482,a:1,os:[5316,1727,19],dev:[7043,0,19],cn:[2584,0,160,4306,0,4,0,8],cc:[219,0,15,241,0,2,0,5],f:[0,0,0,0,0,0]},
+'2026-03-19':{v:6306,c:468,a:5,os:[4839,1455,12],dev:[6294,0,12],cn:[2346,0,131,3819,0,3,0,7],cc:[220,0,16,228,0,0,0,4],f:[0,0,0,0,0,0]},
+'2026-03-20':{v:6104,c:396,a:5,os:[4586,1499,19],dev:[6085,0,19],cn:[2452,0,143,3497,0,2,0,10],cc:[212,0,8,174,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-03-21':{v:5340,c:371,a:4,os:[4047,1287,6],dev:[5334,0,6],cn:[1922,0,115,3295,1,1,0,6],cc:[184,0,14,173,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-03-22':{v:4901,c:351,a:3,os:[3708,1183,10],dev:[4891,0,10],cn:[1662,0,98,3137,0,2,0,2],cc:[168,0,15,167,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-03-23':{v:6068,c:443,a:11,os:[4564,1478,26],dev:[6042,0,26],cn:[2426,0,147,3483,0,2,0,10],cc:[243,0,13,186,0,1,0,0],f:[0,0,0,0,0,0]},
+'2026-03-24':{v:5823,c:409,a:5,os:[4324,1473,26],dev:[5797,0,26],cn:[2373,0,163,3275,0,2,0,10],cc:[214,0,13,180,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-03-25':{v:5717,c:397,a:8,os:[4298,1392,27],dev:[5690,0,27],cn:[2542,0,159,3004,0,2,0,10],cc:[223,0,11,160,0,1,0,2],f:[0,0,0,0,0,0]},
+'2026-03-26':{v:5236,c:399,a:10,os:[3958,1258,20],dev:[5216,0,20],cn:[2308,0,173,2744,0,4,0,7],cc:[231,0,17,146,0,0,0,5],f:[0,0,0,0,0,0]},
+'2026-03-27':{v:10288,c:595,a:3,os:[7592,2672,24],dev:[10265,0,23],cn:[2332,0,146,7793,0,4,0,13],cc:[211,0,12,370,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-03-28':{v:5356,c:367,a:7,os:[4147,1197,12],dev:[5344,0,12],cn:[1951,0,116,3279,0,3,0,7],cc:[183,0,15,165,0,1,0,3],f:[0,0,0,0,0,0]},
+'2026-03-29':{v:4078,c:327,a:2,os:[3076,995,7],dev:[4071,0,7],cn:[1714,0,103,2253,0,1,0,7],cc:[181,0,8,136,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-03-30':{v:4654,c:365,a:6,os:[3512,1123,19],dev:[4635,0,19],cn:[2526,0,178,1938,0,4,0,8],cc:[236,0,17,111,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-03-31':{v:20041,c:1008,a:12,os:[14612,5411,18],dev:[20023,0,18],cn:[2816,0,155,17053,0,3,0,14],cc:[248,0,19,737,0,1,0,3],f:[0,0,0,0,0,0]},
+'2026-04-01':{v:17789,c:838,a:14,os:[13267,4503,19],dev:[17770,0,19],cn:[2879,0,165,14728,0,3,3,11],cc:[246,0,72,516,0,0,0,4],f:[0,0,0,0,0,0]},
+'2026-04-02':{v:9490,c:532,a:6,os:[7146,2330,14],dev:[9476,0,14],cn:[2373,0,130,6974,0,7,0,6],cc:[217,0,49,262,0,1,0,3],f:[0,0,0,0,0,0]},
+'2026-04-03':{v:10958,c:569,a:5,os:[8186,2768,4],dev:[10954,0,4],cn:[1881,0,113,8961,0,0,0,3],cc:[180,0,62,325,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-04-04':{v:12367,c:532,a:2,os:[8988,3370,9],dev:[12358,0,9],cn:[1863,0,112,10378,0,7,0,7],cc:[154,0,60,317,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-04-05':{v:7644,c:405,a:1,os:[5577,2057,10],dev:[7634,0,10],cn:[1598,0,99,5941,1,0,0,5],cc:[148,0,30,224,0,1,0,2],f:[0,0,0,0,0,0]},
+'2026-04-06':{v:9703,c:518,a:5,os:[7288,2382,33],dev:[9671,0,32],cn:[2702,0,148,6837,1,1,0,14],cc:[196,0,50,269,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-04-07':{v:12175,c:704,a:6,os:[8878,3280,17],dev:[12158,0,17],cn:[3270,0,182,8715,1,1,0,6],cc:[295,0,53,355,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-04-08':{v:10466,c:436,a:5,os:[7582,2854,30],dev:[10436,0,30],cn:[3136,0,279,7038,0,4,0,9],cc:[178,0,95,160,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-04-09':{v:10504,c:453,a:4,os:[7446,3032,26],dev:[10478,0,26],cn:[2858,0,477,7152,0,0,0,17],cc:[127,0,187,136,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-04-10':{v:6028,c:262,a:4,os:[4487,1519,22],dev:[6006,0,22],cn:[2778,0,420,2821,0,0,0,9],cc:[87,0,124,49,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-04-11':{v:8175,c:371,a:3,os:[6053,2116,6],dev:[8169,0,6],cn:[2098,0,451,5622,0,0,0,4],cc:[76,0,184,109,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-04-12':{v:7113,c:284,a:2,os:[5243,1859,11],dev:[7102,0,11],cn:[1850,0,420,4839,0,0,0,4],cc:[64,0,134,86,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-04-13':{v:4922,c:291,a:5,os:[3655,1254,13],dev:[4909,0,13],cn:[2653,0,421,1843,0,0,0,5],cc:[107,0,135,48,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-04-14':{v:4293,c:257,a:1,os:[3160,1117,16],dev:[4277,0,16],cn:[2643,0,326,1315,0,0,0,9],cc:[108,0,105,44,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-04-15':{v:12975,c:460,a:3,os:[9091,3861,23],dev:[12952,0,23],cn:[2633,0,290,10040,0,0,0,12],cc:[132,0,81,244,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-04-16':{v:6867,c:345,a:3,os:[5032,1816,19],dev:[6848,0,19],cn:[2559,0,249,4050,0,0,0,9],cc:[153,0,69,119,0,0,0,4],f:[0,0,0,0,0,0]},
+'2026-04-17':{v:4724,c:272,a:0,os:[3558,1149,17],dev:[4707,0,17],cn:[2315,0,216,2188,1,0,0,4],cc:[148,0,47,75,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-04-18':{v:4263,c:246,a:4,os:[3212,1044,7],dev:[4256,0,7],cn:[1885,0,190,2182,0,0,0,6],cc:[120,0,32,93,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-04-19':{v:5599,c:264,a:2,os:[4099,1495,5],dev:[5594,0,5],cn:[1627,0,152,3818,0,0,0,2],cc:[111,0,40,111,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-04-20':{v:6002,c:287,a:0,os:[4472,1517,13],dev:[5989,0,13],cn:[2325,0,233,3440,0,0,0,4],cc:[143,0,53,90,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-04-21':{v:5307,c:289,a:4,os:[3953,1343,11],dev:[5296,0,11],cn:[2096,0,216,2988,0,0,0,7],cc:[140,0,47,99,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-04-22':{v:5921,c:330,a:2,os:[4342,1553,26],dev:[5895,0,26],cn:[2424,0,220,3265,0,0,0,12],cc:[155,0,55,117,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-04-23':{v:5699,c:275,a:5,os:[4183,1496,20],dev:[5679,0,20],cn:[2331,0,237,3125,0,0,0,6],cc:[136,0,46,91,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-04-24':{v:5433,c:297,a:4,os:[4072,1342,19],dev:[5414,0,19],cn:[2191,0,233,3004,0,0,0,5],cc:[130,0,62,105,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-04-25':{v:4650,c:263,a:2,os:[3528,1113,9],dev:[4641,0,9],cn:[1860,0,183,2602,0,0,0,5],cc:[110,0,47,103,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-04-26':{v:4302,c:210,a:2,os:[3269,1027,6],dev:[4296,0,6],cn:[1618,0,183,2496,0,0,0,5],cc:[95,0,39,75,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-04-27':{v:5012,c:259,a:4,os:[3697,1295,20],dev:[4992,0,20],cn:[2335,0,228,2438,0,0,0,11],cc:[138,0,38,80,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-04-28':{v:6309,c:247,a:3,os:[4578,1713,18],dev:[6291,0,18],cn:[2404,0,238,3661,0,0,0,6],cc:[111,0,50,83,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-04-29':{v:3935,c:261,a:8,os:[2830,1090,15],dev:[3920,0,15],cn:[2388,0,227,1314,0,0,0,6],cc:[166,0,43,46,0,0,0,6],f:[0,0,0,0,0,0]},
+'2026-04-30':{v:3934,c:205,a:3,os:[2328,1588,18],dev:[3917,0,17],cn:[2250,0,214,1465,0,0,0,5],cc:[121,0,37,47,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-05-01':{v:7902,c:278,a:4,os:[2743,5154,5],dev:[7897,0,5],cn:[1943,0,213,5742,0,0,0,4],cc:[122,0,35,120,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-05-02':{v:5391,c:197,a:2,os:[2113,3269,9],dev:[5382,0,9],cn:[1780,0,181,3427,0,0,0,3],cc:[98,0,30,68,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-05-03':{v:3563,c:186,a:2,os:[1554,2006,3],dev:[3560,0,3],cn:[1591,0,168,1800,0,0,0,4],cc:[102,0,26,56,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-05-04':{v:2959,c:182,a:3,os:[2003,942,14],dev:[2945,0,14],cn:[2327,0,234,388,0,0,0,10],cc:[145,0,25,7,0,0,0,5],f:[0,0,0,0,0,0]},
+'2026-05-05':{v:2715,c:164,a:1,os:[2034,668,13],dev:[2703,0,12],cn:[2445,0,235,29,0,0,0,6],cc:[142,0,21,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-05-06':{v:2700,c:177,a:7,os:[2016,671,13],dev:[2687,0,13],cn:[2470,0,227,0,0,0,0,3],cc:[141,0,33,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-05-07':{v:2685,c:117,a:3,os:[1999,676,10],dev:[2675,0,10],cn:[2424,0,258,1,0,0,0,2],cc:[107,0,9,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-05-08':{v:2538,c:121,a:3,os:[1950,574,14],dev:[2524,0,14],cn:[2288,0,246,0,1,0,0,3],cc:[107,0,11,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-05-09':{v:1902,c:72,a:3,os:[1447,453,2],dev:[1900,0,2],cn:[1744,0,157,0,0,0,0,1],cc:[59,0,10,1,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-05-10':{v:1534,c:68,a:1,os:[1156,377,1],dev:[1533,0,1],cn:[1390,0,143,0,0,0,0,1],cc:[58,0,9,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-05-11':{v:2565,c:134,a:0,os:[1883,666,16],dev:[2549,0,16],cn:[2331,0,226,0,0,0,0,8],cc:[118,0,13,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-05-12':{v:2950,c:128,a:2,os:[2196,740,14],dev:[2936,0,14],cn:[2258,0,686,0,0,0,0,6],cc:[107,0,16,0,0,0,0,5],f:[0,0,0,0,0,0]},
+'2026-05-13':{v:2546,c:122,a:5,os:[1881,652,13],dev:[2533,0,13],cn:[2169,0,372,0,0,0,0,5],cc:[105,0,15,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-05-14':{v:2318,c:102,a:7,os:[1722,580,16],dev:[2302,0,16],cn:[2060,0,256,0,0,0,0,2],cc:[84,0,16,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-05-15':{v:2161,c:106,a:4,os:[1582,566,13],dev:[2148,0,13],cn:[1927,0,233,0,0,0,0,1],cc:[86,0,19,1,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-05-16':{v:1887,c:71,a:0,os:[1463,418,6],dev:[1881,0,6],cn:[1684,0,200,0,0,0,0,3],cc:[57,0,12,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-05-17':{v:1672,c:84,a:3,os:[1240,425,7],dev:[1665,0,7],cn:[1486,0,181,0,0,0,2,3],cc:[66,0,18,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-05-18':{v:2423,c:111,a:2,os:[1795,613,15],dev:[2408,0,15],cn:[2199,0,223,0,0,0,0,1],cc:[101,0,10,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-05-19':{v:2414,c:103,a:2,os:[1769,628,17],dev:[2397,0,17],cn:[2179,0,232,0,0,0,0,3],cc:[91,0,10,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-05-20':{v:2528,c:103,a:3,os:[1856,659,13],dev:[2515,0,13],cn:[2309,0,217,0,0,0,0,2],cc:[89,0,11,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-05-21':{v:2290,c:115,a:8,os:[1728,552,10],dev:[2280,0,10],cn:[2093,0,192,0,0,0,0,5],cc:[101,0,13,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-05-22':{v:2136,c:94,a:2,os:[1611,515,10],dev:[2126,0,10],cn:[1973,0,161,0,1,0,0,1],cc:[88,0,5,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-05-23':{v:1657,c:97,a:6,os:[1289,365,3],dev:[1654,0,3],cn:[1503,0,151,0,0,0,0,3],cc:[82,0,12,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-05-24':{v:1554,c:83,a:1,os:[1207,345,2],dev:[1552,0,2],cn:[1421,0,132,0,1,0,0,0],cc:[80,0,2,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-05-25':{v:2284,c:109,a:4,os:[1695,580,9],dev:[2275,0,9],cn:[2069,0,213,0,0,0,0,2],cc:[95,0,14,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-05-26':{v:2302,c:123,a:7,os:[1721,561,20],dev:[2282,0,20],cn:[2106,0,195,0,0,0,0,1],cc:[105,0,16,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-05-27':{v:2023,c:124,a:5,os:[1521,487,15],dev:[2008,0,15],cn:[1817,0,205,0,0,0,0,1],cc:[103,0,16,0,0,0,0,5],f:[0,0,0,0,0,0]},
+'2026-05-28':{v:2178,c:100,a:5,os:[1635,531,12],dev:[2166,0,12],cn:[1968,0,210,0,0,0,0,0],cc:[88,0,10,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-05-29':{v:2150,c:99,a:3,os:[1639,499,12],dev:[2138,0,12],cn:[1945,0,202,0,0,0,0,3],cc:[90,0,7,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-05-30':{v:1798,c:115,a:2,os:[1402,393,3],dev:[1795,0,3],cn:[1645,0,153,0,0,0,0,0],cc:[105,0,8,1,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-05-31':{v:1652,c:112,a:4,os:[1284,361,7],dev:[1645,0,7],cn:[1500,0,152,0,0,0,0,0],cc:[97,0,14,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-06-01':{v:2346,c:119,a:8,os:[1732,593,21],dev:[2325,0,21],cn:[2125,0,221,0,0,0,0,0],cc:[105,0,13,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-06-02':{v:2217,c:110,a:7,os:[1669,535,13],dev:[2204,0,13],cn:[2002,0,213,0,0,0,0,2],cc:[99,0,8,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-06-03':{v:2104,c:123,a:7,os:[1591,493,20],dev:[2084,0,20],cn:[1892,0,208,0,0,0,0,4],cc:[114,0,7,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-06-04':{v:1880,c:127,a:8,os:[1421,452,7],dev:[1873,0,7],cn:[1710,0,167,0,0,0,0,3],cc:[91,0,11,0,0,0,0,25],f:[0,0,0,0,0,0]},
+'2026-06-05':{v:2108,c:104,a:3,os:[1599,500,9],dev:[2099,0,9],cn:[1904,0,204,0,0,0,0,0],cc:[93,0,11,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-06-06':{v:1671,c:99,a:2,os:[1299,364,8],dev:[1663,0,8],cn:[1514,0,157,0,0,0,0,0],cc:[87,0,11,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-06-07':{v:1587,c:97,a:4,os:[1220,363,4],dev:[1583,0,4],cn:[1453,0,131,0,0,0,0,3],cc:[88,1,8,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-06-08':{v:2262,c:98,a:2,os:[1645,606,11],dev:[2251,0,11],cn:[2037,0,223,0,0,0,0,2],cc:[82,0,13,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-06-09':{v:2155,c:124,a:5,os:[1612,529,14],dev:[2141,0,14],cn:[1945,0,205,0,0,0,0,5],cc:[108,0,15,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-06-10':{v:2386,c:135,a:6,os:[1753,620,13],dev:[2373,0,13],cn:[2164,0,221,0,0,0,0,1],cc:[121,0,12,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-06-11':{v:2080,c:107,a:4,os:[1525,544,11],dev:[2069,0,11],cn:[1913,0,166,0,0,0,0,1],cc:[93,0,13,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-06-12':{v:1860,c:98,a:5,os:[1420,429,11],dev:[1849,0,11],cn:[1674,0,183,0,0,0,0,3],cc:[87,0,10,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-06-13':{v:1511,c:70,a:4,os:[1150,353,8],dev:[1503,0,8],cn:[1352,0,157,0,0,0,0,2],cc:[64,0,5,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-06-14':{v:1541,c:94,a:6,os:[1158,378,5],dev:[1536,0,5],cn:[1388,0,152,0,0,0,0,1],cc:[81,0,10,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-06-15':{v:2297,c:122,a:4,os:[1692,591,14],dev:[2283,0,14],cn:[2068,0,226,0,0,0,0,3],cc:[110,0,12,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-06-16':{v:2199,c:132,a:6,os:[1606,577,16],dev:[2183,0,16],cn:[1992,0,207,0,0,0,0,0],cc:[115,1,14,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-06-17':{v:2057,c:118,a:5,os:[1491,558,8],dev:[2049,0,8],cn:[1865,0,190,0,0,0,0,2],cc:[104,0,12,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-06-18':{v:1922,c:109,a:2,os:[1429,481,12],dev:[1910,0,12],cn:[1726,0,194,0,0,0,0,2],cc:[91,0,11,0,0,0,0,7],f:[0,0,0,0,0,0]},
+'2026-06-19':{v:1711,c:95,a:5,os:[1313,392,6],dev:[1705,0,6],cn:[1548,0,162,0,0,0,0,1],cc:[84,0,9,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-06-20':{v:1492,c:80,a:1,os:[1165,320,7],dev:[1485,0,7],cn:[1341,0,150,0,0,0,0,1],cc:[72,0,8,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-06-21':{v:1469,c:86,a:3,os:[1134,333,2],dev:[1467,0,2],cn:[1307,0,161,0,0,0,0,1],cc:[76,0,9,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-06-22':{v:2065,c:86,a:4,os:[1487,566,12],dev:[2053,0,12],cn:[1874,0,190,0,0,0,0,1],cc:[78,0,7,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-06-23':{v:2036,c:108,a:2,os:[1467,552,17],dev:[2019,0,17],cn:[1826,0,206,0,0,0,0,4],cc:[90,0,14,0,0,0,0,4],f:[0,0,0,0,0,0]},
+'2026-06-24':{v:1786,c:108,a:4,os:[1323,449,14],dev:[1772,0,14],cn:[1594,0,191,0,0,0,0,1],cc:[91,0,16,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-06-25':{v:1923,c:96,a:4,os:[1397,514,12],dev:[1911,0,12],cn:[1725,0,196,0,0,0,0,2],cc:[85,0,8,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-06-26':{v:1818,c:107,a:4,os:[1369,434,15],dev:[1803,0,15],cn:[1629,0,185,0,0,0,0,4],cc:[96,0,9,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-06-27':{v:1561,c:84,a:4,os:[1168,389,4],dev:[1557,0,4],cn:[1388,0,170,0,0,0,0,3],cc:[74,0,10,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-06-28':{v:1351,c:76,a:5,os:[1016,332,3],dev:[1348,0,3],cn:[1199,0,150,0,0,0,0,2],cc:[65,0,10,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-06-29':{v:1520,c:67,a:2,os:[1154,358,8],dev:[1512,0,8],cn:[1378,0,141,0,0,0,0,1],cc:[54,0,12,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-06-30':{v:2855,c:142,a:11,os:[1947,889,19],dev:[2836,0,19],cn:[2644,0,207,0,0,0,0,4],cc:[125,2,10,0,0,0,0,5],f:[0,0,0,0,0,0]},
+'2026-07-01':{v:2549,c:127,a:4,os:[1886,639,24],dev:[2525,0,24],cn:[2302,0,240,0,1,0,0,6],cc:[108,0,13,0,0,0,0,6],f:[0,0,0,0,0,0]},
+'2026-07-02':{v:2150,c:106,a:8,os:[1596,546,8],dev:[2142,0,8],cn:[1955,0,193,0,0,0,0,2],cc:[91,0,12,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-07-03':{v:1906,c:101,a:7,os:[1403,485,18],dev:[1888,0,18],cn:[1709,0,194,0,1,0,0,2],cc:[88,1,12,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-07-04':{v:1555,c:82,a:6,os:[1183,366,6],dev:[1549,0,6],cn:[1410,0,144,0,0,0,0,1],cc:[65,0,14,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-07-05':{v:1283,c:80,a:1,os:[1003,277,3],dev:[1280,0,3],cn:[1152,0,131,0,0,0,0,0],cc:[74,0,6,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-07-06':{v:2068,c:109,a:6,os:[1524,530,14],dev:[2054,0,14],cn:[1883,0,183,0,0,0,0,2],cc:[97,0,11,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-07':{v:2126,c:108,a:10,os:[1558,555,13],dev:[2113,0,13],cn:[1937,0,187,0,0,0,0,2],cc:[98,0,8,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-07-08':{v:2155,c:111,a:1,os:[1606,537,12],dev:[2143,0,12],cn:[1934,0,216,0,1,0,0,4],cc:[104,0,5,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-07-09':{v:1950,c:107,a:4,os:[1460,485,5],dev:[1945,0,5],cn:[1761,0,187,0,0,0,0,2],cc:[91,0,13,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-07-10':{v:2023,c:119,a:6,os:[1493,521,9],dev:[2015,0,8],cn:[1835,0,186,0,0,0,0,2],cc:[99,1,18,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-11':{v:1604,c:80,a:1,os:[1216,380,8],dev:[1596,0,8],cn:[1440,0,164,0,0,0,0,0],cc:[73,0,7,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-07-12':{v:1405,c:95,a:6,os:[1068,328,9],dev:[1396,0,9],cn:[1253,0,150,0,0,0,0,2],cc:[84,0,10,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-13':{v:2552,c:123,a:5,os:[1775,763,14],dev:[2538,0,14],cn:[2344,0,203,0,0,0,0,5],cc:[106,0,16,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-14':{v:2272,c:120,a:6,os:[1643,618,11],dev:[2261,0,11],cn:[2061,0,207,0,0,0,0,4],cc:[111,0,8,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-15':{v:2232,c:107,a:7,os:[1600,620,12],dev:[2220,0,12],cn:[2020,0,209,0,0,0,0,3],cc:[91,0,14,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-07-16':{v:2125,c:100,a:3,os:[1509,602,14],dev:[2111,0,14],cn:[1935,0,185,0,0,0,0,5],cc:[88,1,9,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-07-17':{v:1839,c:97,a:3,os:[1329,497,13],dev:[1826,0,13],cn:[1666,0,169,0,0,0,0,4],cc:[77,0,15,0,0,0,0,5],f:[0,0,0,0,0,0]},
+'2026-07-18':{v:1477,c:80,a:1,os:[1050,422,5],dev:[1472,0,5],cn:[1330,0,146,0,0,0,0,1],cc:[73,1,4,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-07-19':{v:1300,c:72,a:2,os:[955,341,4],dev:[1296,0,4],cn:[1164,0,132,0,0,0,0,4],cc:[63,0,8,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-20':{v:2105,c:117,a:4,os:[1519,574,12],dev:[2093,0,12],cn:[1898,0,204,0,0,0,0,3],cc:[104,0,12,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-21':{v:1968,c:105,a:4,os:[1360,596,12],dev:[1956,0,12],cn:[1754,0,209,0,0,0,0,5],cc:[86,1,17,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-22':{v:1814,c:101,a:5,os:[1286,517,11],dev:[1803,0,11],cn:[1649,0,161,0,0,0,0,4],cc:[84,0,13,0,0,0,0,4],f:[0,0,0,0,0,0]},
+'2026-07-23':{v:1711,c:91,a:1,os:[1227,479,5],dev:[1706,0,5],cn:[1539,0,171,0,0,0,0,1],cc:[80,0,9,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-07-24':{v:1683,c:85,a:1,os:[1198,470,15],dev:[1668,0,15],cn:[1514,0,162,0,0,0,0,7],cc:[74,0,7,0,0,0,0,4],f:[0,0,0,0,0,0]},
+'2026-07-25':{v:1383,c:70,a:3,os:[960,420,3],dev:[1380,0,3],cn:[1240,0,143,0,0,0,0,0],cc:[63,0,7,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-07-26':{v:1125,c:67,a:2,os:[821,297,7],dev:[1118,0,7],cn:[996,0,128,0,0,0,0,1],cc:[61,0,5,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-27':{v:1839,c:32,a:0,os:[1263,566,10],dev:[1829,0,10],cn:[1604,0,233,0,0,0,0,2],cc:[27,1,3,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-28':{v:1830,c:7,a:0,os:[1269,551,10],dev:[1820,0,10],cn:[1632,0,193,0,0,0,0,5],cc:[2,0,4,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-29':{v:1845,c:3,a:0,os:[1268,563,14],dev:[1831,0,14],cn:[1615,0,228,0,0,0,0,2],cc:[0,1,1,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-30':{v:1785,c:4,a:0,os:[1233,543,9],dev:[1776,0,9],cn:[1559,0,221,0,0,0,0,5],cc:[1,0,2,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-07-31':{v:1774,c:4,a:0,os:[1229,539,6],dev:[1768,0,6],cn:[1571,0,202,0,0,0,0,1],cc:[0,0,1,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-08-01':{v:1614,c:2,a:0,os:[1137,472,5],dev:[1609,0,5],cn:[1420,0,191,0,0,0,0,3],cc:[0,0,2,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-08-02':{v:1337,c:2,a:0,os:[956,380,1],dev:[1336,0,1],cn:[1161,0,175,0,0,0,0,1],cc:[0,0,2,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-08-03':{v:1943,c:2,a:0,os:[1311,616,16],dev:[1927,0,16],cn:[1699,0,240,0,0,0,0,4],cc:[1,0,1,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-08-04':{v:2017,c:6,a:0,os:[1363,642,12],dev:[2005,0,12],cn:[1764,0,247,0,0,0,0,6],cc:[2,0,3,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-08-05':{v:1955,c:6,a:0,os:[1363,576,16],dev:[1939,0,16],cn:[1695,0,246,0,0,0,0,14],cc:[1,0,2,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-08-06':{v:2050,c:5,a:2,os:[1414,626,10],dev:[2040,0,10],cn:[1831,0,213,0,0,0,0,6],cc:[1,0,3,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-08-07':{v:1946,c:73,a:7,os:[1343,589,14],dev:[1932,0,14],cn:[1744,0,198,0,0,0,0,4],cc:[62,0,10,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-08-08':{v:1518,c:79,a:3,os:[1043,467,8],dev:[1510,0,8],cn:[1384,0,132,0,0,0,0,2],cc:[68,1,5,0,0,0,0,5],f:[0,0,0,0,0,0]},
+'2026-08-09':{v:1291,c:80,a:7,os:[924,363,4],dev:[1287,0,4],cn:[1159,0,131,0,0,0,0,1],cc:[67,0,11,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-08-10':{v:2122,c:125,a:13,os:[1471,635,16],dev:[2106,0,16],cn:[1927,0,190,0,0,0,0,5],cc:[106,0,18,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-08-11':{v:2018,c:105,a:5,os:[1411,592,15],dev:[2003,0,15],cn:[1806,0,208,0,0,0,0,4],cc:[90,0,13,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-08-12':{v:2039,c:114,a:6,os:[1429,596,14],dev:[2025,0,14],cn:[1861,0,175,0,0,0,0,3],cc:[97,0,13,0,0,0,0,4],f:[0,0,0,0,0,0]},
+'2026-08-13':{v:1940,c:98,a:4,os:[1384,546,10],dev:[1930,0,10],cn:[1757,0,180,0,0,0,0,3],cc:[85,0,10,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-08-14':{v:1668,c:110,a:1,os:[1206,453,9],dev:[1659,0,9],cn:[1490,0,175,0,0,0,0,3],cc:[96,0,11,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-08-15':{v:1399,c:93,a:3,os:[988,407,4],dev:[1395,0,4],cn:[1239,0,158,0,0,0,0,2],cc:[75,0,16,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-08-16':{v:1298,c:81,a:4,os:[954,338,6],dev:[1292,0,6],cn:[1159,0,135,0,0,0,0,4],cc:[62,1,16,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-08-17':{v:1814,c:96,a:4,os:[1271,532,11],dev:[1803,0,11],cn:[1637,0,177,0,0,0,0,0],cc:[86,0,10,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-08-18':{v:1859,c:112,a:4,os:[1305,538,16],dev:[1843,0,16],cn:[1669,0,189,0,0,0,0,1],cc:[91,3,18,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-08-19':{v:1840,c:103,a:2,os:[1280,550,10],dev:[1830,0,10],cn:[1633,0,201,0,0,0,0,6],cc:[90,0,11,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-08-20':{v:1981,c:96,a:1,os:[1379,595,7],dev:[1974,0,7],cn:[1808,0,169,0,0,0,0,4],cc:[87,1,7,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-08-21':{v:1977,c:98,a:6,os:[1433,533,11],dev:[1966,0,11],cn:[1470,326,179,0,0,0,0,2],cc:[75,12,10,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-08-22':{v:1683,c:115,a:2,os:[1236,442,5],dev:[1678,0,5],cn:[1229,298,155,0,0,0,0,1],cc:[74,29,9,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-08-23':{v:1527,c:113,a:6,os:[1144,375,8],dev:[1519,0,8],cn:[1094,298,130,0,0,0,0,5],cc:[73,26,12,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-08-24':{v:2213,c:131,a:12,os:[1627,573,13],dev:[2200,0,13],cn:[1576,442,194,0,0,0,0,1],cc:[79,36,16,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-08-25':{v:2094,c:132,a:3,os:[1468,614,12],dev:[2082,0,12],cn:[1556,353,185,0,0,0,0,0],cc:[96,22,10,0,0,0,0,4],f:[0,0,0,0,0,0]},
+'2026-08-26':{v:2028,c:133,a:2,os:[1472,539,17],dev:[2011,0,17],cn:[1572,268,187,0,0,0,0,1],cc:[97,22,11,0,0,0,0,3],f:[0,0,0,0,0,0]},
+'2026-08-27':{v:1871,c:125,a:4,os:[1313,548,10],dev:[1861,0,10],cn:[1457,247,167,0,0,0,0,0],cc:[96,15,13,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-08-28':{v:1810,c:107,a:5,os:[1318,487,5],dev:[1805,0,5],cn:[1402,258,150,0,0,0,0,0],cc:[75,19,12,0,0,0,0,1],f:[0,0,0,0,0,0]},
+'2026-08-29':{v:1614,c:87,a:1,os:[1198,410,6],dev:[1608,0,6],cn:[1233,236,143,0,0,0,0,2],cc:[61,16,8,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-08-30':{v:1347,c:80,a:1,os:[979,366,2],dev:[1345,0,2],cn:[1070,152,125,0,0,0,0,0],cc:[67,6,7,0,0,0,0,0],f:[0,0,0,0,0,0]},
+'2026-08-31':{v:2073,c:98,a:6,os:[1446,619,8],dev:[2065,0,8],cn:[1726,151,190,0,1,0,0,5],cc:[77,10,9,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-09-01':{v:2311,c:114,a:4,os:[1659,643,9],dev:[2302,0,9],cn:[1910,188,212,0,0,0,0,1],cc:[89,11,12,0,0,0,0,2],f:[0,0,0,0,0,0]},
+'2026-09-02':{v:1979,c:128,a:0,os:[1436,536,7],dev:[1972,0,7],cn:[1584,231,162,0,0,0,0,2],cc:[98,19,9,0,0,0,0,2],f:[0,0,0,0,0,0]}
 };
 /* ==DAILY_END== */
 
@@ -2673,19 +2675,42 @@ const DAILY={
 renderStrip('main'); renderStrip('cmp');
 renderKPIs(KPI_ABA1, CMP_LABEL, 'kpi-bar');
 renderKPIs(KPI_ABA2, CMP_LABEL_M, 'kpi-bar-m');
-document.getElementById('build-date').textContent = 'Atualizado em: 02/09/2026';
+document.getElementById('build-date').textContent = 'Atualizado em: 03/09/2026';
+const CCOL={'micrositio':'#1A9E5C','banner_xsell':'#FFE600','direct':'#7C3AED','app / push':'#1A6EE8','placement / row_mgm':'#FF6B35','valueprop / canva':'#00B8D9','whatsapp':'#25D366','outros':'#888'};
+/* Legenda e tooltip dos gráficos empilhados por canal: esconde origem com tráfego/cadastro zerado no período visível. */
+function _canalPlugins(){
+  return {
+    legend:{position:'bottom',labels:{font:inter(11),boxWidth:10,padding:12,
+      filter:(item,data)=>{const ds=data.datasets[item.datasetIndex]; return ds.type==='line' || (ds.data||[]).some(v=>v>0);}
+    }},
+    tooltip:{mode:'index',intersect:false,
+      filter:(item)=>item.dataset.type==='line' || item.raw>0
+    }
+  };
+}
 chartTrafico = new Chart(document.getElementById('c1').getContext('2d'),{
   data:{labels:DAYS,datasets:[
-    {label:'Visitas LP',type:'bar',data:VISITS,yAxisID:'y',backgroundColor:'#2D2D2D',borderRadius:3,order:2,datalabels:{display:false}},
-    {label:'Cadastros',type:'bar',data:CADS,yAxisID:'y',backgroundColor:'#FFE600',borderRadius:3,order:2,datalabels:{display:false}},
+    ...CANAL_LABELS.map(c=>({label:c,type:'bar',data:[],yAxisID:'y',backgroundColor:CCOL[c]||'#888',stack:'traf',borderRadius:0,order:2,datalabels:{display:false}})),
     {label:'Conversão %',type:'line',data:CONV,yAxisID:'y2',borderColor:BLUE,backgroundColor:BLUE,borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#fff',pointBorderColor:BLUE,pointBorderWidth:2,tension:0.35,order:1,datalabels:{display:false}}
   ]},
   options:{responsive:true,maintainAspectRatio:false,layout:{padding:{left:14}},
-    plugins:{legend:{position:'bottom',labels:{font:inter(11),boxWidth:10,padding:12}},tooltip:{mode:'index',intersect:false}},
+    plugins:_canalPlugins(),
     scales:{
-      x:{grid:{display:false},ticks:{font:inter(10),color:'#888'}},
-      y:{grid:{color:'#F0F0F0'},ticks:{font:inter(10),color:'#888',padding:6,callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v}},
+      x:{stacked:true,grid:{display:false},ticks:{font:inter(10),color:'#888'}},
+      y:{stacked:true,grid:{color:'#F0F0F0'},ticks:{font:inter(10),color:'#888',padding:6,callback:v=>v>=1000?(v/1000).toFixed(1)+'k':v}},
       y2:{type:'linear',position:'right',grid:{display:false},ticks:{callback:v=>v.toFixed(1)+'%',font:inter(10),color:BLUE,padding:6},title:{display:true,text:'Conv. %',color:BLUE,font:inter(10,'700')}}
+    }
+  }
+});
+
+let chartCadsDaily;
+chartCadsDaily = new Chart(document.getElementById('c-cads').getContext('2d'),{
+  data:{labels:DAYS,datasets:CANAL_LABELS.map(c=>({label:c,type:'bar',data:[],backgroundColor:CCOL[c]||'#888',stack:'cads',borderRadius:0,datalabels:{display:false}}))},
+  options:{responsive:true,maintainAspectRatio:false,layout:{padding:{left:14}},
+    plugins:_canalPlugins(),
+    scales:{
+      x:{stacked:true,grid:{display:false},ticks:{font:inter(10),color:'#888'}},
+      y:{stacked:true,grid:{color:'#F0F0F0'},ticks:{font:inter(10),color:'#888',padding:6}}
     }
   }
 });
@@ -2749,7 +2774,6 @@ chartPieDev = new Chart(document.getElementById('pie-dev').getContext('2d'),{
 });
 
 /* GRÁFICO 3 */
-const CCOL={'micrositio':'#1A9E5C','direct':'#7C3AED','outros':'#888'};
 chartCanal = new Chart(document.getElementById('c3').getContext('2d'),{
   data:{labels:CANAIS.map(r=>r.c),datasets:[
     {label:'Visitas',type:'bar',data:CANAIS.map(r=>r.v),yAxisID:'y',backgroundColor:CANAIS.map(r=>CCOL[r.c]),borderRadius:4,order:2,
@@ -2836,16 +2860,39 @@ function renderChartsMensal(){
   const kpiLbl = (hasOS||hasDev)&&!hasCanal ? baseLbl+' · cads/ativos/tpv totais' : baseLbl;
   renderKPIs(kpiDyn, kpiLbl, 'kpi-bar-m');
 
-  // ── Gráfico evolução mensal (visitas e cads filtrados) ───────
+  // ── Gráfico evolução mensal (tráfego empilhado por origem + conversão) ───────
   if(chartMensal){
     const visData=idxs.map(i=>filtVisits(i));
     const cadData=idxs.map(i=>filtCads(i));
     const convData=visData.map((v,j)=>v>0?+(cadData[j]/v*100).toFixed(2):null);
+    const activeCanais=hasCanal?selCanais:CANAL_LABELS;
     chartMensal.data.labels=labels;
-    chartMensal.data.datasets[0].data=visData;
-    chartMensal.data.datasets[1].data=cadData;
-    chartMensal.data.datasets[2].data=convData;
+    CANAL_LABELS.forEach((c,ci)=>{
+      const active=activeCanais.includes(c);
+      chartMensal.data.datasets[ci].data=idxs.map(i=>{
+        if(!active)return 0;
+        const row=(CANAIS_BY_MES[MESES_M[i]]||[]).find(r=>r.c===c);
+        return row?row.v:0;
+      });
+      chartMensal.data.datasets[ci].hidden=!active;
+    });
+    chartMensal.data.datasets[CANAL_LABELS.length].data=convData;
     chartMensal.update();
+  }
+
+  // ── Gráfico cadastros empilhado por origem ───────
+  if(chartCadsMensal){
+    const activeCanaisC=hasCanal?selCanais:CANAL_LABELS;
+    chartCadsMensal.data.labels=labels;
+    CANAL_LABELS.forEach((c,ci)=>{
+      const active=activeCanaisC.includes(c);
+      chartCadsMensal.data.datasets[ci].data=idxs.map(i=>{
+        if(!active)return 0;
+        return (CADS_BY_CANAL_M[MESES_M[i]]||{})[c]||0;
+      });
+      chartCadsMensal.data.datasets[ci].hidden=!active;
+    });
+    chartCadsMensal.update();
   }
 
   // ── Pie OS (filtra quando OS selecionado) ────────────────────
@@ -2889,81 +2936,30 @@ function renderChartsMensal(){
 
 chartMensal = new Chart(document.getElementById('c-mensal').getContext('2d'),{
   data:{labels:MESES_M,datasets:[
-    {label:'Visitas LP',type:'bar',data:MV,yAxisID:'y',backgroundColor:'#2D2D2D',borderRadius:3,order:2,datalabels:{display:false}},
-    {label:'Cadastros',type:'bar',data:MC,yAxisID:'y',backgroundColor:'#FFE600',borderRadius:3,order:2,datalabels:{display:false}},
+    ...CANAL_LABELS.map(c=>({label:c,type:'bar',data:[],yAxisID:'y',backgroundColor:CCOL[c]||'#888',stack:'traf',borderRadius:0,order:2,datalabels:{display:false}})),
     {label:'Conversão %',type:'line',data:MCONV_M,yAxisID:'y2',borderColor:BLUE,backgroundColor:BLUE,borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#fff',pointBorderColor:BLUE,pointBorderWidth:2,tension:0.35,order:1,datalabels:{display:false}}
   ]},
   options:{responsive:true,maintainAspectRatio:false,layout:{padding:{left:14}},
-    plugins:{legend:{position:'bottom',labels:{font:inter(11),boxWidth:10,padding:12}},tooltip:{mode:'index',intersect:false}},
+    plugins:_canalPlugins(),
     scales:{
-      x:{grid:{display:false},ticks:{font:inter(10),color:'#888'}},
-      y:{grid:{color:'#F0F0F0'},ticks:{font:inter(10),color:'#888',padding:6,callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v}},
+      x:{stacked:true,grid:{display:false},ticks:{font:inter(10),color:'#888'}},
+      y:{stacked:true,grid:{color:'#F0F0F0'},ticks:{font:inter(10),color:'#888',padding:6,callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v}},
       y2:{type:'linear',position:'right',grid:{display:false},ticks:{callback:v=>v.toFixed(1)+'%',font:inter(10),color:BLUE,padding:6},title:{display:true,text:'Conv. %',color:BLUE,font:inter(10,'700')}}
     }
   }
 });
 
-/* ── COHORT HEATMAP ── */
-function fmtTPV(v){
-  if(v===null)return '-';
-  if(v>=1000000)return 'R$'+(v/1000000).toFixed(1)+'M';
-  if(v>=1000)return 'R$'+(v/1000).toFixed(0)+'k';
-  return 'R$'+v;
-}
-
-function renderCohort(){
-  // encontra o valor máximo para normalizar o heatmap
-  const allVals=COHORT_DATA.flat().filter(v=>v!==null);
-  const maxVal=Math.max(...allVals);
-
-  // função de cor: do branco ao amarelo escuro
-  function heatColor(v){
-    if(v===null)return null;
-    const t=v/maxVal; // 0 a 1
-    // interpolação: branco (#FFF) → amarelo (#FFE600) → âmbar escuro (#B45309)
-    if(t<0.5){
-      const r=Math.round(255);
-      const g=Math.round(255-((255-230)*t*2));
-      const b=Math.round(255-(255*t*2));
-      return `rgb(${r},${g},${b})`;
-    } else {
-      const u=(t-0.5)*2;
-      const r=Math.round(255-(75*u));
-      const g=Math.round(230-(147*u));
-      const b=0;
-      return `rgb(${r},${g},${b})`;
+let chartCadsMensal;
+chartCadsMensal = new Chart(document.getElementById('c-cads-m').getContext('2d'),{
+  data:{labels:MESES_M,datasets:CANAL_LABELS.map(c=>({label:c,type:'bar',data:[],backgroundColor:CCOL[c]||'#888',stack:'cads',borderRadius:0,datalabels:{display:false}}))},
+  options:{responsive:true,maintainAspectRatio:false,layout:{padding:{left:14}},
+    plugins:_canalPlugins(),
+    scales:{
+      x:{stacked:true,grid:{display:false},ticks:{font:inter(10),color:'#888'}},
+      y:{stacked:true,grid:{color:'#F0F0F0'},ticks:{font:inter(10),color:'#888',padding:6}}
     }
   }
-  function textColor(v){
-    if(v===null)return '#BBB';
-    return v/maxVal>0.65?'#fff':'#1A1A1A';
-  }
-
-  const cols=13; // M0-M12
-  let html='<table class="cohort-tbl"><thead><tr>';
-  html+='<th class="safra-hd">Safra</th>';
-  for(let m=0;m<=12;m++) html+=`<th>M${m}</th>`;
-  html+='</tr></thead><tbody>';
-
-  COHORT_SAFRAS.forEach((safra,i)=>{
-    html+=`<tr><td class="safra-lbl">${safra}</td>`;
-    for(let m=0;m<=12;m++){
-      const v=COHORT_DATA[i][m];
-      if(v===null){
-        html+='<td class="empty">–</td>';
-      } else {
-        const bg=heatColor(v);
-        const fg=textColor(v);
-        html+=`<td style="background:${bg};color:${fg};">${fmtTPV(v)}</td>`;
-      }
-    }
-    html+='</tr>';
-  });
-  html+='</tbody></table>';
-  document.getElementById('cohort-table').innerHTML=html;
-}
-
-renderCohort();
+});
 
 chartPieOsM = new Chart(document.getElementById('pie-os-m').getContext('2d'),{
   type:'doughnut',
@@ -3142,14 +3138,14 @@ function _walkNodes(root, fn){
 /* ===== ABA 1 · Filtro por calendário (intervalo diário) ===== */
 function _dailyKeys(){return (typeof DAILY!=='undefined')?Object.keys(DAILY).sort():[];}
 function _daysInRange(s,e){return _dailyKeys().filter(d=>d>=s&&d<=e);}
-function _blankAgg(){return {v:0,c:0,a:0,os:OS_LABELS.map(_=>0),dev:DEV_LABELS.map(_=>0),cn:CANAL_LABELS.map(_=>0),cc:CANAL_LABELS.map(_=>0),f:FUNIL_STEPS.map(_=>0),days:[],dvis:[],dcad:[]};}
+function _blankAgg(){return {v:0,c:0,a:0,os:OS_LABELS.map(_=>0),dev:DEV_LABELS.map(_=>0),cn:CANAL_LABELS.map(_=>0),cc:CANAL_LABELS.map(_=>0),f:FUNIL_STEPS.map(_=>0),days:[],dvis:[],dcad:[],dcnByCanal:CANAL_LABELS.map(_=>[]),dccByCanal:CANAL_LABELS.map(_=>[])};}
 function _aggRange(s,e){
   const A=_blankAgg();
   _daysInRange(s,e).forEach(d=>{
     const r=DAILY[d]; if(!r)return;
     A.v+=r.v||0; A.c+=r.c||0; A.a+=r.a||0;
     (r.os||[]).forEach((x,i)=>A.os[i]+=x); (r.dev||[]).forEach((x,i)=>A.dev[i]+=x);
-    (r.cn||[]).forEach((x,i)=>A.cn[i]+=x); (r.cc||[]).forEach((x,i)=>A.cc[i]+=x);
+    (r.cn||[]).forEach((x,i)=>{A.cn[i]+=x; A.dcnByCanal[i].push(x);}); (r.cc||[]).forEach((x,i)=>{A.cc[i]+=x; A.dccByCanal[i].push(x);});
     (r.f||[]).forEach((x,i)=>A.f[i]+=x);
     A.days.push(d.slice(8,10)+'/'+d.slice(5,7)); A.dvis.push(r.v||0); A.dcad.push(r.c||0);
   });
@@ -3200,8 +3196,15 @@ function _renderAba1Range(s,e,cs,ce){
   const info=document.getElementById('periodo-info'); if(info)info.textContent='('+cur.days.length+' dias)';
   if(typeof chartTrafico!=='undefined'&&chartTrafico){
     const conv=cur.dvis.map((v,i)=>v>0?+(cur.dcad[i]/v*100).toFixed(2):null);
-    chartTrafico.data.labels=cur.days; chartTrafico.data.datasets[0].data=cur.dvis;
-    chartTrafico.data.datasets[1].data=cur.dcad; chartTrafico.data.datasets[2].data=conv; chartTrafico.update();
+    chartTrafico.data.labels=cur.days;
+    CANAL_LABELS.forEach((c,ci)=>{ chartTrafico.data.datasets[ci].data=cur.dcnByCanal[ci]; });
+    chartTrafico.data.datasets[CANAL_LABELS.length].data=conv;
+    chartTrafico.update();
+  }
+  if(typeof chartCadsDaily!=='undefined'&&chartCadsDaily){
+    chartCadsDaily.data.labels=cur.days;
+    CANAL_LABELS.forEach((c,ci)=>{ chartCadsDaily.data.datasets[ci].data=cur.dccByCanal[ci]; });
+    chartCadsDaily.update();
   }
   const osS=cur.os.reduce((a,b)=>a+b,0)||1;
   if(typeof chartPieOs!=='undefined'&&chartPieOs){chartPieOs.data.datasets[0].data=cur.os.map(v=>Math.round(v/osS*100));chartPieOs.update();}
