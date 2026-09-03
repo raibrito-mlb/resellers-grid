@@ -335,81 +335,87 @@ body{font-family:'Inter',-apple-system,sans-serif;background:var(--gbg);color:va
 <!-- ══ ABA REPOSITÓRIO DE QUERIES ══ -->
 <div id="tab-queries" class="tab-pane">
 <div class="qr-wrap">
-
-  <div class="qr-section-title">Visão Geral de Resultado</div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q1_LP</span>
-      <span class="qr-desc">Visitas à LP por dia, canal, OS e device — período atual (MTD)</span>
-      <span class="qr-badges">
-        <span class="badge badge-daily">daily</span>
-        <span class="badge badge-table">MELIDATA.TRACKS</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+<!-- ==QUERY_REPO_START== -->
+<div class="qr-summary">17 consultas documentadas · 16 executadas no build · 1 auxiliar não executada</div>
+<div class="qr-section-title">Visão Geral de Resultado</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q1_LP</span>
+    <span class="qr-desc" title="Visitas únicas à LP por dia, origem, sistema operacional e dispositivo. Reutilizada no MTD e na janela diária.">Visitas únicas à LP por dia, origem, sistema operacional e dispositivo. Reutilizada no MTD e na janela diária.</span>
+    <span class="qr-badges">
+      <span class="badge badge-daily">daily</span>
+      <span class="badge badge-table qr-primary-table">MELIDATA.TRACKS</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-active">em uso</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">MELIDATA.TRACKS</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
   SELECT t.ds, t.usr.user_id AS user_id,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_source' LIMIT 1)),''),'') AS src,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_medium' LIMIT 1)),''),'') AS med,
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_source&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS src,
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_medium&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS med,
     t.device.os_name AS os, t.device.platform AS device
   FROM `meli-bi-data.MELIDATA.TRACKS` t
-  WHERE t.ds BETWEEN '{curr_start}' AND '{curr_end}'
-    AND t.bu='mercadopago' AND t.application.site_id='MLB'
-    AND t.path='/merchant_acquisition/flows/resellers/landing/home'
+  WHERE t.ds BETWEEN &#x27;{start}&#x27; AND &#x27;{end}&#x27;
+    AND t.bu=&#x27;mercadopago&#x27; AND t.application.site_id=&#x27;MLB&#x27;
+    AND t.path=&#x27;/merchant_acquisition/flows/resellers/landing/home&#x27;
 )
 SELECT ds,
-  CASE WHEN src='app' AND med='push' THEN 'app / push'
-       WHEN src='placement' THEN 'placement / row_mgm'
-       WHEN src='micrositio' THEN 'micrositio'
-       WHEN src='home_mp' THEN 'banner_xsell'
-       WHEN src='' OR src='direct' THEN 'direct'
-       WHEN src='valueprop' THEN 'valueprop / canva'
-       WHEN LOWER(src) LIKE '%whatsapp%' THEN 'whatsapp'
-       ELSE 'outros' END AS canal,
-  COALESCE(os,'desconhecido') AS os,
-  COALESCE(device,'desconhecido') AS device,
+  CASE WHEN src=&#x27;app&#x27; AND med=&#x27;push&#x27; THEN &#x27;app / push&#x27;
+       WHEN src=&#x27;placement&#x27; THEN &#x27;placement / row_mgm&#x27;
+       WHEN src=&#x27;micrositio&#x27; THEN &#x27;micrositio&#x27;
+       WHEN src=&#x27;home_mp&#x27; THEN &#x27;banner_xsell&#x27;
+       WHEN src=&#x27;&#x27; OR src=&#x27;direct&#x27; THEN &#x27;direct&#x27;
+       WHEN src=&#x27;valueprop&#x27; THEN &#x27;valueprop / canva&#x27;
+       WHEN LOWER(src) LIKE &#x27;%whatsapp%&#x27; THEN &#x27;whatsapp&#x27;
+       ELSE &#x27;outros&#x27; END AS canal,
+  COALESCE(os,&#x27;desconhecido&#x27;) AS os,
+  COALESCE(device,&#x27;desconhecido&#x27;) AS device,
   COUNT(DISTINCT user_id) AS visitas
 FROM lp_raw GROUP BY 1,2,3,4 ORDER BY 1,2</pre>
-    </div>
   </div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q2_FUNIL</span>
-      <span class="qr-desc">Funil completo de cadastro por etapa, canal, OS e device — mês atual + anterior</span>
-      <span class="qr-badges">
-        <span class="badge badge-daily">daily</span>
-        <span class="badge badge-table">MELIDATA.TRACKS</span>
-        <span class="badge badge-table">RESELLERS_LEADS_TAN</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q2_FUNIL</span>
+    <span class="qr-desc" title="Funil de cadastro do período atual e anterior, segmentado por origem, sistema operacional e dispositivo.">Funil de cadastro do período atual e anterior, segmentado por origem, sistema operacional e dispositivo.</span>
+    <span class="qr-badges">
+      <span class="badge badge-daily">daily</span>
+      <span class="badge badge-table qr-primary-table">MELIDATA.TRACKS</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-active">em uso</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">MELIDATA.TRACKS</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
   SELECT t.ds, t.usr.user_id AS user_id,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_source' LIMIT 1)),''),'') AS src,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_medium' LIMIT 1)),''),'') AS med,
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_source&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS src,
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_medium&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS med,
     t.device.os_name AS os, t.device.platform AS device
   FROM `meli-bi-data.MELIDATA.TRACKS` t
-  WHERE t.ds BETWEEN '{prev_start}' AND '{curr_end}'
-    AND t.bu='mercadopago' AND t.application.site_id='MLB'
-    AND t.path='/merchant_acquisition/flows/resellers/landing/home'
+  WHERE t.ds BETWEEN &#x27;{prev_start}&#x27; AND &#x27;{curr_end}&#x27;
+    AND t.bu=&#x27;mercadopago&#x27; AND t.application.site_id=&#x27;MLB&#x27;
+    AND t.path=&#x27;/merchant_acquisition/flows/resellers/landing/home&#x27;
 ),
 lp_classified AS (
   SELECT ds,
-    CASE WHEN ds BETWEEN '{curr_start}' AND '{curr_end}' THEN 'atual'
-         WHEN ds BETWEEN '{prev_start}' AND '{prev_end}' THEN 'anterior' END AS periodo,
-    user_id, COALESCE(os,'desconhecido') AS os, COALESCE(device,'desconhecido') AS device,
-    CASE WHEN src='app' AND med='push' THEN 'app / push'
-         WHEN src='placement' THEN 'placement / row_mgm'
-         WHEN src='micrositio' THEN 'micrositio'
-         WHEN src='home_mp' THEN 'banner_xsell'
-         WHEN src='' OR src='direct' THEN 'direct'
-         WHEN src='valueprop' THEN 'valueprop / canva'
-         WHEN LOWER(src) LIKE '%whatsapp%' THEN 'whatsapp'
-         ELSE 'outros' END AS canal
+    CASE WHEN ds BETWEEN &#x27;{curr_start}&#x27; AND &#x27;{curr_end}&#x27; THEN &#x27;atual&#x27;
+         WHEN ds BETWEEN &#x27;{prev_start}&#x27; AND &#x27;{prev_end}&#x27; THEN &#x27;anterior&#x27; END AS periodo,
+    user_id, COALESCE(os,&#x27;desconhecido&#x27;) AS os, COALESCE(device,&#x27;desconhecido&#x27;) AS device,
+    CASE WHEN src=&#x27;app&#x27; AND med=&#x27;push&#x27; THEN &#x27;app / push&#x27;
+         WHEN src=&#x27;placement&#x27; THEN &#x27;placement / row_mgm&#x27;
+         WHEN src=&#x27;micrositio&#x27; THEN &#x27;micrositio&#x27;
+         WHEN src=&#x27;home_mp&#x27; THEN &#x27;banner_xsell&#x27;
+         WHEN src=&#x27;&#x27; OR src=&#x27;direct&#x27; THEN &#x27;direct&#x27;
+         WHEN src=&#x27;valueprop&#x27; THEN &#x27;valueprop / canva&#x27;
+         WHEN LOWER(src) LIKE &#x27;%whatsapp%&#x27; THEN &#x27;whatsapp&#x27;
+         ELSE &#x27;outros&#x27; END AS canal
   FROM lp_raw
 ),
 lp_attr AS (
@@ -422,47 +428,43 @@ lp_attr AS (
 step_events AS (
   SELECT t.ds, t.usr.user_id AS user_id,
     CASE t.path
-      WHEN '/merchant_acquisition/flows/resellers/profiling'           THEN '2_profiling_exp'
-      WHEN '/merchant_acquisition/flows/resellers/business_type'       THEN '3_tipo_negocio'
-      WHEN '/merchant_acquisition/flows/resellers/store/selection'     THEN '4_loc_selecao'
-      WHEN '/merchant_acquisition/flows/resellers/store/confirmation'  THEN '5_loc_confirmacao'
+      WHEN &#x27;/merchant_acquisition/flows/resellers/profiling&#x27; THEN &#x27;2_profiling_exp&#x27;
+      WHEN &#x27;/merchant_acquisition/flows/resellers/business_type&#x27; THEN &#x27;3_tipo_negocio&#x27;
+      WHEN &#x27;/merchant_acquisition/flows/resellers/store/selection&#x27; THEN &#x27;4_loc_selecao&#x27;
+      WHEN &#x27;/merchant_acquisition/flows/resellers/store/confirmation&#x27; THEN &#x27;5_loc_confirmacao&#x27;
     END AS step,
     t.device.os_name AS os, t.device.platform AS device
   FROM `meli-bi-data.MELIDATA.TRACKS` t
-  WHERE t.ds BETWEEN '{prev_start}' AND '{curr_end}'
-    AND t.bu='mercadopago' AND t.application.site_id='MLB'
-    AND t.path IN (
-      '/merchant_acquisition/flows/resellers/profiling',
-      '/merchant_acquisition/flows/resellers/business_type',
-      '/merchant_acquisition/flows/resellers/store/selection',
-      '/merchant_acquisition/flows/resellers/store/confirmation')
+  WHERE t.ds BETWEEN &#x27;{prev_start}&#x27; AND &#x27;{curr_end}&#x27;
+    AND t.bu=&#x27;mercadopago&#x27; AND t.application.site_id=&#x27;MLB&#x27;
+    AND t.path IN (&#x27;/merchant_acquisition/flows/resellers/profiling&#x27;,&#x27;/merchant_acquisition/flows/resellers/business_type&#x27;,&#x27;/merchant_acquisition/flows/resellers/store/selection&#x27;,&#x27;/merchant_acquisition/flows/resellers/store/confirmation&#x27;)
 ),
 steps_2_5 AS (
   SELECT e.ds, e.user_id, e.step, e.os, e.device,
-    COALESCE(la.canal,'outros') AS canal,
-    CASE WHEN e.ds BETWEEN '{curr_start}' AND '{curr_end}' THEN 'atual'
-         WHEN e.ds BETWEEN '{prev_start}' AND '{prev_end}' THEN 'anterior' END AS periodo
+    COALESCE(la.canal,&#x27;outros&#x27;) AS canal,
+    CASE WHEN e.ds BETWEEN &#x27;{curr_start}&#x27; AND &#x27;{curr_end}&#x27; THEN &#x27;atual&#x27;
+         WHEN e.ds BETWEEN &#x27;{prev_start}&#x27; AND &#x27;{prev_end}&#x27; THEN &#x27;anterior&#x27; END AS periodo
   FROM step_events e
   LEFT JOIN lp_attr la ON e.user_id=la.user_id
-    AND CASE WHEN e.ds BETWEEN '{curr_start}' AND '{curr_end}' THEN 'atual'
-             WHEN e.ds BETWEEN '{prev_start}' AND '{prev_end}' THEN 'anterior' END = la.periodo
+    AND CASE WHEN e.ds BETWEEN &#x27;{curr_start}&#x27; AND &#x27;{curr_end}&#x27; THEN &#x27;atual&#x27;
+             WHEN e.ds BETWEEN &#x27;{prev_start}&#x27; AND &#x27;{prev_end}&#x27; THEN &#x27;anterior&#x27; END = la.periodo
   WHERE step IS NOT NULL
 ),
 step6 AS (
   SELECT DATE(l.completo_cadastro) AS ds, CAST(l.CUST AS STRING) AS user_id,
-    '6_cadastro_concluido' AS step, 'n/a' AS os, 'n/a' AS device,
-    COALESCE(la.canal,'outros') AS canal,
-    CASE WHEN DATE(l.completo_cadastro) BETWEEN '{curr_start}' AND '{curr_end}' THEN 'atual'
-         WHEN DATE(l.completo_cadastro) BETWEEN '{prev_start}' AND '{prev_end}' THEN 'anterior' END AS periodo
+    &#x27;6_cadastro_concluido&#x27; AS step, &#x27;n/a&#x27; AS os, &#x27;n/a&#x27; AS device,
+    COALESCE(la.canal,&#x27;outros&#x27;) AS canal,
+    CASE WHEN DATE(l.completo_cadastro) BETWEEN &#x27;{curr_start}&#x27; AND &#x27;{curr_end}&#x27; THEN &#x27;atual&#x27;
+         WHEN DATE(l.completo_cadastro) BETWEEN &#x27;{prev_start}&#x27; AND &#x27;{prev_end}&#x27; THEN &#x27;anterior&#x27; END AS periodo
   FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN` l
   LEFT JOIN lp_attr la ON CAST(l.CUST AS STRING)=la.user_id
-    AND CASE WHEN DATE(l.completo_cadastro) BETWEEN '{curr_start}' AND '{curr_end}' THEN 'atual'
-             WHEN DATE(l.completo_cadastro) BETWEEN '{prev_start}' AND '{prev_end}' THEN 'anterior' END = la.periodo
+    AND CASE WHEN DATE(l.completo_cadastro) BETWEEN &#x27;{curr_start}&#x27; AND &#x27;{curr_end}&#x27; THEN &#x27;atual&#x27;
+             WHEN DATE(l.completo_cadastro) BETWEEN &#x27;{prev_start}&#x27; AND &#x27;{prev_end}&#x27; THEN &#x27;anterior&#x27; END = la.periodo
   WHERE l.completo_cadastro IS NOT NULL
-    AND DATE(l.completo_cadastro) BETWEEN '{prev_start}' AND '{curr_end}'
+    AND DATE(l.completo_cadastro) BETWEEN &#x27;{prev_start}&#x27; AND &#x27;{curr_end}&#x27;
 ),
 step1 AS (
-  SELECT ds, user_id, '1_visita_lp' AS step, os, device, canal, periodo
+  SELECT ds, user_id, &#x27;1_visita_lp&#x27; AS step, os, device, canal, periodo
   FROM lp_classified WHERE periodo IS NOT NULL
 ),
 all_steps AS (
@@ -472,86 +474,94 @@ all_steps AS (
 )
 SELECT periodo, step, canal, os, device, COUNT(DISTINCT user_id) AS usuarios
 FROM all_steps GROUP BY 1,2,3,4,5 ORDER BY 1,2,3</pre>
-    </div>
   </div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q3A</span>
-      <span class="qr-desc">Cadastros concluídos por dia — período atual (MTD)</span>
-      <span class="qr-badges">
-        <span class="badge badge-daily">daily</span>
-        <span class="badge badge-table">RESELLERS_LEADS_TAN</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q3A</span>
+    <span class="qr-desc" title="Cadastros concluídos por dia. Reutilizada no MTD e na janela diária.">Cadastros concluídos por dia. Reutilizada no MTD e na janela diária.</span>
+    <span class="qr-badges">
+      <span class="badge badge-daily">daily</span>
+      <span class="badge badge-table qr-primary-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-active">em uso</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>SELECT DATE(completo_cadastro) AS ds, COUNT(DISTINCT CUST) AS cadastros
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>SELECT DATE(completo_cadastro) AS ds, COUNT(DISTINCT CUST) AS cadastros
 FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN`
 WHERE completo_cadastro IS NOT NULL
-  AND DATE(completo_cadastro) BETWEEN '{curr_start}' AND '{curr_end}'
+  AND DATE(completo_cadastro) BETWEEN &#x27;{start}&#x27; AND &#x27;{end}&#x27;
 GROUP BY 1 ORDER BY 1</pre>
-    </div>
   </div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q3B</span>
-      <span class="qr-desc">Ativos M0 por dia — resellers com 1ª compra em até 30 dias do cadastro (MTD)</span>
-      <span class="qr-badges">
-        <span class="badge badge-daily">daily</span>
-        <span class="badge badge-table">RESELLERS_LEADS_TAN</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q3B</span>
+    <span class="qr-desc" title="Ativos M0 por dia de cadastro, considerando completo_venda em até 30 dias.">Ativos M0 por dia de cadastro, considerando completo_venda em até 30 dias.</span>
+    <span class="qr-badges">
+      <span class="badge badge-daily">daily</span>
+      <span class="badge badge-table qr-primary-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-active">em uso</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>SELECT DATE(completo_cadastro) AS ds,
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>SELECT DATE(completo_cadastro) AS ds,
   COUNT(DISTINCT CASE WHEN DATE_DIFF(DATE(Completo_Venda),DATE(completo_cadastro),DAY)&lt;=30 THEN CUST END) AS ativos_m0
 FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN`
 WHERE completo_cadastro IS NOT NULL
-  AND DATE(completo_cadastro) BETWEEN '{curr_start}' AND '{curr_end}'
+  AND DATE(completo_cadastro) BETWEEN &#x27;{start}&#x27; AND &#x27;{end}&#x27;
 GROUP BY 1 ORDER BY 1</pre>
-    </div>
   </div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q4_TPV</span>
-      <span class="qr-desc">TPV M0 por canal — transações nos primeiros 30 dias após cadastro (MTD)</span>
-      <span class="qr-badges">
-        <span class="badge badge-daily">daily</span>
-        <span class="badge badge-table">LK_PRODUCT_DEVICE</span>
-        <span class="badge badge-table">BT_MP_IC_CUBO_SELLERS</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q4_TPV</span>
+    <span class="qr-desc" title="TPV M0 por origem para o período atual/anterior. Continua executada; o KPI está temporariamente oculto.">TPV M0 por origem para o período atual/anterior. Continua executada; o KPI está temporariamente oculto.</span>
+    <span class="qr-badges">
+      <span class="badge badge-daily">daily</span>
+      <span class="badge badge-table qr-primary-table">MELIDATA.TRACKS</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-hidden">saída oculta</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">MELIDATA.TRACKS</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span><span class="badge badge-table">WHOWNER.BT_PRODUCT_ORDERS</span><span class="badge badge-table">WHOWNER.BT_PRODUCT_ORDER_ITEM</span><span class="badge badge-table">WHOWNER.LK_PRODUCT_DEVICE</span><span class="badge badge-table">WHOWNER.BT_MP_IC_CUBO_SELLERS</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
   SELECT t.ds, t.usr.user_id AS user_id,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_source' LIMIT 1)),''),'') AS src,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_medium' LIMIT 1)),''),'') AS med
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_source&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS src,
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_medium&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS med
   FROM `meli-bi-data.MELIDATA.TRACKS` t
-  WHERE t.ds BETWEEN '{curr_start}' AND '{curr_end}'
-    AND t.bu='mercadopago' AND t.application.site_id='MLB'
-    AND t.path='/merchant_acquisition/flows/resellers/landing/home'
+  WHERE t.ds BETWEEN &#x27;{start}&#x27; AND &#x27;{end}&#x27;
+    AND t.bu=&#x27;mercadopago&#x27; AND t.application.site_id=&#x27;MLB&#x27;
+    AND t.path=&#x27;/merchant_acquisition/flows/resellers/landing/home&#x27;
 ),
 lp_attr AS (
   SELECT user_id,
-    ARRAY_AGG(CASE WHEN src='app' AND med='push' THEN 'app / push'
-                   WHEN src='placement' THEN 'placement / row_mgm'
-                   WHEN src='micrositio' THEN 'micrositio'
-                   WHEN src='home_mp' THEN 'banner_xsell'
-                   WHEN src='' OR src='direct' THEN 'direct'
-                   WHEN src='valueprop' THEN 'valueprop / canva'
-                   WHEN LOWER(src) LIKE '%whatsapp%' THEN 'whatsapp'
-                   ELSE 'outros' END ORDER BY ds DESC LIMIT 1)[OFFSET(0)] AS canal
+    ARRAY_AGG(CASE WHEN src=&#x27;app&#x27; AND med=&#x27;push&#x27; THEN &#x27;app / push&#x27;
+                   WHEN src=&#x27;placement&#x27; THEN &#x27;placement / row_mgm&#x27;
+                   WHEN src=&#x27;micrositio&#x27; THEN &#x27;micrositio&#x27;
+                   WHEN src=&#x27;home_mp&#x27; THEN &#x27;banner_xsell&#x27;
+                   WHEN src=&#x27;&#x27; OR src=&#x27;direct&#x27; THEN &#x27;direct&#x27;
+                   WHEN src=&#x27;valueprop&#x27; THEN &#x27;valueprop / canva&#x27;
+                   WHEN LOWER(src) LIKE &#x27;%whatsapp%&#x27; THEN &#x27;whatsapp&#x27;
+                   ELSE &#x27;outros&#x27; END ORDER BY ds DESC LIMIT 1)[OFFSET(0)] AS canal
   FROM lp_raw GROUP BY 1
 ),
 resellers AS (
   SELECT CAST(CUST AS STRING) AS user_id, DATE(completo_cadastro) AS cadastro_date
   FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN`
   WHERE completo_cadastro IS NOT NULL
-    AND DATE(completo_cadastro) BETWEEN '{curr_start}' AND '{curr_end}'
+    AND DATE(completo_cadastro) BETWEEN &#x27;{start}&#x27; AND &#x27;{end}&#x27;
 ),
 device_orders AS (
   SELECT CAST(o.CUS_CUST_ID_BUY AS STRING) AS user_id, d.PAY_MPOS_DEVICE_ID
@@ -559,7 +569,7 @@ device_orders AS (
   JOIN `meli-bi-data.WHOWNER.BT_PRODUCT_ORDER_ITEM` oi ON o.IDX_ID=oi.IDX_ID
   JOIN `meli-bi-data.WHOWNER.LK_PRODUCT_DEVICE` d ON oi.PD_ID=d.PD_ID
   JOIN resellers r ON CAST(o.CUS_CUST_ID_BUY AS STRING)=r.user_id
-  WHERE o.ORDER_GATEWAY='1' AND o.SIT_SITE_ID='MLB' AND o.OPERATION_TYPE='1' AND oi.PI_PRODUCT_TYPE=1
+  WHERE o.ORDER_GATEWAY=&#x27;1&#x27; AND o.SIT_SITE_ID=&#x27;MLB&#x27; AND o.OPERATION_TYPE=&#x27;1&#x27; AND oi.PI_PRODUCT_TYPE=1
 ),
 tpv_30d AS (
   SELECT do.user_id, SUM(tpv.TPV_EM_REAIS) AS tpv_m0
@@ -568,164 +578,122 @@ tpv_30d AS (
   JOIN `meli-bi-data.WHOWNER.BT_MP_IC_CUBO_SELLERS` tpv
     ON do.PAY_MPOS_DEVICE_ID=tpv.PAY_MPOS_DEVICE_ID
    AND tpv.TIM_DAY BETWEEN r.cadastro_date AND DATE_ADD(r.cadastro_date, INTERVAL 30 DAY)
-   AND tpv.TIM_DAY BETWEEN '{curr_start}' AND DATE_ADD(DATE '{curr_end}', INTERVAL 30 DAY)
+   AND tpv.TIM_DAY BETWEEN &#x27;{start}&#x27; AND DATE_ADD(DATE &#x27;{end}&#x27;, INTERVAL 30 DAY)
   GROUP BY 1
 )
-SELECT COALESCE(la.canal,'outros') AS canal,
+SELECT COALESCE(la.canal,&#x27;outros&#x27;) AS canal,
   COUNT(DISTINCT t.user_id) AS resellers_com_tpv,
   ROUND(SUM(t.tpv_m0),0) AS tpv_m0_total
 FROM tpv_30d t LEFT JOIN lp_attr la ON t.user_id=la.user_id
 GROUP BY 1 ORDER BY tpv_m0_total DESC</pre>
-    </div>
   </div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q_CADS_CANAL_DAILY</span>
-      <span class="qr-desc">Cadastros por canal e dia — last-touch attribution via visita à LP. Alimenta a série de conversão por canal no gráfico diário</span>
-      <span class="qr-badges">
-        <span class="badge badge-daily">daily</span>
-        <span class="badge badge-table">MELIDATA.TRACKS</span>
-        <span class="badge badge-table">RESELLERS_LEADS_TAN</span>
-      </span>
-      <span class="qr-chevron">▼</span>
-    </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
-  SELECT t.ds, t.usr.user_id AS user_id,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_source' LIMIT 1)),''),'') AS src,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_medium' LIMIT 1)),''),'') AS med
-  FROM `meli-bi-data.MELIDATA.TRACKS` t
-  WHERE t.ds BETWEEN '{start}' AND '{end}'
-    AND t.bu='mercadopago' AND t.application.site_id='MLB'
-    AND t.path='/merchant_acquisition/flows/resellers/landing/home'
-),
-lp_classified AS (
-  SELECT ds, user_id,
-    CASE WHEN src='app' AND med='push' THEN 'app / push'
-         WHEN src='placement' THEN 'placement / row_mgm'
-         WHEN src='micrositio' THEN 'micrositio'
-         WHEN src='home_mp' THEN 'banner_xsell'
-         WHEN src='' OR src='direct' THEN 'direct'
-         WHEN src='valueprop' THEN 'valueprop / canva'
-         WHEN LOWER(src) LIKE '%whatsapp%' THEN 'whatsapp'
-         ELSE 'outros' END AS canal
-  FROM lp_raw
-),
-lp_attr AS (
-  SELECT user_id, ARRAY_AGG(canal ORDER BY ds DESC LIMIT 1)[OFFSET(0)] AS canal
-  FROM lp_classified GROUP BY 1
-)
-SELECT CAST(DATE(l.completo_cadastro) AS STRING) AS ds,
-  COALESCE(la.canal,'outros') AS canal,
-  COUNT(DISTINCT CAST(l.CUST AS STRING)) AS cadastros
-FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN` l
-LEFT JOIN lp_attr la ON CAST(l.CUST AS STRING)=la.user_id
-WHERE l.completo_cadastro IS NOT NULL
-  AND DATE(l.completo_cadastro) BETWEEN '{start}' AND '{end}'
-GROUP BY 1,2 ORDER BY 1</pre>
-    </div>
+</div>
+<div class="qr-section-title">Visão Mensal de Resultado</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q1M_LP</span>
+    <span class="qr-desc" title="Visitas mensais à LP por origem, sistema operacional e dispositivo.">Visitas mensais à LP por origem, sistema operacional e dispositivo.</span>
+    <span class="qr-badges">
+      <span class="badge badge-monthly">monthly</span>
+      <span class="badge badge-table qr-primary-table">MELIDATA.TRACKS</span>
+    </span>
+    <span class="qr-chevron">▼</span>
   </div>
-
-  <div class="qr-section-title">Visão Mensal de Resultado</div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q1M_LP</span>
-      <span class="qr-desc">Visitas LP mensais por canal, OS e device — histórico completo (Jan/25 → M-1)</span>
-      <span class="qr-badges">
-        <span class="badge badge-monthly">monthly</span>
-        <span class="badge badge-table">MELIDATA.TRACKS</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-active">em uso</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">MELIDATA.TRACKS</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
   SELECT DATE_TRUNC(t.ds,MONTH) AS mes, t.usr.user_id AS user_id,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_source' LIMIT 1)),''),'') AS src,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_medium' LIMIT 1)),''),'') AS med,
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_source&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS src,
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_medium&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS med,
     t.device.os_name AS os, t.device.platform AS device
   FROM `meli-bi-data.MELIDATA.TRACKS` t
-  WHERE t.ds BETWEEN '{hist_start}' AND '{hist_end}'
-    AND t.bu='mercadopago' AND t.application.site_id='MLB'
-    AND t.path='/merchant_acquisition/flows/resellers/landing/home'
+  WHERE t.ds BETWEEN &#x27;{hist_start}&#x27; AND &#x27;{hist_end}&#x27;
+    AND t.bu=&#x27;mercadopago&#x27; AND t.application.site_id=&#x27;MLB&#x27;
+    AND t.path=&#x27;/merchant_acquisition/flows/resellers/landing/home&#x27;
 )
 SELECT mes,
-  CASE WHEN src='app' AND med='push' THEN 'app / push'
-       WHEN src='placement' THEN 'placement / row_mgm'
-       WHEN src='micrositio' THEN 'micrositio'
-       WHEN src='home_mp' THEN 'banner_xsell'
-       WHEN src='' OR src='direct' THEN 'direct'
-       WHEN src='valueprop' THEN 'valueprop / canva'
-       WHEN LOWER(src) LIKE '%whatsapp%' THEN 'whatsapp'
-       ELSE 'outros' END AS canal,
-  COALESCE(os,'desconhecido') AS os,
-  COALESCE(device,'desconhecido') AS device,
+  CASE WHEN src=&#x27;app&#x27; AND med=&#x27;push&#x27; THEN &#x27;app / push&#x27;
+       WHEN src=&#x27;placement&#x27; THEN &#x27;placement / row_mgm&#x27;
+       WHEN src=&#x27;micrositio&#x27; THEN &#x27;micrositio&#x27;
+       WHEN src=&#x27;home_mp&#x27; THEN &#x27;banner_xsell&#x27;
+       WHEN src=&#x27;&#x27; OR src=&#x27;direct&#x27; THEN &#x27;direct&#x27;
+       WHEN src=&#x27;valueprop&#x27; THEN &#x27;valueprop / canva&#x27;
+       WHEN LOWER(src) LIKE &#x27;%whatsapp%&#x27; THEN &#x27;whatsapp&#x27;
+       ELSE &#x27;outros&#x27; END AS canal,
+  COALESCE(os,&#x27;desconhecido&#x27;) AS os,
+  COALESCE(device,&#x27;desconhecido&#x27;) AS device,
   COUNT(DISTINCT user_id) AS visitas
 FROM lp_raw GROUP BY 1,2,3,4 ORDER BY 1,2</pre>
-    </div>
   </div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q3A_M</span>
-      <span class="qr-desc">Cadastros mensais — histórico completo (Jan/25 → M-1)</span>
-      <span class="qr-badges">
-        <span class="badge badge-monthly">monthly</span>
-        <span class="badge badge-table">RESELLERS_LEADS_TAN</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q3A_M</span>
+    <span class="qr-desc" title="Cadastros concluídos por mês.">Cadastros concluídos por mês.</span>
+    <span class="qr-badges">
+      <span class="badge badge-monthly">monthly</span>
+      <span class="badge badge-table qr-primary-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-active">em uso</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>SELECT DATE_TRUNC(DATE(completo_cadastro),MONTH) AS mes, COUNT(DISTINCT CUST) AS cadastros
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>SELECT DATE_TRUNC(DATE(completo_cadastro),MONTH) AS mes, COUNT(DISTINCT CUST) AS cadastros
 FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN`
 WHERE completo_cadastro IS NOT NULL
-  AND DATE(completo_cadastro) BETWEEN '{hist_start}' AND '{hist_end}'
+  AND DATE(completo_cadastro) BETWEEN &#x27;{hist_start}&#x27; AND &#x27;{hist_end}&#x27;
 GROUP BY 1 ORDER BY 1</pre>
-    </div>
   </div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q3B_M</span>
-      <span class="qr-desc">Ativos M0 mensais — resellers com 1ª compra em até 30 dias (Jan/25 → M-1). Janela de 30 dias: reprocessar até M-2 semanalmente.</span>
-      <span class="qr-badges">
-        <span class="badge badge-weekly">weekly (M-1, M-2)</span>
-        <span class="badge badge-monthly">monthly (demais)</span>
-        <span class="badge badge-table">RESELLERS_LEADS_TAN</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q3B_M</span>
+    <span class="qr-desc" title="Ativos M0 por mês de cadastro.">Ativos M0 por mês de cadastro.</span>
+    <span class="qr-badges">
+      <span class="badge badge-monthly">monthly</span>
+      <span class="badge badge-table qr-primary-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-active">em uso</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>SELECT DATE_TRUNC(DATE(completo_cadastro),MONTH) AS mes,
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>SELECT DATE_TRUNC(DATE(completo_cadastro),MONTH) AS mes,
   COUNT(DISTINCT CASE WHEN DATE_DIFF(DATE(Completo_Venda),DATE(completo_cadastro),DAY)&lt;=30 THEN CUST END) AS ativos_m0
 FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN`
 WHERE completo_cadastro IS NOT NULL
-  AND DATE(completo_cadastro) BETWEEN '{hist_start}' AND '{hist_end}'
+  AND DATE(completo_cadastro) BETWEEN &#x27;{hist_start}&#x27; AND &#x27;{hist_end}&#x27;
 GROUP BY 1 ORDER BY 1</pre>
-    </div>
   </div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q4M_TPV</span>
-      <span class="qr-desc">TPV M0 mensal por safra de cadastro — janela deslizante de 30 dias (Jan/25 → M-1)</span>
-      <span class="qr-badges">
-        <span class="badge badge-weekly">weekly (M-1, M-2)</span>
-        <span class="badge badge-monthly">monthly (demais)</span>
-        <span class="badge badge-table">LK_PRODUCT_DEVICE</span>
-        <span class="badge badge-table">BT_MP_IC_CUBO_SELLERS</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q4M_TPV</span>
+    <span class="qr-desc" title="TPV M0 mensal por safra de cadastro. Continua executada; o KPI está temporariamente oculto.">TPV M0 mensal por safra de cadastro. Continua executada; o KPI está temporariamente oculto.</span>
+    <span class="qr-badges">
+      <span class="badge badge-monthly">monthly</span>
+      <span class="badge badge-table qr-primary-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-hidden">saída oculta</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span><span class="badge badge-table">WHOWNER.BT_PRODUCT_ORDERS</span><span class="badge badge-table">WHOWNER.BT_PRODUCT_ORDER_ITEM</span><span class="badge badge-table">WHOWNER.LK_PRODUCT_DEVICE</span><span class="badge badge-table">WHOWNER.BT_MP_IC_CUBO_SELLERS</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH resellers AS (
-  SELECT CAST(CUST AS STRING) AS user_id,
-    DATE_TRUNC(DATE(completo_cadastro),MONTH) AS mes,
-    DATE(completo_cadastro) AS cadastro_date
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH resellers AS (
+  SELECT CAST(CUST AS STRING) AS user_id, DATE_TRUNC(DATE(completo_cadastro),MONTH) AS mes, DATE(completo_cadastro) AS cadastro_date
   FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN`
   WHERE completo_cadastro IS NOT NULL
-    AND DATE(completo_cadastro) BETWEEN '{hist_start}' AND '{hist_end}'
+    AND DATE(completo_cadastro) BETWEEN &#x27;{hist_start}&#x27; AND &#x27;{hist_end}&#x27;
 ),
 device_orders AS (
   SELECT CAST(o.CUS_CUST_ID_BUY AS STRING) AS user_id, d.PAY_MPOS_DEVICE_ID
@@ -733,7 +701,7 @@ device_orders AS (
   JOIN `meli-bi-data.WHOWNER.BT_PRODUCT_ORDER_ITEM` oi ON o.IDX_ID=oi.IDX_ID
   JOIN `meli-bi-data.WHOWNER.LK_PRODUCT_DEVICE` d ON oi.PD_ID=d.PD_ID
   JOIN resellers r ON CAST(o.CUS_CUST_ID_BUY AS STRING)=r.user_id
-  WHERE o.ORDER_GATEWAY='1' AND o.SIT_SITE_ID='MLB' AND o.OPERATION_TYPE='1' AND oi.PI_PRODUCT_TYPE=1
+  WHERE o.ORDER_GATEWAY=&#x27;1&#x27; AND o.SIT_SITE_ID=&#x27;MLB&#x27; AND o.OPERATION_TYPE=&#x27;1&#x27; AND oi.PI_PRODUCT_TYPE=1
 ),
 tpv_30d AS (
   SELECT do.user_id, r.mes, SUM(tpv.TPV_EM_REAIS) AS tpv_m0
@@ -742,33 +710,33 @@ tpv_30d AS (
   JOIN `meli-bi-data.WHOWNER.BT_MP_IC_CUBO_SELLERS` tpv
     ON do.PAY_MPOS_DEVICE_ID=tpv.PAY_MPOS_DEVICE_ID
    AND tpv.TIM_DAY BETWEEN r.cadastro_date AND DATE_ADD(r.cadastro_date, INTERVAL 30 DAY)
-   AND tpv.TIM_DAY BETWEEN '{hist_start}' AND DATE_ADD(DATE '{hist_end}', INTERVAL 30 DAY)
+   AND tpv.TIM_DAY BETWEEN &#x27;{hist_start}&#x27; AND DATE_ADD(DATE &#x27;{hist_end}&#x27;, INTERVAL 30 DAY)
   GROUP BY 1,2
 )
 SELECT mes, ROUND(SUM(tpv_m0),0) AS tpv_m0_total, COUNT(DISTINCT user_id) AS resellers
 FROM tpv_30d GROUP BY 1 ORDER BY 1</pre>
-    </div>
   </div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q5_SAFRA</span>
-      <span class="qr-desc">Cohort de TPV por mês de vida (M0–M12) por safra de cadastro — tabela de retenção</span>
-      <span class="qr-badges">
-        <span class="badge badge-monthly">monthly</span>
-        <span class="badge badge-table">LK_PRODUCT_DEVICE</span>
-        <span class="badge badge-table">BT_MP_IC_CUBO_SELLERS</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q5_SAFRA</span>
+    <span class="qr-desc" title="Cohort de TPV por safra e mês de vida M0–M12. Continua executada; o heatmap está temporariamente oculto.">Cohort de TPV por safra e mês de vida M0–M12. Continua executada; o heatmap está temporariamente oculto.</span>
+    <span class="qr-badges">
+      <span class="badge badge-monthly">monthly</span>
+      <span class="badge badge-table qr-primary-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-hidden">saída oculta</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span><span class="badge badge-table">WHOWNER.BT_PRODUCT_ORDERS</span><span class="badge badge-table">WHOWNER.BT_PRODUCT_ORDER_ITEM</span><span class="badge badge-table">WHOWNER.LK_PRODUCT_DEVICE</span><span class="badge badge-table">WHOWNER.BT_MP_IC_CUBO_SELLERS</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH resellers AS (
-  SELECT CAST(CUST AS STRING) AS user_id,
-    DATE_TRUNC(DATE(completo_cadastro),MONTH) AS safra,
-    DATE(completo_cadastro) AS cadastro_date
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH resellers AS (
+  SELECT CAST(CUST AS STRING) AS user_id, DATE_TRUNC(DATE(completo_cadastro),MONTH) AS safra, DATE(completo_cadastro) AS cadastro_date
   FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN`
   WHERE completo_cadastro IS NOT NULL
-    AND DATE(completo_cadastro) BETWEEN '{hist_start}' AND '{hist_end}'
+    AND DATE(completo_cadastro) BETWEEN &#x27;{hist_start}&#x27; AND &#x27;{hist_end}&#x27;
 ),
 device_orders AS (
   SELECT CAST(o.CUS_CUST_ID_BUY AS STRING) AS user_id, d.PAY_MPOS_DEVICE_ID
@@ -776,144 +744,208 @@ device_orders AS (
   JOIN `meli-bi-data.WHOWNER.BT_PRODUCT_ORDER_ITEM` oi ON o.IDX_ID=oi.IDX_ID
   JOIN `meli-bi-data.WHOWNER.LK_PRODUCT_DEVICE` d ON oi.PD_ID=d.PD_ID
   JOIN resellers r ON CAST(o.CUS_CUST_ID_BUY AS STRING)=r.user_id
-  WHERE o.ORDER_GATEWAY='1' AND o.SIT_SITE_ID='MLB' AND o.OPERATION_TYPE='1' AND oi.PI_PRODUCT_TYPE=1
+  WHERE o.ORDER_GATEWAY=&#x27;1&#x27; AND o.SIT_SITE_ID=&#x27;MLB&#x27; AND o.OPERATION_TYPE=&#x27;1&#x27; AND oi.PI_PRODUCT_TYPE=1
 )
-SELECT r.safra,
-  DATE_DIFF(DATE_TRUNC(tpv.TIM_DAY,MONTH), r.safra, MONTH) AS mes_vida,
+SELECT r.safra, DATE_DIFF(DATE_TRUNC(tpv.TIM_DAY,MONTH),r.safra,MONTH) AS mes_vida,
   ROUND(SUM(tpv.TPV_EM_REAIS),0) AS tpv
 FROM device_orders do
 JOIN resellers r ON do.user_id=r.user_id
 JOIN `meli-bi-data.WHOWNER.BT_MP_IC_CUBO_SELLERS` tpv
   ON do.PAY_MPOS_DEVICE_ID=tpv.PAY_MPOS_DEVICE_ID
  AND DATE_DIFF(DATE_TRUNC(tpv.TIM_DAY,MONTH),r.safra,MONTH) BETWEEN 0 AND 12
- AND tpv.TIM_DAY BETWEEN '{hist_start}' AND DATE_ADD(DATE '{hist_end}', INTERVAL 12 MONTH)
+ AND tpv.TIM_DAY BETWEEN &#x27;{hist_start}&#x27; AND DATE_ADD(DATE &#x27;{hist_end}&#x27;, INTERVAL 12 MONTH)
 GROUP BY 1,2 ORDER BY 1,2</pre>
-    </div>
   </div>
-
-  <div class="qr-section-title">Auxiliares · Tráfego Diário Histórico e Atribuição por Canal</div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q_TRAF_DIARIO_HIST</span>
-      <span class="qr-desc">Visitas únicas à LP por dia — histórico completo (Jan/25 → M-1). Alimenta o gráfico de evolução diária nos períodos históricos.</span>
-      <span class="qr-badges">
-        <span class="badge badge-monthly">monthly</span>
-        <span class="badge badge-table">MELIDATA.TRACKS</span>
-      </span>
-      <span class="qr-chevron">▼</span>
-    </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>SELECT t.ds AS day, COUNT(DISTINCT t.usr.user_id) AS visitas
-FROM `meli-bi-data.MELIDATA.TRACKS` t
-WHERE t.ds BETWEEN '{hist_start}' AND '{hist_end}'
-  AND t.bu='mercadopago' AND t.application.site_id='MLB'
-  AND t.path='/merchant_acquisition/flows/resellers/landing/home'
-GROUP BY 1 ORDER BY 1</pre>
-    </div>
+</div>
+<div class="qr-section-title">Perfil Revendedores</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q_PERFIL</span>
+    <span class="qr-desc" title="Perfil por experiência e modelo de operação, com cadastros, ativação M0 e TPV M0 nos últimos seis meses fechados.">Perfil por experiência e modelo de operação, com cadastros, ativação M0 e TPV M0 nos últimos seis meses fechados.</span>
+    <span class="qr-badges">
+      <span class="badge badge-monthly">monthly</span>
+      <span class="badge badge-table qr-primary-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span>
+    </span>
+    <span class="qr-chevron">▼</span>
   </div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q_CADS_DIARIO_HIST</span>
-      <span class="qr-desc">Cadastros por dia — histórico completo (Jan/25 → M-1). Alimenta o gráfico de evolução diária nos períodos históricos.</span>
-      <span class="qr-badges">
-        <span class="badge badge-monthly">monthly</span>
-        <span class="badge badge-table">RESELLERS_LEADS_TAN</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-active">em uso</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span><span class="badge badge-table">WHOWNER.LK_MP_SGROWTH_RESELLERS_TRIAL_FORM_RESPONSES</span><span class="badge badge-table">WHOWNER.BT_PRODUCT_ORDERS</span><span class="badge badge-table">WHOWNER.BT_PRODUCT_ORDER_ITEM</span><span class="badge badge-table">WHOWNER.LK_PRODUCT_DEVICE</span><span class="badge badge-table">WHOWNER.BT_MP_IC_CUBO_SELLERS</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>SELECT DATE(completo_cadastro) AS day, COUNT(DISTINCT CUST) AS cadastros
-FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN`
-WHERE completo_cadastro IS NOT NULL
-  AND DATE(completo_cadastro) BETWEEN '{hist_start}' AND '{hist_end}'
-GROUP BY 1 ORDER BY 1</pre>
-    </div>
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH
+base AS (
+  SELECT
+    DATE_TRUNC(DATE(l.completo_cadastro), MONTH) AS mes,
+    CAST(l.CUST AS STRING) AS user_id,
+    DATE(l.completo_cadastro) AS cadastro_date,
+    (l.Completo_Venda IS NOT NULL) AS ativado,
+    (l.Completo_Venda IS NOT NULL
+       AND DATE_DIFF(DATE(l.Completo_Venda), DATE(l.completo_cadastro), DAY) BETWEEN 0 AND 30) AS ativo_m0
+  FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN` l
+  WHERE l.completo_cadastro IS NOT NULL
+    AND DATE(l.completo_cadastro) BETWEEN &#x27;{start}&#x27; AND &#x27;{end}&#x27;
+),
+perfil AS (
+  SELECT CAST(user_id AS STRING) AS user_id,
+    CASE WHEN STARTS_WITH(LOWER(experiencia_raw),&#x27;especialista&#x27;) THEN &#x27;Especialista&#x27;
+         WHEN STARTS_WITH(LOWER(experiencia_raw),&#x27;intermedi&#x27;)    THEN &#x27;Intermediário&#x27;
+         WHEN STARTS_WITH(LOWER(experiencia_raw),&#x27;iniciante&#x27;)    THEN &#x27;Iniciante&#x27; ELSE &#x27;Outros&#x27; END AS experiencia,
+    CASE WHEN STARTS_WITH(LOWER(modelo_op_raw),&#x27;gestor&#x27;)    THEN &#x27;Gestor de Equipe&#x27;
+         WHEN STARTS_WITH(LOWER(modelo_op_raw),&#x27;estrat&#x27;)    THEN &#x27;Estratégia Digital&#x27;
+         WHEN STARTS_WITH(LOWER(modelo_op_raw),&#x27;indica&#x27;)    THEN &#x27;Indicação de Balcão&#x27;
+         WHEN STARTS_WITH(LOWER(modelo_op_raw),&#x27;consultor&#x27;) THEN &#x27;Consultor Autônomo&#x27; ELSE &#x27;Outros&#x27; END AS modelo_op
+  FROM (
+    SELECT f.user_id,
+      MAX(CASE WHEN f.QUESTION_ORDER=1 THEN f.ANSWER_TEXT END) AS experiencia_raw,
+      MAX(CASE WHEN f.QUESTION_ORDER=2 THEN f.ANSWER_TEXT END) AS modelo_op_raw
+    FROM `meli-bi-data.WHOWNER.LK_MP_SGROWTH_RESELLERS_TRIAL_FORM_RESPONSES` f
+    GROUP BY f.user_id
+  )
+),
+ativos_m0 AS (SELECT user_id FROM base WHERE ativo_m0),
+device_orders AS (
+  SELECT CAST(o.CUS_CUST_ID_BUY AS STRING) AS user_id, d.PAY_MPOS_DEVICE_ID
+  FROM `meli-bi-data.WHOWNER.BT_PRODUCT_ORDERS` o
+  JOIN `meli-bi-data.WHOWNER.BT_PRODUCT_ORDER_ITEM` oi ON o.IDX_ID=oi.IDX_ID
+  JOIN `meli-bi-data.WHOWNER.LK_PRODUCT_DEVICE` d ON oi.PD_ID=d.PD_ID
+  JOIN ativos_m0 a ON CAST(o.CUS_CUST_ID_BUY AS STRING)=a.user_id
+  WHERE o.ORDER_GATEWAY=&#x27;1&#x27; AND o.SIT_SITE_ID=&#x27;MLB&#x27; AND o.OPERATION_TYPE=&#x27;1&#x27; AND oi.PI_PRODUCT_TYPE=1
+),
+tpv_30d AS (
+  SELECT b.user_id, SUM(c.TPV_EM_REAIS) AS tpv_m0
+  FROM base b
+  JOIN device_orders do ON b.user_id=do.user_id
+  JOIN `meli-bi-data.WHOWNER.BT_MP_IC_CUBO_SELLERS` c
+    ON c.PAY_MPOS_DEVICE_ID=do.PAY_MPOS_DEVICE_ID
+   AND c.TIM_DAY BETWEEN b.cadastro_date AND DATE_ADD(b.cadastro_date, INTERVAL 30 DAY)
+   AND c.TIM_DAY BETWEEN &#x27;{start}&#x27; AND DATE_ADD(DATE &#x27;{end}&#x27;, INTERVAL 30 DAY)
+  WHERE b.ativo_m0
+  GROUP BY 1
+),
+joined AS (
+  SELECT b.mes, p.experiencia, p.modelo_op, b.user_id, b.ativado, b.ativo_m0, COALESCE(t.tpv_m0,0) AS tpv_m0
+  FROM base b
+  JOIN perfil p ON b.user_id=p.user_id
+  LEFT JOIN tpv_30d t ON b.user_id=t.user_id
+  WHERE p.experiencia&lt;&gt;&#x27;Outros&#x27; AND p.modelo_op&lt;&gt;&#x27;Outros&#x27;
+)
+SELECT
+  FORMAT_DATE(&#x27;%b/%y&#x27;, mes) AS mes,
+  experiencia, modelo_op,
+  COUNT(DISTINCT user_id) AS cadastros,
+  COUNT(DISTINCT IF(ativado, user_id, NULL)) AS ativados,
+  COUNT(DISTINCT IF(ativo_m0, user_id, NULL)) AS ativos_m0,
+  ROUND(SUM(tpv_m0),0) AS tpv_total,
+  COUNT(DISTINCT IF(tpv_m0&gt;0, user_id, NULL)) AS n_tpv
+FROM joined
+GROUP BY 1,2,3
+ORDER BY mes, experiencia, modelo_op</pre>
   </div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q_CADS_ATIVOS_CANAL_M</span>
-      <span class="qr-desc">Cadastros e ativos M0 por canal/mês com last-touch attribution via visita à LP (Jan/25 → M-1)</span>
-      <span class="qr-badges">
-        <span class="badge badge-monthly">monthly</span>
-        <span class="badge badge-table">MELIDATA.TRACKS</span>
-        <span class="badge badge-table">RESELLERS_LEADS_TAN</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+</div>
+<div class="qr-section-title">Projeção Resultados</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Lógica client-side</span>
+    <span class="qr-desc">Projeção calculada no navegador a partir dos dados já carregados</span>
+    <span class="qr-badges"><span class="badge badge-daily">client-side</span></span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details"><div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-inactive">sem SQL próprio</span></div></div>
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>-- Inputs já produzidos pelo build.py:
+-- DAILY: visitas, cadastros e ativos M0 por dia.
+-- PERFIL_DATA_BY_MES / PERFIL_TPV_DATA_BY_MES: taxas e valores de referência M-2.
+-- A projeção é calculada no navegador; não existe consulta BigQuery exclusiva.</pre>
+  </div>
+</div>
+<div class="qr-section-title">Auxiliares · filtros, séries e atribuição</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q_CADS_ATIVOS_CANAL_M</span>
+    <span class="qr-desc" title="Cadastros e ativos M0 mensais por origem para filtros e gráficos.">Cadastros e ativos M0 mensais por origem para filtros e gráficos.</span>
+    <span class="qr-badges">
+      <span class="badge badge-monthly">monthly</span>
+      <span class="badge badge-table qr-primary-table">MELIDATA.TRACKS</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-active">em uso</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">MELIDATA.TRACKS</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
   SELECT t.ds, t.usr.user_id AS user_id,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_source' LIMIT 1)),''),'') AS src,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_medium' LIMIT 1)),''),'') AS med
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_source&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS src,
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_medium&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS med
   FROM `meli-bi-data.MELIDATA.TRACKS` t
-  WHERE t.ds BETWEEN '{hist_start}' AND '{hist_end}'
-    AND t.bu='mercadopago' AND t.application.site_id='MLB'
-    AND t.path='/merchant_acquisition/flows/resellers/landing/home'
+  WHERE t.ds BETWEEN &#x27;{hist_start}&#x27; AND &#x27;{hist_end}&#x27;
+    AND t.bu=&#x27;mercadopago&#x27; AND t.application.site_id=&#x27;MLB&#x27;
+    AND t.path=&#x27;/merchant_acquisition/flows/resellers/landing/home&#x27;
 ),
 lp_attr AS (
   SELECT user_id,
     ARRAY_AGG(
-      CASE WHEN src='app' AND med='push' THEN 'app / push'
-           WHEN src='placement' THEN 'placement / row_mgm'
-           WHEN src='micrositio' THEN 'micrositio'
-           WHEN src='home_mp' THEN 'banner_xsell'
-           WHEN src='' OR src='direct' THEN 'direct'
-           WHEN src='valueprop' THEN 'valueprop / canva'
-           WHEN LOWER(src) LIKE '%whatsapp%' THEN 'whatsapp'
-           ELSE 'outros' END
+      CASE WHEN src=&#x27;app&#x27; AND med=&#x27;push&#x27; THEN &#x27;app / push&#x27;
+           WHEN src=&#x27;placement&#x27; THEN &#x27;placement / row_mgm&#x27;
+           WHEN src=&#x27;micrositio&#x27; THEN &#x27;micrositio&#x27;
+           WHEN src=&#x27;home_mp&#x27; THEN &#x27;banner_xsell&#x27;
+           WHEN src=&#x27;&#x27; OR src=&#x27;direct&#x27; THEN &#x27;direct&#x27;
+           WHEN src=&#x27;valueprop&#x27; THEN &#x27;valueprop / canva&#x27;
+           WHEN LOWER(src) LIKE &#x27;%whatsapp%&#x27; THEN &#x27;whatsapp&#x27;
+           ELSE &#x27;outros&#x27; END
       ORDER BY ds DESC LIMIT 1
     )[OFFSET(0)] AS canal
   FROM lp_raw GROUP BY 1
 )
 SELECT
   DATE_TRUNC(DATE(l.completo_cadastro), MONTH) AS mes,
-  COALESCE(la.canal, 'outros') AS canal,
+  COALESCE(la.canal, &#x27;outros&#x27;) AS canal,
   COUNT(DISTINCT l.CUST) AS cadastros,
   COUNT(DISTINCT CASE WHEN DATE_DIFF(DATE(l.Completo_Venda), DATE(l.completo_cadastro), DAY) &lt;= 30 THEN l.CUST END) AS ativos_m0
 FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN` l
 LEFT JOIN lp_attr la ON CAST(l.CUST AS STRING) = la.user_id
 WHERE l.completo_cadastro IS NOT NULL
-  AND DATE(l.completo_cadastro) BETWEEN '{hist_start}' AND '{hist_end}'
+  AND DATE(l.completo_cadastro) BETWEEN &#x27;{hist_start}&#x27; AND &#x27;{hist_end}&#x27;
 GROUP BY 1, 2 ORDER BY 1, 2</pre>
-    </div>
   </div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q_TPV_CANAL_M</span>
-      <span class="qr-desc">TPV M0 por canal/mês com last-touch attribution via LP — janela de 30 dias (Jan/25 → M-1)</span>
-      <span class="qr-badges">
-        <span class="badge badge-monthly">monthly</span>
-        <span class="badge badge-table">MELIDATA.TRACKS</span>
-        <span class="badge badge-table">LK_PRODUCT_DEVICE</span>
-        <span class="badge badge-table">BT_MP_IC_CUBO_SELLERS</span>
-      </span>
-      <span class="qr-chevron">▼</span>
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q_TPV_CANAL_M</span>
+    <span class="qr-desc" title="TPV M0 mensal por origem. Continua executada; sua saída está temporariamente oculta.">TPV M0 mensal por origem. Continua executada; sua saída está temporariamente oculta.</span>
+    <span class="qr-badges">
+      <span class="badge badge-monthly">monthly</span>
+      <span class="badge badge-table qr-primary-table">MELIDATA.TRACKS</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-hidden">saída oculta</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">MELIDATA.TRACKS</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span><span class="badge badge-table">WHOWNER.BT_PRODUCT_ORDERS</span><span class="badge badge-table">WHOWNER.BT_PRODUCT_ORDER_ITEM</span><span class="badge badge-table">WHOWNER.LK_PRODUCT_DEVICE</span><span class="badge badge-table">WHOWNER.BT_MP_IC_CUBO_SELLERS</span></div>
     </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
   SELECT t.ds, t.usr.user_id AS user_id,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_source' LIMIT 1)),''),'') AS src,
-    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key='utm_medium' LIMIT 1)),''),'') AS med
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_source&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS src,
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_medium&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS med
   FROM `meli-bi-data.MELIDATA.TRACKS` t
-  WHERE t.ds BETWEEN '{hist_start}' AND '{hist_end}'
-    AND t.bu='mercadopago' AND t.application.site_id='MLB'
-    AND t.path='/merchant_acquisition/flows/resellers/landing/home'
+  WHERE t.ds BETWEEN &#x27;{hist_start}&#x27; AND &#x27;{hist_end}&#x27;
+    AND t.bu=&#x27;mercadopago&#x27; AND t.application.site_id=&#x27;MLB&#x27;
+    AND t.path=&#x27;/merchant_acquisition/flows/resellers/landing/home&#x27;
 ),
 lp_attr AS (
   SELECT user_id,
     ARRAY_AGG(
-      CASE WHEN src='app' AND med='push' THEN 'app / push'
-           WHEN src='placement' THEN 'placement / row_mgm'
-           WHEN src='micrositio' THEN 'micrositio'
-           WHEN src='home_mp' THEN 'banner_xsell'
-           WHEN src='' OR src='direct' THEN 'direct'
-           WHEN src='valueprop' THEN 'valueprop / canva'
-           WHEN LOWER(src) LIKE '%whatsapp%' THEN 'whatsapp'
-           ELSE 'outros' END
+      CASE WHEN src=&#x27;app&#x27; AND med=&#x27;push&#x27; THEN &#x27;app / push&#x27;
+           WHEN src=&#x27;placement&#x27; THEN &#x27;placement / row_mgm&#x27;
+           WHEN src=&#x27;micrositio&#x27; THEN &#x27;micrositio&#x27;
+           WHEN src=&#x27;home_mp&#x27; THEN &#x27;banner_xsell&#x27;
+           WHEN src=&#x27;&#x27; OR src=&#x27;direct&#x27; THEN &#x27;direct&#x27;
+           WHEN src=&#x27;valueprop&#x27; THEN &#x27;valueprop / canva&#x27;
+           WHEN LOWER(src) LIKE &#x27;%whatsapp%&#x27; THEN &#x27;whatsapp&#x27;
+           ELSE &#x27;outros&#x27; END
       ORDER BY ds DESC LIMIT 1
     )[OFFSET(0)] AS canal
   FROM lp_raw GROUP BY 1
@@ -922,11 +954,11 @@ resellers AS (
   SELECT CAST(l.CUST AS STRING) AS user_id,
     DATE_TRUNC(DATE(l.completo_cadastro), MONTH) AS mes,
     DATE(l.completo_cadastro) AS cadastro_date,
-    COALESCE(la.canal, 'outros') AS canal
+    COALESCE(la.canal, &#x27;outros&#x27;) AS canal
   FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN` l
   LEFT JOIN lp_attr la ON CAST(l.CUST AS STRING) = la.user_id
   WHERE l.completo_cadastro IS NOT NULL
-    AND DATE(l.completo_cadastro) BETWEEN '{hist_start}' AND '{hist_end}'
+    AND DATE(l.completo_cadastro) BETWEEN &#x27;{hist_start}&#x27; AND &#x27;{hist_end}&#x27;
 ),
 device_orders AS (
   SELECT CAST(o.CUS_CUST_ID_BUY AS STRING) AS user_id, d.PAY_MPOS_DEVICE_ID
@@ -934,7 +966,7 @@ device_orders AS (
   JOIN `meli-bi-data.WHOWNER.BT_PRODUCT_ORDER_ITEM` oi ON o.IDX_ID=oi.IDX_ID
   JOIN `meli-bi-data.WHOWNER.LK_PRODUCT_DEVICE` d ON oi.PD_ID=d.PD_ID
   JOIN resellers r ON CAST(o.CUS_CUST_ID_BUY AS STRING)=r.user_id
-  WHERE o.ORDER_GATEWAY='1' AND o.SIT_SITE_ID='MLB' AND o.OPERATION_TYPE='1' AND oi.PI_PRODUCT_TYPE=1
+  WHERE o.ORDER_GATEWAY=&#x27;1&#x27; AND o.SIT_SITE_ID=&#x27;MLB&#x27; AND o.OPERATION_TYPE=&#x27;1&#x27; AND oi.PI_PRODUCT_TYPE=1
 ),
 tpv_30d AS (
   SELECT do.user_id, r.mes, r.canal, SUM(tpv.TPV_EM_REAIS) AS tpv_m0
@@ -943,14 +975,156 @@ tpv_30d AS (
   JOIN `meli-bi-data.WHOWNER.BT_MP_IC_CUBO_SELLERS` tpv
     ON do.PAY_MPOS_DEVICE_ID=tpv.PAY_MPOS_DEVICE_ID
    AND tpv.TIM_DAY BETWEEN r.cadastro_date AND DATE_ADD(r.cadastro_date, INTERVAL 30 DAY)
-   AND tpv.TIM_DAY BETWEEN '{hist_start}' AND DATE_ADD(DATE '{hist_end}', INTERVAL 30 DAY)
+   AND tpv.TIM_DAY BETWEEN &#x27;{hist_start}&#x27; AND DATE_ADD(DATE &#x27;{hist_end}&#x27;, INTERVAL 30 DAY)
   GROUP BY 1, 2, 3
 )
 SELECT mes, canal, ROUND(SUM(tpv_m0), 0) AS tpv_m0_total
 FROM tpv_30d GROUP BY 1, 2 ORDER BY 1, 2</pre>
-    </div>
   </div>
-
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q_TRAF_DIARIO_HIST</span>
+    <span class="qr-desc" title="Série diária histórica de visitas usada nos períodos mensais fechados.">Série diária histórica de visitas usada nos períodos mensais fechados.</span>
+    <span class="qr-badges">
+      <span class="badge badge-daily">daily</span>
+      <span class="badge badge-table qr-primary-table">MELIDATA.TRACKS</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-active">em uso</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">MELIDATA.TRACKS</span></div>
+    </div>
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>SELECT t.ds AS day, COUNT(DISTINCT t.usr.user_id) AS visitas
+FROM `meli-bi-data.MELIDATA.TRACKS` t
+WHERE t.ds BETWEEN &#x27;{hist_start}&#x27; AND &#x27;{hist_end}&#x27;
+  AND t.bu=&#x27;mercadopago&#x27; AND t.application.site_id=&#x27;MLB&#x27;
+  AND t.path=&#x27;/merchant_acquisition/flows/resellers/landing/home&#x27;
+GROUP BY 1 ORDER BY 1</pre>
+  </div>
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q_CADS_DIARIO_HIST</span>
+    <span class="qr-desc" title="Série diária histórica de cadastros usada nos períodos mensais fechados.">Série diária histórica de cadastros usada nos períodos mensais fechados.</span>
+    <span class="qr-badges">
+      <span class="badge badge-daily">daily</span>
+      <span class="badge badge-table qr-primary-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-active">em uso</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span></div>
+    </div>
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>SELECT DATE(completo_cadastro) AS day, COUNT(DISTINCT CUST) AS cadastros
+FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN`
+WHERE completo_cadastro IS NOT NULL
+  AND DATE(completo_cadastro) BETWEEN &#x27;{hist_start}&#x27; AND &#x27;{hist_end}&#x27;
+GROUP BY 1 ORDER BY 1</pre>
+  </div>
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q_CADS_CANAL_DAILY</span>
+    <span class="qr-desc" title="Cadastros por dia e origem, com atribuição last-touch pela visita à LP.">Cadastros por dia e origem, com atribuição last-touch pela visita à LP.</span>
+    <span class="qr-badges">
+      <span class="badge badge-daily">daily</span>
+      <span class="badge badge-table qr-primary-table">MELIDATA.TRACKS</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-active">em uso</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">MELIDATA.TRACKS</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span></div>
+    </div>
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH lp_raw AS (
+  SELECT t.ds, t.usr.user_id AS user_id,
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_source&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS src,
+    COALESCE(NULLIF(TRIM((SELECT v.value FROM UNNEST(t.platform.http.utm.map) AS v WHERE v.key=&#x27;utm_medium&#x27; LIMIT 1)),&#x27;&#x27;),&#x27;&#x27;) AS med
+  FROM `meli-bi-data.MELIDATA.TRACKS` t
+  WHERE t.ds BETWEEN &#x27;{start}&#x27; AND &#x27;{end}&#x27;
+    AND t.bu=&#x27;mercadopago&#x27; AND t.application.site_id=&#x27;MLB&#x27;
+    AND t.path=&#x27;/merchant_acquisition/flows/resellers/landing/home&#x27;
+),
+lp_classified AS (
+  SELECT ds, user_id,
+    CASE WHEN src=&#x27;app&#x27; AND med=&#x27;push&#x27; THEN &#x27;app / push&#x27;
+         WHEN src=&#x27;placement&#x27; THEN &#x27;placement / row_mgm&#x27;
+         WHEN src=&#x27;micrositio&#x27; THEN &#x27;micrositio&#x27;
+         WHEN src=&#x27;home_mp&#x27; THEN &#x27;banner_xsell&#x27;
+         WHEN src=&#x27;&#x27; OR src=&#x27;direct&#x27; THEN &#x27;direct&#x27;
+         WHEN src=&#x27;valueprop&#x27; THEN &#x27;valueprop / canva&#x27;
+         WHEN LOWER(src) LIKE &#x27;%whatsapp%&#x27; THEN &#x27;whatsapp&#x27;
+         ELSE &#x27;outros&#x27; END AS canal
+  FROM lp_raw
+),
+lp_attr AS (
+  SELECT user_id, ARRAY_AGG(canal ORDER BY ds DESC LIMIT 1)[OFFSET(0)] AS canal
+  FROM lp_classified GROUP BY 1
+)
+SELECT CAST(DATE(l.completo_cadastro) AS STRING) AS ds,
+  COALESCE(la.canal,&#x27;outros&#x27;) AS canal,
+  COUNT(DISTINCT CAST(l.CUST AS STRING)) AS cadastros
+FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN` l
+LEFT JOIN lp_attr la ON CAST(l.CUST AS STRING)=la.user_id
+WHERE l.completo_cadastro IS NOT NULL
+  AND DATE(l.completo_cadastro) BETWEEN &#x27;{start}&#x27; AND &#x27;{end}&#x27;
+GROUP BY 1,2 ORDER BY 1</pre>
+  </div>
+</div>
+<div class="qr-card">
+  <div class="qr-card-head" onclick="toggleQr(this)">
+    <span class="qr-name">Q_FUNIL_DAILY</span>
+    <span class="qr-desc" title="Microetapas diárias do funil. Consulta auxiliar preservada, mas não executada porque o tracking é parcial.">Microetapas diárias do funil. Consulta auxiliar preservada, mas não executada porque o tracking é parcial.</span>
+    <span class="qr-badges">
+      <span class="badge badge-daily">auxiliar</span>
+      <span class="badge badge-table qr-primary-table">MELIDATA.TRACKS</span>
+    </span>
+    <span class="qr-chevron">▼</span>
+  </div>
+  <div class="qr-body">
+    <div class="qr-details">
+      <div class="qr-tables"><span class="qr-meta-label">Status</span><span class="badge badge-inactive">não executada</span></div>
+      <div class="qr-tables"><span class="qr-meta-label">Tabelas</span><span class="badge badge-table">MELIDATA.TRACKS</span><span class="badge badge-table">SBOX_WHMPBR.RESELLERS_LEADS_TAN</span></div>
+    </div>
+    <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH tracks AS (
+  SELECT ds, usr.user_id AS user_id,
+    JSON_VALUE(event_data, &#x27;$.entrypoint&#x27;) AS entrypoint,
+    JSON_VALUE(event_data, &#x27;$.custom&#x27;)      AS custom
+  FROM `meli-bi-data.MELIDATA.TRACKS`
+  WHERE ds BETWEEN &#x27;{start}&#x27; AND &#x27;{end}&#x27;
+    AND path LIKE &#x27;/merchant_acquisition%&#x27;
+),
+classified AS (
+  SELECT ds, user_id,
+    CASE
+      WHEN entrypoint IS NULL                                                        THEN &#x27;1_visita_lp&#x27;
+      WHEN entrypoint=&#x27;questionnaire-option-selected&#x27; AND custom LIKE &#x27;%EXPERIENCE_MLB%&#x27;    THEN &#x27;2_profiling_exp&#x27;
+      WHEN entrypoint=&#x27;questionnaire-option-selected&#x27; AND custom LIKE &#x27;%BUSINESS_MLB%&#x27;      THEN &#x27;3_tipo_negocio&#x27;
+      WHEN entrypoint=&#x27;questionnaire-option-selected&#x27; AND custom LIKE &#x27;%USER%&#x27;              THEN &#x27;4_loc_selecao&#x27;
+      WHEN entrypoint=&#x27;questionnaire-confirm-button&#x27;  AND custom LIKE &#x27;%USER_LOCATION_MLB%&#x27; THEN &#x27;5_loc_confirmacao&#x27;
+      ELSE NULL
+    END AS step
+  FROM tracks
+),
+funnel_tracks AS (SELECT ds, user_id, step FROM classified WHERE step IS NOT NULL),
+leads AS (
+  SELECT DATE(completo_cadastro) AS ds, CAST(CUST AS STRING) AS user_id, &#x27;6_cadastro_concluido&#x27; AS step
+  FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN`
+  WHERE completo_cadastro IS NOT NULL
+    AND DATE(completo_cadastro) BETWEEN &#x27;{start}&#x27; AND &#x27;{end}&#x27;
+)
+SELECT CAST(ds AS STRING) AS ds, step, COUNT(DISTINCT user_id) AS usuarios
+FROM (SELECT ds,user_id,step FROM funnel_tracks UNION ALL SELECT ds,user_id,step FROM leads)
+GROUP BY 1,2 ORDER BY 1,2</pre>
+  </div>
+</div>
+<!-- ==QUERY_REPO_END== -->
 </div>
 </div><!-- /tab-queries -->
 
@@ -1071,143 +1245,7 @@ FROM tpv_30d GROUP BY 1, 2 ORDER BY 1, 2</pre>
     <strong>Leitura com cautela:</strong> como a taxa de ativação vem em tendência de alta e é mantida flat, a projeção de M0 tende a ser conservadora. No início do mês a amostra de fins de semana é pequena, então o cenário de fim de semana é menos estável.
   </div>
 
-  <div class="qr-section-title">Perfil Revendedores</div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Q_PERFIL</span>
-      <span class="qr-desc">Heatmap Experiência × Modelo de Operação — cadastros, ativos M0, TPV M0. Última janela de 6 meses (M-6 a M-1). Dados disponíveis a partir de abr/26</span>
-      <span class="qr-badges">
-        <span class="badge badge-monthly">monthly</span>
-        <span class="badge badge-table">RESELLERS_LEADS_TAN</span>
-        <span class="badge badge-table">LK_MP_SGROWTH_RESELLERS_TRIAL_FORM_RESPONSES</span>
-        <span class="badge badge-table">BT_MP_IC_CUBO_SELLERS</span>
-      </span>
-      <span class="qr-chevron">▼</span>
-    </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button>WITH
-base AS (
-  SELECT
-    DATE_TRUNC(DATE(l.completo_cadastro), MONTH) AS mes,
-    CAST(l.CUST AS STRING)                       AS user_id,
-    DATE(l.completo_cadastro)                    AS cadastro_date,
-    (l.Completo_Venda IS NOT NULL)               AS ativado,
-    (l.Completo_Venda IS NOT NULL
-       AND DATE_DIFF(DATE(l.Completo_Venda), DATE(l.completo_cadastro), DAY)
-           BETWEEN 0 AND 30)                     AS ativo_m0
-  FROM `meli-bi-data.SBOX_WHMPBR.RESELLERS_LEADS_TAN` l
-  WHERE l.completo_cadastro IS NOT NULL
-    AND DATE(l.completo_cadastro) BETWEEN '{start_date}' AND '{end_date}'
-),
-perfil AS (
-  SELECT
-    CAST(user_id AS STRING) AS user_id,
-    CASE
-      WHEN STARTS_WITH(LOWER(experiencia_raw), 'especialista') THEN 'Especialista'
-      WHEN STARTS_WITH(LOWER(experiencia_raw), 'intermedi')    THEN 'Intermediário'
-      WHEN STARTS_WITH(LOWER(experiencia_raw), 'iniciante')    THEN 'Iniciante'
-      ELSE 'Outros'
-    END AS experiencia,
-    CASE
-      WHEN STARTS_WITH(LOWER(modelo_op_raw), 'gestor')    THEN 'Gestor de Equipe'
-      WHEN STARTS_WITH(LOWER(modelo_op_raw), 'estrat')    THEN 'Estratégia Digital'
-      WHEN STARTS_WITH(LOWER(modelo_op_raw), 'indica')    THEN 'Indicação de Balcão'
-      WHEN STARTS_WITH(LOWER(modelo_op_raw), 'consultor') THEN 'Consultor Autônomo'
-      ELSE 'Outros'
-    END AS modelo_op
-  FROM (
-    SELECT f.user_id,
-      MAX(CASE WHEN f.QUESTION_ORDER = 1 THEN f.ANSWER_TEXT END) AS experiencia_raw,
-      MAX(CASE WHEN f.QUESTION_ORDER = 2 THEN f.ANSWER_TEXT END) AS modelo_op_raw
-    FROM `meli-bi-data.WHOWNER.LK_MP_SGROWTH_RESELLERS_TRIAL_FORM_RESPONSES` f
-    GROUP BY f.user_id
-  )
-),
-ativos_m0 AS (SELECT user_id FROM base WHERE ativo_m0),
-device_orders AS (
-  SELECT CAST(o.CUS_CUST_ID_BUY AS STRING) AS user_id, d.PAY_MPOS_DEVICE_ID
-  FROM `meli-bi-data.WHOWNER.BT_PRODUCT_ORDERS` o
-  JOIN `meli-bi-data.WHOWNER.BT_PRODUCT_ORDER_ITEM` oi ON o.IDX_ID = oi.IDX_ID
-  JOIN `meli-bi-data.WHOWNER.LK_PRODUCT_DEVICE`     d  ON oi.PD_ID = d.PD_ID
-  JOIN ativos_m0 a ON CAST(o.CUS_CUST_ID_BUY AS STRING) = a.user_id
-  WHERE o.ORDER_GATEWAY='1' AND o.SIT_SITE_ID='MLB'
-    AND o.OPERATION_TYPE='1' AND oi.PI_PRODUCT_TYPE=1
-),
-tpv_30d AS (
-  SELECT b.user_id, SUM(c.TPV_EM_REAIS) AS tpv_m0
-  FROM base b
-  JOIN device_orders do ON b.user_id = do.user_id
-  JOIN `meli-bi-data.WHOWNER.BT_MP_IC_CUBO_SELLERS` c
-    ON c.PAY_MPOS_DEVICE_ID = do.PAY_MPOS_DEVICE_ID
-   AND c.TIM_DAY BETWEEN b.cadastro_date AND DATE_ADD(b.cadastro_date, INTERVAL 30 DAY)
-   AND c.TIM_DAY BETWEEN '{start_date}' AND DATE_ADD(DATE '{end_date}', INTERVAL 30 DAY)
-  WHERE b.ativo_m0
-  GROUP BY 1
-),
-joined AS (
-  SELECT b.mes, p.experiencia, p.modelo_op, b.user_id,
-    b.ativado, b.ativo_m0, COALESCE(t.tpv_m0, 0) AS tpv_m0
-  FROM base b
-  JOIN perfil p ON b.user_id = p.user_id
-  LEFT JOIN tpv_30d t ON b.user_id = t.user_id
-  WHERE p.experiencia &lt;&gt; 'Outros' AND p.modelo_op &lt;&gt; 'Outros'
-)
-SELECT
-  FORMAT_DATE('%b/%y', mes)                                          AS mes,
-  experiencia, modelo_op,
-  COUNT(DISTINCT user_id)                                            AS cadastros,
-  COUNT(DISTINCT IF(ativado,  user_id, NULL))                        AS ativados,
-  COUNT(DISTINCT IF(ativo_m0, user_id, NULL))                        AS ativos_m0,
-  ROUND(SUM(tpv_m0), 0)                                             AS tpv_total,
-  COUNT(DISTINCT IF(tpv_m0 &gt; 0, user_id, NULL))                     AS n_tpv,
-  ROUND(SAFE_DIVIDE(COUNT(DISTINCT IF(ativo_m0, user_id, NULL)),
-                    COUNT(DISTINCT user_id)) * 100, 1)               AS taxa_ativacao_m0_pct,
-  ROUND(SAFE_DIVIDE(SUM(tpv_m0),
-        NULLIF(COUNT(DISTINCT IF(tpv_m0 &gt; 0, user_id, NULL)), 0)), 0) AS tpv_medio_ativados,
-  ROUND(SAFE_DIVIDE(SUM(tpv_m0), COUNT(DISTINCT user_id)), 0)        AS tpv_esperado_por_lead
-FROM joined
-GROUP BY 1,2,3 ORDER BY mes, experiencia, modelo_op</pre>
-    </div>
-  </div>
-
-  <div class="qr-section-title">Projeção Resultados</div>
-
-  <div class="qr-card">
-    <div class="qr-card-head" onclick="toggleQr(this)">
-      <span class="qr-name">Lógica client-side</span>
-      <span class="qr-desc">Projeção não executa query própria — deriva de DAILY (série diária) + PERFIL_DATA_BY_MES (taxas M-2). Calculado no frontend.</span>
-      <span class="qr-badges">
-        <span class="badge badge-daily">client-side</span>
-      </span>
-      <span class="qr-chevron">▼</span>
-    </div>
-    <div class="qr-body">
-      <pre class="qr-code"><button class="qr-copy" onclick="copyQr(this)">Copiar</button">-- Projeção não tem query independente no BigQuery.
--- Inputs (já injetados pelo build.py):
---   DAILY          → série diária de visitas (v), cadastros (c) e ativos M0 (a)
---                    desde jan/26. Alimenta os dias realizados MTD.
---   PERFIL_DATA_BY_MES + PERFIL_TPV_DATA_BY_MES
---                  → métricas de perfil por (mês, exp, modelo).
---                    Projeção usa o mês M-2 como referência flat:
---                    taxa ativação M0, n_tpv/ativos e TPV médio por experiência.
---
--- Algoritmo (3 cenários: pessimista / realista / otimista):
---   1. Separa dias realizados MTD em dia_útil e fim_de_semana.
---   2. Calcula taxa diária por tipo de dia:
---        pessimista  = terço inferior (P33)
---        realista    = mediana (P50)
---        otimista    = terço superior (P67)
---   3. Multiplica pela contagem de dias úteis / fins de semana restantes no mês
---      (exclui feriados fixos definidos em PROJ_HOLIDAYS no build.py).
---   4. Realizado + projetado = total do mês para cada cenário.
---   5. Ativos M0 = cadastros_proj × share_exp(M-2) × taxa_ativacao(M-2)
---      TPV M0    = ativos_m0_proj × (n_tpv/ativos)(M-2) × tpv_medio(M-2)
---      Cenário afeta só os cadastros; taxas ficam flat de M-2.</pre>
-    </div>
-  </div>
-
-
+  
 </div>
 </div><!-- /tab-projecao -->
 
